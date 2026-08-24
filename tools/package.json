@@ -7,6 +7,6 @@
     "generate": "python scrape_method_bis.py --wowhead-json wowhead_browser_data.json"
   },
   "devDependencies": {
-    "playwright": "^1.62.1"
+    "playwright": "^1.49.1"
   }
 }

@@ -407,6 +407,8 @@ function addon:ContentLabel(key)
     return L["CONTENT_RAID"]
   elseif key == "mythic" then
     return L["CONTENT_MYTHIC"]
+  elseif key == "trinket" then
+    return L["CONTENT_TRINKET"]
   elseif key == "alt" then
     return L["RANK_ALT"]
   end

@@ -10,9 +10,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = ROOT / "Data"
 
-PLACEHOLDER_RE = re.compile(r'^name = "Item \d+"', re.M)
+PLACEHOLDER_RE = re.compile(r'^\s*name = "Item \d+"', re.M)
 ENTRY_RE = re.compile(r"\[\d+\] = entry")
 DROP_EMPTY_RE = re.compile(r'drop = ""')
+DROP_NONEMPTY_RE = re.compile(r'drop = "[^"]+"')
 
 
 def audit() -> dict:
@@ -26,6 +27,10 @@ def audit() -> dict:
         n = len(ENTRY_RE.findall(text))
         ph = len(PLACEHOLDER_RE.findall(text))
         nd = len(DROP_EMPTY_RE.findall(text))
+        # Prefer counting empty via total - nonempty when drop="" is omitted style
+        nonempty = len(DROP_NONEMPTY_RE.findall(text))
+        if n and nonempty <= n:
+            nd = max(nd, n - nonempty)
         total += n
         placeholders += ph
         empty_drop += nd

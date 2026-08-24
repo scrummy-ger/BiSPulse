@@ -1,22 +1,22 @@
 {
   "BloodDeathKnight": {
-    "count": 22,
-    "wowhead_overall": 22,
+    "count": 18,
+    "wowhead_overall": 13,
     "sources": [
       "Wowhead"
     ],
     "file": "BloodDeathKnight.lua"
   },
   "FrostDeathKnight": {
-    "count": 15,
-    "wowhead_overall": 15,
+    "count": 18,
+    "wowhead_overall": 14,
     "sources": [
       "Wowhead"
     ],
     "file": "FrostDeathKnight.lua"
   },
   "UnholyDeathKnight": {
-    "count": 15,
+    "count": 19,
     "wowhead_overall": 15,
     "sources": [
       "Wowhead"
@@ -24,39 +24,39 @@
     "file": "UnholyDeathKnight.lua"
   },
   "HavocDemonHunter": {
-    "count": 19,
-    "wowhead_overall": 19,
+    "count": 14,
+    "wowhead_overall": 13,
     "sources": [
       "Wowhead"
     ],
     "file": "HavocDemonHunter.lua"
   },
   "VengeanceDemonHunter": {
-    "count": 21,
-    "wowhead_overall": 21,
+    "count": 15,
+    "wowhead_overall": 13,
     "sources": [
       "Wowhead"
     ],
     "file": "VengeanceDemonHunter.lua"
   },
   "DevourerDemonHunter": {
-    "count": 23,
-    "wowhead_overall": 23,
+    "count": 18,
+    "wowhead_overall": 15,
     "sources": [
       "Wowhead"
     ],
     "file": "DevourerDemonHunter.lua"
   },
   "BalanceDruid": {
-    "count": 16,
-    "wowhead_overall": 16,
+    "count": 10,
+    "wowhead_overall": 7,
     "sources": [
       "Wowhead"
     ],
     "file": "BalanceDruid.lua"
   },
   "FeralDruid": {
-    "count": 15,
+    "count": 19,
     "wowhead_overall": 15,
     "sources": [
       "Wowhead"
@@ -64,7 +64,7 @@
     "file": "FeralDruid.lua"
   },
   "GuardianDruid": {
-    "count": 15,
+    "count": 19,
     "wowhead_overall": 15,
     "sources": [
       "Wowhead"
@@ -72,8 +72,8 @@
     "file": "GuardianDruid.lua"
   },
   "RestorationDruid": {
-    "count": 25,
-    "wowhead_overall": 25,
+    "count": 16,
+    "wowhead_overall": 13,
     "sources": [
       "Wowhead"
     ],
@@ -88,16 +88,16 @@
     "file": "DevastationEvoker.lua"
   },
   "PreservationEvoker": {
-    "count": 21,
-    "wowhead_overall": 21,
+    "count": 14,
+    "wowhead_overall": 12,
     "sources": [
       "Wowhead"
     ],
     "file": "PreservationEvoker.lua"
   },
   "AugmentationEvoker": {
-    "count": 21,
-    "wowhead_overall": 21,
+    "count": 11,
+    "wowhead_overall": 9,
     "sources": [
       "Wowhead"
     ],
@@ -120,32 +120,32 @@
     "file": "MarksmanshipHunter.lua"
   },
   "SurvivalHunter": {
-    "count": 20,
-    "wowhead_overall": 20,
+    "count": 15,
+    "wowhead_overall": 14,
     "sources": [
       "Wowhead"
     ],
     "file": "SurvivalHunter.lua"
   },
   "ArcaneMage": {
-    "count": 21,
-    "wowhead_overall": 21,
+    "count": 13,
+    "wowhead_overall": 11,
     "sources": [
       "Wowhead"
     ],
     "file": "ArcaneMage.lua"
   },
   "FireMage": {
-    "count": 21,
-    "wowhead_overall": 21,
+    "count": 13,
+    "wowhead_overall": 11,
     "sources": [
       "Wowhead"
     ],
     "file": "FireMage.lua"
   },
   "FrostMage": {
-    "count": 21,
-    "wowhead_overall": 21,
+    "count": 12,
+    "wowhead_overall": 9,
     "sources": [
       "Wowhead"
     ],
@@ -160,8 +160,8 @@
     "file": "BrewmasterMonk.lua"
   },
   "MistweaverMonk": {
-    "count": 25,
-    "wowhead_overall": 25,
+    "count": 11,
+    "wowhead_overall": 11,
     "sources": [
       "Wowhead"
     ],
@@ -176,15 +176,15 @@
     "file": "WindwalkerMonk.lua"
   },
   "HolyPaladin": {
-    "count": 20,
-    "wowhead_overall": 20,
+    "count": 15,
+    "wowhead_overall": 12,
     "sources": [
       "Wowhead"
     ],
     "file": "HolyPaladin.lua"
   },
   "ProtectionPaladin": {
-    "count": 16,
+    "count": 20,
     "wowhead_overall": 16,
     "sources": [
       "Wowhead"
@@ -200,16 +200,16 @@
     "file": "RetributionPaladin.lua"
   },
   "DisciplinePriest": {
-    "count": 19,
-    "wowhead_overall": 19,
+    "count": 15,
+    "wowhead_overall": 13,
     "sources": [
       "Wowhead"
     ],
     "file": "DisciplinePriest.lua"
   },
   "HolyPriest": {
-    "count": 18,
-    "wowhead_overall": 18,
+    "count": 16,
+    "wowhead_overall": 14,
     "sources": [
       "Wowhead"
     ],
@@ -224,31 +224,31 @@
     "file": "ShadowPriest.lua"
   },
   "AssassinationRogue": {
-    "count": 20,
-    "wowhead_overall": 20,
+    "count": 15,
+    "wowhead_overall": 10,
     "sources": [
       "Wowhead"
     ],
     "file": "AssassinationRogue.lua"
   },
   "OutlawRogue": {
-    "count": 17,
-    "wowhead_overall": 17,
+    "count": 15,
+    "wowhead_overall": 13,
     "sources": [
       "Wowhead"
     ],
     "file": "OutlawRogue.lua"
   },
   "SubtletyRogue": {
-    "count": 21,
-    "wowhead_overall": 21,
+    "count": 17,
+    "wowhead_overall": 11,
     "sources": [
       "Wowhead"
     ],
     "file": "SubtletyRogue.lua"
   },
   "ElementalShaman": {
-    "count": 16,
+    "count": 18,
     "wowhead_overall": 16,
     "sources": [
       "Wowhead"
@@ -264,15 +264,15 @@
     "file": "EnhancementShaman.lua"
   },
   "RestorationShaman": {
-    "count": 20,
-    "wowhead_overall": 20,
+    "count": 18,
+    "wowhead_overall": 12,
     "sources": [
       "Wowhead"
     ],
     "file": "RestorationShaman.lua"
   },
   "AfflictionWarlock": {
-    "count": 16,
+    "count": 17,
     "wowhead_overall": 16,
     "sources": [
       "Wowhead"
@@ -280,15 +280,15 @@
     "file": "AfflictionWarlock.lua"
   },
   "DemonologyWarlock": {
-    "count": 20,
-    "wowhead_overall": 20,
+    "count": 12,
+    "wowhead_overall": 11,
     "sources": [
       "Wowhead"
     ],
     "file": "DemonologyWarlock.lua"
   },
   "DestructionWarlock": {
-    "count": 16,
+    "count": 17,
     "wowhead_overall": 16,
     "sources": [
       "Wowhead"
@@ -296,23 +296,23 @@
     "file": "DestructionWarlock.lua"
   },
   "ArmsWarrior": {
-    "count": 18,
-    "wowhead_overall": 18,
+    "count": 13,
+    "wowhead_overall": 10,
     "sources": [
       "Wowhead"
     ],
     "file": "ArmsWarrior.lua"
   },
   "FuryWarrior": {
-    "count": 21,
-    "wowhead_overall": 21,
+    "count": 12,
+    "wowhead_overall": 9,
     "sources": [
       "Wowhead"
     ],
     "file": "FuryWarrior.lua"
   },
   "ProtectionWarrior": {
-    "count": 16,
+    "count": 20,
     "wowhead_overall": 16,
     "sources": [
       "Wowhead"

@@ -20,28 +20,48 @@ local function entry(opts)
 end
 
 local items = {
-  [237834] = entry({
-    name = "Spellbreaker's Bracers",
-    slot = "Wrist",
-    drop = "Crafting/Misc",
+  [251136] = entry({
+    name = "Signet of Snarling Servitude",
+    slot = "",
+    drop = "",
     source = "Wowhead",
-    wowhead = "overall",
-    rank = RANK.BIS,
+    wowhead = "mythic",
+    rank = RANK.STRONG,
     note = nil,
-    priority = true,
+    priority = nil,
+  }),
+  [251218] = entry({
+    name = "Taz'Rah's Cosmic Edge",
+    slot = "",
+    drop = "",
+    source = "Wowhead",
+    wowhead = "mythic",
+    rank = RANK.STRONG,
+    note = nil,
+    priority = nil,
   }),
   [251513] = entry({
     name = "Loa Worshiper's Band",
     slot = "Ring",
-    drop = "Crafting/Misc",
+    drop = "Crafting/ Misc",
     source = "Wowhead",
     wowhead = "overall",
     rank = RANK.BIS,
     note = nil,
     priority = true,
   }),
+  [252258] = entry({
+    name = "Sickening Signet of Atroxus",
+    slot = "",
+    drop = "",
+    source = "Wowhead",
+    wowhead = "mythic",
+    rank = RANK.STRONG,
+    note = nil,
+    priority = nil,
+  }),
   [268202] = entry({
-    name = "Jaw of the Shackled Goddess",
+    name = "Jaw Of The Shackled Goddess",
     slot = "Weapon",
     drop = "Ula'tek",
     source = "Wowhead",
@@ -81,7 +101,7 @@ local items = {
     priority = true,
   }),
   [268259] = entry({
-    name = "Girdle of Toxic Regret",
+    name = "Girdle Of Toxic Regret",
     slot = "Belt",
     drop = "The Coiled Altar",
     source = "Wowhead",
@@ -121,7 +141,7 @@ local items = {
     priority = true,
   }),
   [270175] = entry({
-    name = "Voracious Heart of Ula'tek",
+    name = "Voracious Heart Of Ula'tek",
     slot = "Trinket",
     drop = "Ula'tek",
     source = "Wowhead",
@@ -143,7 +163,7 @@ local items = {
   [271474] = entry({
     name = "Baleful Grave-Knight's Casque",
     slot = "Head",
-    drop = "Tier Set",
+    drop = "The Coiled Altar",
     source = "Wowhead",
     wowhead = "overall",
     rank = RANK.BIS,
@@ -151,8 +171,8 @@ local items = {
     priority = true,
   }),
   [271475] = entry({
-    name = "Baleful Grave-Knight's Deathgrips",
-    slot = "Gloves",
+    name = "Baleful Grave Knights Deathgrips",
+    slot = "Wrist",
     drop = "Tier Set",
     source = "Wowhead",
     wowhead = "overall",
@@ -161,7 +181,7 @@ local items = {
     priority = true,
   }),
   [271878] = entry({
-    name = "Chausses of Unbound Rancor",
+    name = "Chausses Of Unbound Rancor",
     slot = "Legs",
     drop = "Ula'tek",
     source = "Wowhead",
@@ -169,6 +189,16 @@ local items = {
     rank = RANK.BIS,
     note = nil,
     priority = true,
+  }),
+  [273797] = entry({
+    name = "Tattered Amani War Banner",
+    slot = "",
+    drop = "",
+    source = "Wowhead",
+    wowhead = "mythic",
+    rank = RANK.STRONG,
+    note = nil,
+    priority = nil,
   }),
 }
 

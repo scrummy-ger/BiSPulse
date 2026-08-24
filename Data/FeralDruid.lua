@@ -20,10 +20,30 @@ local function entry(opts)
 end
 
 local items = {
+  [159617] = entry({
+    name = "Lustrous Golden Plumage",
+    slot = "",
+    drop = "",
+    source = "Wowhead",
+    wowhead = "mythic",
+    rank = RANK.STRONG,
+    note = nil,
+    priority = nil,
+  }),
+  [159642] = entry({
+    name = "Royal Purifier's Spade",
+    slot = "",
+    drop = "",
+    source = "Wowhead",
+    wowhead = "mythic",
+    rank = RANK.STRONG,
+    note = nil,
+    priority = nil,
+  }),
   [244575] = entry({
     name = "Silvermoon Agent's Handwraps",
     slot = "Gloves",
-    drop = "Crafting/Misc",
+    drop = "Crafting/ Misc",
     source = "Wowhead",
     wowhead = "overall",
     rank = RANK.BIS,
@@ -33,7 +53,7 @@ local items = {
   [244576] = entry({
     name = "Silvermoon Agent's Deflectors",
     slot = "Wrist",
-    drop = "Crafting/Misc",
+    drop = "Crafting/ Misc",
     source = "Wowhead",
     wowhead = "overall",
     rank = RANK.BIS,
@@ -41,7 +61,7 @@ local items = {
     priority = true,
   }),
   [252258] = entry({
-    name = "Sickening Signet of Atroxus",
+    name = "Sickening Signet Of Atroxus",
     slot = "Ring",
     drop = "Voidscar Arena",
     source = "Wowhead",
@@ -51,7 +71,7 @@ local items = {
     priority = true,
   }),
   [268215] = entry({
-    name = "Abyssal Broodfiend's Bardiche",
+    name = "Abyssal Broodfiends Bardiche",
     slot = "Weapon",
     drop = "Ula'tek",
     source = "Wowhead",
@@ -81,7 +101,7 @@ local items = {
     priority = true,
   }),
   [268256] = entry({
-    name = "Sash of the Forlorn Vessel",
+    name = "Sash Of The Forlorn Vessel",
     slot = "Belt",
     drop = "The Coiled Altar",
     source = "Wowhead",
@@ -121,7 +141,7 @@ local items = {
     priority = true,
   }),
   [270175] = entry({
-    name = "Voracious Heart of Ula'tek",
+    name = "Voracious Heart Of Ula'tek",
     slot = "Trinket",
     drop = "Ula'tek",
     source = "Wowhead",
@@ -169,6 +189,26 @@ local items = {
     rank = RANK.BIS,
     note = nil,
     priority = true,
+  }),
+  [273783] = entry({
+    name = "Toxin-Coated Warstaff",
+    slot = "",
+    drop = "",
+    source = "Wowhead",
+    wowhead = "mythic",
+    rank = RANK.STRONG,
+    note = nil,
+    priority = nil,
+  }),
+  [273796] = entry({
+    name = "Vile Vial of Volatile Venom",
+    slot = "",
+    drop = "",
+    source = "Wowhead",
+    wowhead = "mythic",
+    rank = RANK.STRONG,
+    note = nil,
+    priority = nil,
   }),
 }
 

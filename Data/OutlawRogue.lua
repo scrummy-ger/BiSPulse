@@ -20,38 +20,28 @@ local function entry(opts)
 end
 
 local items = {
-  [244569] = entry({
-    name = "Silvermoon Agent's Sneakers",
+  [159617] = entry({
+    name = "Lustrous Golden Plumage",
     slot = "",
     drop = "",
     source = "Wowhead",
-    wowhead = "overall",
-    rank = RANK.BIS,
+    wowhead = "mythic",
+    rank = RANK.STRONG,
     note = nil,
-    priority = true,
+    priority = nil,
   }),
-  [244573] = entry({
-    name = "Silvermoon Agent's Utility Belt",
+  [250259] = entry({
+    name = "Sapling of the Dawnroot",
     slot = "",
     drop = "",
     source = "Wowhead",
-    wowhead = "overall",
-    rank = RANK.BIS,
+    wowhead = "mythic",
+    rank = RANK.STRONG,
     note = nil,
-    priority = true,
-  }),
-  [251124] = entry({
-    name = "Item 251124",
-    slot = "",
-    drop = "",
-    source = "Wowhead",
-    wowhead = "overall",
-    rank = RANK.BIS,
-    note = nil,
-    priority = true,
+    priority = nil,
   }),
   [268209] = entry({
-    name = "Aman'muso, Warlord's Vengeance",
+    name = "Aman'muso Warlord's Vengeance",
     slot = "Weapon",
     drop = "The Coiled Altar",
     source = "Wowhead",
@@ -101,7 +91,7 @@ local items = {
     priority = true,
   }),
   [268266] = entry({
-    name = "Alluring Bubbleband",
+    name = "Silvermoon Agent's Sneakers",
     slot = "Boots",
     drop = "Nymrissa Wavecaller",
     source = "Wowhead",
@@ -121,7 +111,7 @@ local items = {
     priority = true,
   }),
   [270175] = entry({
-    name = "Voracious Heart of Ula'tek",
+    name = "Voracious Heart Of Ula'tek",
     slot = "Trinket",
     drop = "Ula'tek",
     source = "Wowhead",
@@ -141,19 +131,9 @@ local items = {
     priority = true,
   }),
   [271509] = entry({
-    name = "Chosen Bloodslayer's Reinforced Pants",
-    slot = "Gloves",
+    name = "Chosen Bloodslayers Reinforced Pants",
+    slot = "Belt",
     drop = "Tier Set",
-    source = "Wowhead",
-    wowhead = "overall",
-    rank = RANK.BIS,
-    note = nil,
-    priority = true,
-  }),
-  [271511] = entry({
-    name = "Item 271511",
-    slot = "",
-    drop = "",
     source = "Wowhead",
     wowhead = "overall",
     rank = RANK.BIS,
@@ -171,7 +151,7 @@ local items = {
     priority = true,
   }),
   [271875] = entry({
-    name = "Gaze of the Coiled Watcher",
+    name = "Gaze Of The Coiled Watcher",
     slot = "Head",
     drop = "Ula'tek",
     source = "Wowhead",

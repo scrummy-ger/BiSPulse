@@ -1,5 +1,17 @@
 # Changelog
 
+## Unreleased
+
+### DE
+- Wowhead-Scrape: Trinket-Tiers und Raid/M+-Listen als Strong/Alt (Mindest-Rank-Filter greift)
+- Bessere Drop-Texte; lokaler Full-Scrape + Quality-Gates
+- Hinweis am Mindest-Rank: gilt für Toast/Badges, Tooltip zeigt alles
+
+### EN
+- Wowhead scrape: trinket tiers and raid/M+ lists as Strong/Alt (min-rank filter actually works)
+- Better drop text; local full scrape + quality gates
+- Min-rank hint: applies to toast/badges; tooltips still show every rank
+
 ## 1.5.5
 
 ### DE

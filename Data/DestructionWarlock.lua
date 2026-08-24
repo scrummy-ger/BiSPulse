@@ -40,6 +40,16 @@ local items = {
     note = nil,
     priority = true,
   }),
+  [250215] = entry({
+    name = "Freightrunner's Flask",
+    slot = "",
+    drop = "",
+    source = "Wowhead",
+    wowhead = "mythic",
+    rank = RANK.STRONG,
+    note = nil,
+    priority = nil,
+  }),
   [268252] = entry({
     name = "Apex Brute's Claw Ring",
     slot = "Ring",
@@ -101,7 +111,7 @@ local items = {
     priority = true,
   }),
   [271092] = entry({
-    name = "Jan'thrazet, the Soul Fang",
+    name = "Janthrazet The Soul Fang",
     slot = "Weapon",
     drop = "Ula'tek",
     source = "Wowhead",
@@ -111,7 +121,7 @@ local items = {
     priority = true,
   }),
   [271544] = entry({
-    name = "Spires of the Damned Necrolyte",
+    name = "Spires Of The Damned Necrolyte",
     slot = "Shoulders",
     drop = "The Lost Explorers",
     source = "Wowhead",
@@ -171,7 +181,7 @@ local items = {
     priority = true,
   }),
   [273792] = entry({
-    name = "Band of the Amani Warlord",
+    name = "Band Of The Amani Warlord",
     slot = "Ring",
     drop = "The Coiled Altar",
     source = "Wowhead",

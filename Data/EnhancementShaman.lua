@@ -21,7 +21,7 @@ end
 
 local items = {
   [237850] = entry({
-    name = "Farstrider's Chopper",
+    name = "Farstriders Chopper",
     slot = "",
     drop = "Blacksmithing",
     source = "Wowhead",
@@ -31,7 +31,7 @@ local items = {
     priority = true,
   }),
   [244584] = entry({
-    name = "Farstrider's Plated Bracers",
+    name = "Farstriders Plated Bracers",
     slot = "",
     drop = "Leatherworking",
     source = "Wowhead",
@@ -41,7 +41,7 @@ local items = {
     priority = true,
   }),
   [268209] = entry({
-    name = "Aman'muso, Warlord's Vengeance",
+    name = "Aman'muso Warlord's Vengeance",
     slot = "",
     drop = "The Coiled Altar",
     source = "Wowhead",
@@ -51,7 +51,7 @@ local items = {
     priority = true,
   }),
   [268252] = entry({
-    name = "Apex Brute's Claw Ring",
+    name = "Apex Brutes Claw Ring",
     slot = "",
     drop = "Sszorak",
     source = "Wowhead",
@@ -81,7 +81,7 @@ local items = {
     priority = true,
   }),
   [268258] = entry({
-    name = "Boots of the Reckless Wayfarer",
+    name = "Boots Of The Reckless Wayfarer",
     slot = "",
     drop = "The Lost Explorers",
     source = "Wowhead",
@@ -111,7 +111,7 @@ local items = {
     priority = true,
   }),
   [270175] = entry({
-    name = "Voracious Heart of Ula'tek",
+    name = "Voracious Heart Of Ula'tek",
     slot = "",
     drop = "Ula'tek",
     source = "Wowhead",
@@ -151,7 +151,7 @@ local items = {
     priority = true,
   }),
   [271484] = entry({
-    name = "Hexing Grips of the Ophidian Oracle",
+    name = "Hexing Grips Of The Ophidian Oracle",
     slot = "",
     drop = "Token &ndash; Entombed Sentinels",
     source = "Wowhead",
@@ -171,7 +171,7 @@ local items = {
     priority = true,
   }),
   [273792] = entry({
-    name = "Band of the Amani Warlord",
+    name = "Band Of The Amani Warlord",
     slot = "",
     drop = "Altar of Fangs",
     source = "Wowhead",

@@ -32,3 +32,6 @@ venv/
 tools/_cdp_expr.txt
 tools/_test_fetch.py
 tools/bispulse_wowhead_*.html
+tools/debug_*.html
+tools/debug_*.mjs
+tools/debug_*.txt

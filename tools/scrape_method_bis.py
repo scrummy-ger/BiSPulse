@@ -334,6 +334,48 @@ def parse_wowhead_bis(html: str) -> dict[int, dict]:
         if iid not in items or items[iid]["rank"] != "bis":
             upsert(iid, "mythic", "strong", name)
 
+    # Trinket tier headings (S/A/B/C)
+    tier_chunk_m = re.search(
+        r"Trinket Tier List|Best .{0,40}Trinkets", html, re.I
+    )
+    if tier_chunk_m:
+        chunk = html[tier_chunk_m.start() : tier_chunk_m.start() + 45000]
+        end = re.search(
+            r"Embellish|Crafted Gear|Stat Priority|Consumable|Talent|Rotation",
+            chunk[40:],
+            re.I,
+        )
+        if end:
+            chunk = chunk[: 40 + end.start()]
+        for hm in re.finditer(
+            r"(?:^|\n|>|\])\s*(?:\[b\])?\s*([SABCD])\+?\s*[-–—]?\s*Tier",
+            chunk,
+            re.I,
+        ):
+            letter = hm.group(1).upper()
+            rank = {"S": "bis", "A": "strong", "B": "alt", "C": "ok", "D": "ok"}.get(
+                letter, "alt"
+            )
+            # slice until next tier heading
+            rest = chunk[hm.end() :]
+            nxt = re.search(
+                r"(?:^|\n|>|\])\s*(?:\[b\])?\s*[SABCD]\+?\s*[-–—]?\s*Tier",
+                rest,
+                re.I,
+            )
+            slice_ = rest[: nxt.start()] if nxt else rest[:8000]
+            for iid, name in [
+                (int(m.group(1)), names.get(int(m.group(1))) or f"Item {m.group(1)}")
+                for m in ITEM_ANY_RE.finditer(slice_)
+            ]:
+                note = f"{letter} Tier"
+                prev = items.get(iid)
+                if not prev or _rank_score(rank) > _rank_score(prev["rank"]):
+                    upsert(iid, "trinket", rank, name)
+                    if iid in items:
+                        items[iid]["note"] = note
+                        items[iid]["slot"] = items[iid].get("slot") or "Trinket"
+
     return items
 
 
@@ -360,7 +402,10 @@ def load_existing_lua_meta(stem: str) -> dict[int, dict]:
         name = name_m.group(1).replace('\\"', '"') if name_m else ""
         drop = drop_m.group(1).replace('\\"', '"') if drop_m else ""
         slot = slot_m.group(1).replace('\\"', '"') if slot_m else ""
-        out[iid] = {"name": name, "drop": drop, "slot": slot}
+        rank_m = re.search(r"rank = RANK\.(\w+)", body)
+        rank_map = {"BIS": "bis", "STRONG": "strong", "ALT": "alt", "OK": "ok"}
+        rank = rank_map.get(rank_m.group(1), "") if rank_m else ""
+        out[iid] = {"name": name, "drop": drop, "slot": slot, "rank": rank}
     return out
 
 
@@ -377,6 +422,9 @@ def merge_preserve_quality(new_items: dict[int, dict], stem: str) -> dict[int, d
             info["drop"] = old["drop"]
         if not (info.get("slot") or "").strip() and (old.get("slot") or "").strip():
             info["slot"] = old["slot"]
+        # Keep a stronger prior rank only if scrape omitted rank (shouldn't happen).
+        if not info.get("rank") and old.get("rank"):
+            info["rank"] = old["rank"]
     return new_items
 
 
@@ -503,7 +551,7 @@ def load_wowhead_browser_json(path: Path) -> dict[str, dict[int, dict]]:
                 "method": None,
                 "rank": row.get("rank") or "bis",
                 "source": "Wowhead",
-                "note": None,
+                "note": row.get("note") or None,
                 "slot": row.get("slot") or "",
                 "drop": row.get("drop") or "",
             }
@@ -513,13 +561,17 @@ def load_wowhead_browser_json(path: Path) -> dict[str, dict[int, dict]]:
 
 
 def finalize_wowhead_items(wh_items: dict[int, dict]) -> dict[int, dict]:
-    """Normalize Wowhead-only pack (priority flags)."""
+    """Normalize Wowhead-only pack (priority flags). Preserve scrape ranks."""
     out: dict[int, dict] = {}
     for iid, info in wh_items.items():
         entry = dict(info)
         entry["method"] = None
         entry["source"] = "Wowhead"
-        if entry.get("rank") == "bis" and entry.get("slot") != "Embellishment":
+        rank = (entry.get("rank") or "bis").lower()
+        if rank not in {"bis", "strong", "alt", "ok"}:
+            rank = "bis"
+        entry["rank"] = rank
+        if rank == "bis" and entry.get("slot") != "Embellishment":
             entry["priority"] = True
         else:
             entry["priority"] = False

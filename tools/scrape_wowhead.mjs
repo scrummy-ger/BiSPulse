@@ -63,6 +63,14 @@ const EMBELLISHMENTS = new Set([240167, 273060, 245790]);
 const SLOT_RE =
   /^(Weapon|Weapons|Offhand|Off[- ]?Hand|Main[- ]?Hand|One[- ]?Hand|Two[- ]?Hand|[12]H(?:\s*Weapon)?|MH|OH|Head|Helm|Neck|Shoulders?|Back|Cloak|Chest|Wrist|Wrists|Hands|Gloves|Waist|Belt|Legs|Feet|Boots|Finger|Ring|Trinkets?)$/i;
 
+/** Relative or absolute Wowhead item href (source only — clone per use). */
+const ITEM_HREF_SRC =
+  'href="(?:https?:\\/\\/(?:www|de|fr|es|pt|ru|ko|cn)\\.wowhead\\.com)?\\/item=(\\d+)\\/([^"#?]+)"';
+
+function itemHrefMatches(html) {
+  return html.matchAll(new RegExp(ITEM_HREF_SRC, "gi"));
+}
+
 function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));
 }
@@ -134,13 +142,17 @@ function isPlaceholderName(name) {
 
 function buildNameIndex(html) {
   const names = {};
-  // Rendered item links
+  // Rendered item links (relative or absolute)
   for (const m of html.matchAll(
-    /href="\/item=(\d+)\/([^"#?]+)"[^>]*>([^<]*)</gi
+    /href="(?:https?:\/\/(?:www|de|fr|es|pt|ru|ko|cn)\.wowhead\.com)?\/item=(\d+)\/([^"#?]+)"[^>]*>([\s\S]*?)<\/a>/gi
   )) {
     const id = Number(m[1]);
-    const text = (m[3] || "").trim();
-    if (text && !isPlaceholderName(text)) names[id] = text;
+    const inner = m[3] || "";
+    const text =
+      (inner.match(/class="tinyicontxt"[^>]*>([^<]+)/i) || [])[1] ||
+      (inner.match(/alt="([^"]+)"/i) || [])[1] ||
+      stripMarkup(inner);
+    if (text && !isPlaceholderName(text)) names[id] = text.trim();
     else if (!names[id]) names[id] = slugToName(m[2]);
   }
   // WH.Gatherer blobs (name_enus)
@@ -154,12 +166,6 @@ function buildNameIndex(html) {
     } catch {
       /* ignore */
     }
-  }
-  // Alternate gatherer key order
-  for (const m of html.matchAll(
-    /name_enus"\s*:\s*"((?:\\.|[^"\\])*)"[^{}]{0,200}?"(\d{5,7})"/gi
-  )) {
-    /* skip noisy reverse matches */
   }
   return names;
 }
@@ -213,6 +219,65 @@ function bisChunk(html) {
   return html.slice(start, start + 20 + end);
 }
 
+function cleanDrop(raw) {
+  let drop = stripMarkup(raw);
+  if (!drop) return "";
+  // Common Wowhead junk in source cells
+  drop = drop
+    .replace(/\s*[|·•]\s*/g, " / ")
+    .replace(/\s+/g, " ")
+    .trim();
+  if (!drop || drop.length > 80) return "";
+  if (SLOT_RE.test(drop)) return "";
+  if (/^[\d.%\s/+-]+$/.test(drop)) return "";
+  if (/^(source|drop|location|where|item|name|slot|tier)$/i.test(drop)) return "";
+  // Normalize crafting labels
+  if (/blacksmithing/i.test(drop) && /craft/i.test(drop)) return "Blacksmithing";
+  if (/leatherworking/i.test(drop) && /craft/i.test(drop)) return "Leatherworking";
+  if (/tailoring/i.test(drop) && /craft/i.test(drop)) return "Tailoring";
+  if (/jewelcrafting|inscription|engineering|alchemy/i.test(drop) && /craft/i.test(drop)) {
+    const prof = drop.match(
+      /(Blacksmithing|Leatherworking|Tailoring|Jewelcrafting|Inscription|Engineering|Alchemy)/i
+    );
+    if (prof) return prof[1].replace(/^\w/, (c) => c.toUpperCase());
+  }
+  if (/^crafting(\/misc)?$/i.test(drop) || /^crafted$/i.test(drop)) return "Crafting";
+  if (/^tier set$/i.test(drop)) return "Tier Set";
+  return drop;
+}
+
+function rankScore(rank) {
+  return { bis: 4, strong: 3, alt: 2, ok: 1 }[rank] || 0;
+}
+
+function tierLetterToRank(letter) {
+  const t = String(letter || "")
+    .trim()
+    .toUpperCase();
+  if (t === "S" || t === "S+" || t === "SS") return "bis";
+  if (t === "A" || t === "A+" || t === "A-") return "strong";
+  if (t === "B" || t === "B+" || t === "B-") return "alt";
+  if (t === "C" || t === "C+" || t === "D" || t === "F") return "ok";
+  return null;
+}
+
+function sectionChunk(html, startPats, endPats, hardCap = 35000) {
+  let start = -1;
+  for (const p of startPats) {
+    const i = html.search(p);
+    if (i >= 0 && (start < 0 || i < start)) start = i;
+  }
+  if (start < 0) return "";
+  const rest = html.slice(start + 20);
+  let end = -1;
+  for (const p of endPats) {
+    const i = rest.search(p);
+    if (i >= 0 && (end < 0 || i < end)) end = i;
+  }
+  if (end < 0 || end > hardCap) end = hardCap;
+  return html.slice(start, start + 20 + end);
+}
+
 /** Pull Slot | Item | Source rows from BBCode + HTML tables. */
 function extractGearRows(html) {
   const rows = [];
@@ -226,39 +291,44 @@ function extractGearRows(html) {
     if (!itemM) continue;
     const nameFromCell =
       tds[1].match(/\[item=\d+[^\]]*\]([^\[]+)/i)?.[1] ||
-      tds[1].match(/href="\/item=\d+\/[^"]+"[^>]*>([^<]+)/i)?.[1] ||
+      tds[1].match(/tinyicontxt"[^>]*>([^<]+)/i)?.[1] ||
       null;
     rows.push({
       id: Number(itemM[1]),
       name: nameFromCell,
       slot: slotRaw,
-      drop: tds[2] || "",
+      drop: cleanDrop(tds[2] || ""),
     });
   }
 
+  // HTML table rows — absolute or relative item URLs, name may be in nested span/img
   const htmlRow =
-    /<(?:td|th)[^>]*>\s*(?:<[^>]+>\s*)*([^<]{2,40}?)\s*(?:<\/[^>]+>\s*)*<\/(?:td|th)>\s*<(?:td|th)[^>]*>[\s\S]{0,900}?href="\/item=(\d+)\/([^"#?]+)"[^>]*>([^<]*)<\/a>[\s\S]{0,500}?<\/(?:td|th)>\s*<(?:td|th)[^>]*>([\s\S]*?)<\/(?:td|th)>/gi;
+    /<(?:td|th)[^>]*>\s*(?:<[^>]+>\s*)*([^<]{2,40}?)\s*(?:<\/[^>]+>\s*)*<\/(?:td|th)>\s*<(?:td|th)[^>]*>[\s\S]{0,1200}?href="(?:https?:\/\/(?:www|de|fr|es|pt|ru|ko|cn)\.wowhead\.com)?\/item=(\d+)\/([^"#?]+)"[\s\S]{0,800}?<\/(?:td|th)>\s*<(?:td|th)[^>]*>([\s\S]*?)<\/(?:td|th)>/gi;
   for (const m of html.matchAll(htmlRow)) {
-    const slotRaw = m[1].trim();
+    const slotRaw = stripMarkup(m[1]);
     if (!SLOT_RE.test(slotRaw)) continue;
+    const cell = m[0];
+    const name =
+      (cell.match(/tinyicontxt"[^>]*>([^<]+)/i) || [])[1] ||
+      (cell.match(/alt="([^"]+)"/i) || [])[1] ||
+      slugToName(m[3]);
     rows.push({
       id: Number(m[2]),
-      name: m[4] || slugToName(m[3]),
+      name,
       slot: slotRaw,
-      drop: m[5],
+      drop: cleanDrop(m[4]),
     });
   }
 
-  // Item | Source only (no slot column) — common in "Raid Drops" tables
+  // Item | Source only (no slot column)
   const itemSource =
-    /href="\/item=(\d+)\/([^"#?]+)"[^>]*>([^<]*)<\/a>[\s\S]{0,200}?<(?:td|th)[^>]*>([\s\S]{2,120}?)<\/(?:td|th)>/gi;
+    /href="(?:https?:\/\/(?:www|de|fr|es|pt|ru|ko|cn)\.wowhead\.com)?\/item=(\d+)\/([^"#?]+)"[\s\S]{0,400}?<(?:td|th)[^>]*>([\s\S]{2,160}?)<\/(?:td|th)>/gi;
   for (const m of html.matchAll(itemSource)) {
-    const drop = stripMarkup(m[4]);
-    if (!drop || SLOT_RE.test(drop) || drop.length > 80) continue;
-    if (/^[\d.%\s]+$/.test(drop)) continue;
+    const drop = cleanDrop(m[3]);
+    if (!drop) continue;
     rows.push({
       id: Number(m[1]),
-      name: m[3] || slugToName(m[2]),
+      name: slugToName(m[2]),
       slot: null,
       drop,
     });
@@ -267,13 +337,93 @@ function extractGearRows(html) {
   return rows;
 }
 
-function parseOverall(html) {
+function extractItemIds(html) {
+  const ids = [];
+  const seen = new Set();
+  for (const m of html.matchAll(/\[item=(\d+)/gi)) {
+    const id = Number(m[1]);
+    if (!id || seen.has(id) || EMBELLISHMENTS.has(id)) continue;
+    seen.add(id);
+    ids.push(id);
+  }
+  for (const m of itemHrefMatches(html)) {
+    const id = Number(m[1]);
+    if (!id || seen.has(id) || EMBELLISHMENTS.has(id)) continue;
+    seen.add(id);
+    ids.push(id);
+  }
+  return ids;
+}
+
+/** Trinket tier lists: S/A/B(/C) headings or Tier | Item tables. */
+function extractTrinketTierRows(html) {
+  const chunk = sectionChunk(
+    html,
+    [
+      /Trinket Tier List/i,
+      /Best .* Trinkets/i,
+      /Trinket Tier/i,
+      /toc=\\"Trinkets\\"/i,
+      /toc="Trinkets"/i,
+    ],
+    [
+      /Embellish/i,
+      /Crafted Gear/i,
+      /Stat Priority/i,
+      /Consumable/i,
+      /Talent/i,
+      /Rotation/i,
+      /toc=\\"Stat/i,
+    ],
+    45000
+  );
+  if (!chunk) return [];
+
+  const rows = [];
+
+  // Heading-based: ### S Tier / [b]A Tier[/b] then items until next tier
+  const headingRe =
+    /(?:^|\n|\r|>|\])\s*(?:\[b\])?\s*([SABCD])\+?\s*[-–—]?\s*Tier(?:\s*List)?(?:\[\/b\])?/gi;
+  const matches = [...chunk.matchAll(headingRe)];
+  for (let i = 0; i < matches.length; i++) {
+    const letter = matches[i][1];
+    const rank = tierLetterToRank(letter);
+    if (!rank) continue;
+    const from = matches[i].index + matches[i][0].length;
+    const to = i + 1 < matches.length ? matches[i + 1].index : chunk.length;
+    const slice = chunk.slice(from, to);
+    for (const id of extractItemIds(slice)) {
+      rows.push({ id, rank, note: `${letter.toUpperCase()} Tier`, slot: "Trinket" });
+    }
+  }
+
+  // Table: Tier letter in first cell, item in second
+  for (const tr of chunk.matchAll(/\[tr\]([\s\S]*?)\[\/tr\]/gi)) {
+    const tds = [...tr[1].matchAll(/\[td\]([\s\S]*?)\[\/td\]/gi)].map((m) =>
+      stripMarkup(m[1])
+    );
+    if (tds.length < 2) continue;
+    const rank = tierLetterToRank(tds[0].replace(/tier/i, "").trim());
+    const itemM = tr[1].match(/\[item=(\d+)/i);
+    if (!rank || !itemM) continue;
+    rows.push({
+      id: Number(itemM[1]),
+      rank,
+      note: `${tds[0].trim()} Tier`.replace(/\s+Tier Tier/i, " Tier"),
+      slot: "Trinket",
+    });
+  }
+
+  return rows;
+}
+
+function parseGuide(html) {
   const chunk = bisChunk(html);
   const nameById = buildNameIndex(html);
   const ordered = [];
   const byId = new Map();
 
-  function upsert(id, name, slot, drop, { allowNew = true } = {}) {
+  function upsert(id, name, slot, drop, rank, wowhead, note, { allowNew = true } = {}) {
     id = Number(id);
     if (!id || EMBELLISHMENTS.has(id)) return;
     let entry = byId.get(id);
@@ -282,11 +432,17 @@ function parseOverall(html) {
       entry = {
         id,
         name: "",
-        wowhead: "overall",
-        rank: "bis",
+        wowhead: wowhead || "overall",
+        rank: rank || "bis",
       };
       byId.set(id, entry);
       ordered.push(entry);
+    } else {
+      // Higher rank wins; never downgrade Overall BiS.
+      if (rank && rankScore(rank) > rankScore(entry.rank)) {
+        entry.rank = rank;
+        if (wowhead) entry.wowhead = wowhead;
+      }
     }
     const cleanName = stripMarkup(name);
     if (cleanName && !isPlaceholderName(cleanName)) {
@@ -298,26 +454,60 @@ function parseOverall(html) {
       const ns = normalizeSlot(slot);
       if (ns && (!entry.slot || entry.slot === "")) entry.slot = ns;
     }
-    const cleanDrop = stripMarkup(drop);
-    if (cleanDrop) {
-      if (!entry.drop || cleanDrop.length > entry.drop.length) entry.drop = cleanDrop;
+    const cd = cleanDrop(drop);
+    if (cd) {
+      if (!entry.drop || cd.length >= entry.drop.length) entry.drop = cd;
+    }
+    if (note && !entry.note) entry.note = note;
+  }
+
+  // 1) Overall BiS chunk — BiS (order matters)
+  for (const row of extractGearRows(chunk)) {
+    upsert(row.id, row.name, row.slot, row.drop, "bis", "overall");
+  }
+  for (const m of chunk.matchAll(/\[item=(\d+)/gi)) {
+    upsert(m[1], null, null, null, "bis", "overall");
+  }
+  for (const m of itemHrefMatches(chunk)) {
+    upsert(m[1], slugToName(m[2]), null, null, "bis", "overall");
+  }
+
+  // 2) Trinket tier list — Strong/Alt/Ok (and S-tier as BiS if not already)
+  for (const row of extractTrinketTierRows(html)) {
+    upsert(row.id, null, row.slot, null, row.rank, "trinket", row.note, {
+      allowNew: true,
+    });
+  }
+
+  // 3) Raid / Mythic+ BiS sections — Strong if not already Overall BiS
+  const secondarySections = [
+    {
+      wowhead: "raid",
+      start: [/Raid BiS/i, /Best Gear from Raids/i, /Best Raid Items/i, /Raid Drops/i],
+      end: [/Mythic\+/i, /M\+ BiS/i, /Crafted Gear/i, /Trinket Tier/i, /Dungeon/i],
+    },
+    {
+      wowhead: "mythic",
+      start: [/Mythic\+ BiS/i, /M\+ BiS/i, /Best Gear from Mythic/i, /Mythic Plus/i],
+      end: [/Crafted Gear/i, /Trinket Tier/i, /Embellish/i, /Stat Priority/i],
+    },
+  ];
+  for (const sec of secondarySections) {
+    const secHtml = sectionChunk(html, sec.start, sec.end, 30000);
+    if (!secHtml) continue;
+    for (const row of extractGearRows(secHtml)) {
+      upsert(row.id, row.name, row.slot, row.drop, "strong", sec.wowhead, null, {
+        allowNew: true,
+      });
+    }
+    for (const id of extractItemIds(secHtml)) {
+      upsert(id, null, null, null, "strong", sec.wowhead, null, { allowNew: true });
     }
   }
 
-  // 1) Overall BiS chunk — defines which items are BiS (order matters)
-  for (const row of extractGearRows(chunk)) {
-    upsert(row.id, row.name, row.slot, row.drop);
-  }
-  for (const m of chunk.matchAll(/\[item=(\d+)/gi)) {
-    upsert(m[1], null, null, null);
-  }
-  for (const m of chunk.matchAll(/href="\/item=(\d+)\/([^"#?]+)"[^>]*>([^<]*)</gi)) {
-    upsert(m[1], m[3] || slugToName(m[2]), null, null);
-  }
-
-  // 2) Rest of guide (Raid Drops / Dungeons / Crafting) — enrich slot+drop only
+  // 4) Rest of guide — enrich slot+drop on known items only
   for (const row of extractGearRows(html)) {
-    upsert(row.id, row.name, row.slot, row.drop, { allowNew: false });
+    upsert(row.id, row.name, row.slot, row.drop, null, null, null, { allowNew: false });
   }
 
   // Fill missing names from page-wide index / slug
@@ -327,7 +517,10 @@ function parseOverall(html) {
     }
     if (isPlaceholderName(entry.name)) {
       const slugM = html.match(
-        new RegExp(`href="/item=${entry.id}/([^"#?]+)"`, "i")
+        new RegExp(
+          String.raw`href="(?:https?:\/\/(?:www|de|fr|es|pt|ru|ko|cn)\.wowhead\.com)?\/item=${entry.id}\/([^"#?]+)"`,
+          "i"
+        )
       );
       if (slugM) entry.name = slugToName(slugM[1]);
     }
@@ -419,15 +612,18 @@ async function scrapeSpecOnce(page, stem, cls, spec) {
   ) {
     throw new Error("blocked or empty page");
   }
-  const items = parseOverall(html);
+  const items = parseGuide(html);
   if (items.length === 0) {
     throw new Error("no BiS items parsed");
   }
   const placeholders = items.filter((i) => /^Item \d+$/i.test(i.name || "")).length;
+  const byRank = { bis: 0, strong: 0, alt: 0, ok: 0 };
+  for (const i of items) byRank[i.rank] = (byRank[i.rank] || 0) + 1;
   return {
     count: items.length,
     withDrop: items.filter((i) => i.drop).length,
     placeholders,
+    byRank,
     items,
     url,
   };
@@ -486,7 +682,11 @@ async function main() {
       const pack = await scrapeSpec(page, stem, cls, spec);
       out[stem] = pack;
       console.log(
-        `${pack.count} items (${pack.withDrop} drop, ${pack.placeholders} ph)`
+        `${pack.count} items (${pack.withDrop} drop, ${pack.placeholders} ph` +
+          (pack.byRank
+            ? `, bis=${pack.byRank.bis || 0}/strong=${pack.byRank.strong || 0}/alt=${pack.byRank.alt || 0}`
+            : "") +
+          `)`
       );
       if (pack.count < 8) errors[stem] = `only ${pack.count} items`;
     } catch (e) {
@@ -537,7 +737,15 @@ async function main() {
   }
 }
 
-main().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+const isDirectRun =
+  process.argv[1] &&
+  path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+
+if (isDirectRun) {
+  main().catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });
+}
+
+export { parseGuide, extractGearRows, bisChunk, cleanDrop, extractTrinketTierRows };

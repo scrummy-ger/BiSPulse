@@ -20,8 +20,48 @@ local function entry(opts)
 end
 
 local items = {
+  [158370] = entry({
+    name = "Twin-Strike Polearm",
+    slot = "",
+    drop = "",
+    source = "Wowhead",
+    wowhead = "mythic",
+    rank = RANK.STRONG,
+    note = nil,
+    priority = nil,
+  }),
+  [159313] = entry({
+    name = "Breeches of the Sacred Hall",
+    slot = "",
+    drop = "",
+    source = "Wowhead",
+    wowhead = "mythic",
+    rank = RANK.STRONG,
+    note = nil,
+    priority = nil,
+  }),
+  [251124] = entry({
+    name = "Gauntlets of Fevered Defense",
+    slot = "",
+    drop = "",
+    source = "Wowhead",
+    wowhead = "mythic",
+    rank = RANK.STRONG,
+    note = nil,
+    priority = nil,
+  }),
+  [251223] = entry({
+    name = "Somber Spaulders",
+    slot = "",
+    drop = "",
+    source = "Wowhead",
+    wowhead = "mythic",
+    rank = RANK.STRONG,
+    note = nil,
+    priority = nil,
+  }),
   [268215] = entry({
-    name = "Abyssal Broodfiend's Bardiche",
+    name = "Abyssal Broodfiends Bardiche",
     slot = "Weapon",
     drop = "Ula'tek",
     source = "Wowhead",
@@ -41,9 +81,9 @@ local items = {
     priority = true,
   }),
   [268249] = entry({
-    name = "Vile Alchemist's Band",
+    name = "Vile Alchemists Band",
     slot = "",
-    drop = "",
+    drop = "Vashnik the Malignant",
     source = "Wowhead",
     wowhead = "overall",
     rank = RANK.BIS,
@@ -71,7 +111,7 @@ local items = {
     priority = true,
   }),
   [268256] = entry({
-    name = "Sash of the Forlorn Vessel",
+    name = "Sash Of The Forlorn Vessel",
     slot = "Belt",
     drop = "The Coiled Altar",
     source = "Wowhead",
@@ -113,7 +153,7 @@ local items = {
   [270173] = entry({
     name = "Zul'jin's Guillotine Technique",
     slot = "",
-    drop = "",
+    drop = "The Coiled Altar",
     source = "Wowhead",
     wowhead = "overall",
     rank = RANK.BIS,
@@ -161,7 +201,7 @@ local items = {
     priority = true,
   }),
   [271875] = entry({
-    name = "Gaze of the Coiled Watcher",
+    name = "Gaze Of The Coiled Watcher",
     slot = "Head",
     drop = "Ula'tek",
     source = "Wowhead",

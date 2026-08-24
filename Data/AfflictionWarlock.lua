@@ -91,7 +91,7 @@ local items = {
     priority = true,
   }),
   [271092] = entry({
-    name = "Jan'thrazet, the Soul Fang",
+    name = "Janthrazet The Soul Fang",
     slot = "Weapon",
     drop = "Ula'tek",
     source = "Wowhead",
@@ -101,7 +101,7 @@ local items = {
     priority = true,
   }),
   [271544] = entry({
-    name = "Spires of the Damned Necrolyte",
+    name = "Spires Of The Damned Necrolyte",
     slot = "Shoulders",
     drop = "The Lost Explorers",
     source = "Wowhead",
@@ -151,7 +151,7 @@ local items = {
     priority = true,
   }),
   [273649] = entry({
-    name = "Stormbound Emblem of Dazar",
+    name = "Stormbound Emblem Of Dazar",
     slot = "Trinket",
     drop = "King Dazar",
     source = "Wowhead",
@@ -171,7 +171,7 @@ local items = {
     priority = true,
   }),
   [273792] = entry({
-    name = "Band of the Amani Warlord",
+    name = "Band Of The Amani Warlord",
     slot = "Ring",
     drop = "The Coiled Altar",
     source = "Wowhead",
@@ -179,6 +179,16 @@ local items = {
     rank = RANK.BIS,
     note = nil,
     priority = true,
+  }),
+  [273796] = entry({
+    name = "Vile Vial of Volatile Venom",
+    slot = "",
+    drop = "",
+    source = "Wowhead",
+    wowhead = "mythic",
+    rank = RANK.STRONG,
+    note = nil,
+    priority = nil,
   }),
 }
 

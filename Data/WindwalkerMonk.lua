@@ -51,7 +51,7 @@ local items = {
     priority = true,
   }),
   [251124] = entry({
-    name = "Gauntlets of Fevered Defense",
+    name = "Gauntlets Of Fevered Defense",
     slot = "Gloves",
     drop = "Murder Row",
     source = "Wowhead",
@@ -61,7 +61,7 @@ local items = {
     priority = true,
   }),
   [252258] = entry({
-    name = "Sickening Signet of Atroxus",
+    name = "Sickening Signet Of Atroxus",
     slot = "Ring",
     drop = "Voidscar Arena",
     source = "Wowhead",
@@ -71,9 +71,9 @@ local items = {
     priority = true,
   }),
   [268215] = entry({
-    name = "Abyssal Broodfiend's Bardiche",
-    slot = "",
-    drop = "",
+    name = "Abyssal Broodfiends Bardiche",
+    slot = "Weapon",
+    drop = "Ula'tek",
     source = "Wowhead",
     wowhead = "overall",
     rank = RANK.BIS,
@@ -91,7 +91,7 @@ local items = {
     priority = true,
   }),
   [268235] = entry({
-    name = "Vestment of the Awakening",
+    name = "Vestment Of The Awakening",
     slot = "Chest",
     drop = "Nek'zali the Soulcoiler",
     source = "Wowhead",
@@ -111,7 +111,7 @@ local items = {
     priority = true,
   }),
   [268256] = entry({
-    name = "Sash of the Forlorn Vessel",
+    name = "Sash Of The Forlorn Vessel",
     slot = "Belt",
     drop = "The Coiled Altar",
     source = "Wowhead",
@@ -133,7 +133,7 @@ local items = {
   [270173] = entry({
     name = "Zul'jin's Guillotine Technique",
     slot = "",
-    drop = "",
+    drop = "The Coiled Altar",
     source = "Wowhead",
     wowhead = "overall",
     rank = RANK.BIS,
@@ -141,9 +141,9 @@ local items = {
     priority = true,
   }),
   [270175] = entry({
-    name = "Voracious Heart of Ula'tek",
+    name = "Voracious Heart Of Ula'tek",
     slot = "",
-    drop = "",
+    drop = "Ula'tek",
     source = "Wowhead",
     wowhead = "overall",
     rank = RANK.BIS,
@@ -151,7 +151,7 @@ local items = {
     priority = true,
   }),
   [271517] = entry({
-    name = "Tassels of the Monkey King",
+    name = "Tassels Of The Monkey King",
     slot = "Shoulders",
     drop = "Tier Set",
     source = "Wowhead",
@@ -161,7 +161,7 @@ local items = {
     priority = true,
   }),
   [271875] = entry({
-    name = "Gaze of the Coiled Watcher",
+    name = "Gaze Of The Coiled Watcher",
     slot = "Head",
     drop = "Ula'tek",
     source = "Wowhead",

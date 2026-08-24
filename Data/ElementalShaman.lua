@@ -40,8 +40,28 @@ local items = {
     note = nil,
     priority = true,
   }),
+  [250215] = entry({
+    name = "Freightrunner's Flask",
+    slot = "",
+    drop = "",
+    source = "Wowhead",
+    wowhead = "mythic",
+    rank = RANK.STRONG,
+    note = nil,
+    priority = nil,
+  }),
+  [251142] = entry({
+    name = "Pendant of Malefic Fury",
+    slot = "",
+    drop = "",
+    source = "Wowhead",
+    wowhead = "mythic",
+    rank = RANK.STRONG,
+    note = nil,
+    priority = nil,
+  }),
   [252258] = entry({
-    name = "Sickening Signet of Atroxus",
+    name = "Sickening Signet Of Atroxus",
     slot = "Ring",
     drop = "Voidscar Arena",
     source = "Wowhead",
@@ -111,7 +131,7 @@ local items = {
     priority = true,
   }),
   [271092] = entry({
-    name = "Jan'thrazet, the Soul Fang",
+    name = "Janthrazet The Soul Fang",
     slot = "Weapon",
     drop = "Ula'tek",
     source = "Wowhead",
@@ -121,7 +141,7 @@ local items = {
     priority = true,
   }),
   [271481] = entry({
-    name = "Hissing Mantle of the Ophidian Oracle",
+    name = "Hissing Mantle Of The Ophidian Oracle",
     slot = "Shoulders",
     drop = "Tier Set",
     source = "Wowhead",
@@ -131,7 +151,7 @@ local items = {
     priority = true,
   }),
   [271482] = entry({
-    name = "Leggings of the Ophidian Oracle",
+    name = "Leggings Of The Ophidian Oracle",
     slot = "Legs",
     drop = "Tier Set",
     source = "Wowhead",
@@ -141,7 +161,7 @@ local items = {
     priority = true,
   }),
   [271483] = entry({
-    name = "Serpent Crown of the Ophidian Oracle",
+    name = "Serpent Crown Of The Ophidian Oracle",
     slot = "Head",
     drop = "Tier Set",
     source = "Wowhead",
@@ -151,7 +171,7 @@ local items = {
     priority = true,
   }),
   [271484] = entry({
-    name = "Hexing Grips of the Ophidian Oracle",
+    name = "Hexing Grips Of The Ophidian Oracle",
     slot = "Gloves",
     drop = "Tier Set",
     source = "Wowhead",
@@ -161,7 +181,7 @@ local items = {
     priority = true,
   }),
   [271486] = entry({
-    name = "Fanged Raiment of the Ophidian Oracle",
+    name = "Fanged Raiment Of The Ophidian Oracle",
     slot = "Chest",
     drop = "Tier Set",
     source = "Wowhead",
@@ -171,7 +191,7 @@ local items = {
     priority = true,
   }),
   [273796] = entry({
-    name = "Vile Vial of Volatile Venom",
+    name = "Vile Vial Of Volatile Venom",
     slot = "Trinket",
     drop = "Altar of Fangs",
     source = "Wowhead",

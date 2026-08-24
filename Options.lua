@@ -223,7 +223,20 @@ function addon:BuildOptions()
     panel.rankCycle = cycle
   end
 
-  local btnY = y - 70
+  local rankHint = panel:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
+  if hasDropdown and dropdown then
+    rankHint:SetPoint("TOPLEFT", dropdown, "BOTTOMLEFT", 20, -2)
+  elseif panel.rankCycle then
+    rankHint:SetPoint("TOPLEFT", panel.rankCycle, "BOTTOMLEFT", 0, -2)
+  else
+    rankHint:SetPoint("TOPLEFT", rankLabel, "BOTTOMLEFT", 0, -36)
+  end
+  rankHint:SetWidth(400)
+  rankHint:SetJustifyH("LEFT")
+  rankHint:SetText(L["OPTS_MIN_RANK_HINT"] or "")
+  panel.rankHint = rankHint
+
+  local btnY = y - 100
   local scanBtn = CreateFrame("Button", nil, panel, "UIPanelButtonTemplate")
   scanBtn:SetSize(120, 24)
   scanBtn:SetPoint("TOPLEFT", 16, btnY)
