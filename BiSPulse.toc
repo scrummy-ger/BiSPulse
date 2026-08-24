@@ -62,4 +62,3 @@ Alerts.lua
 LootBadges.lua
 Minimap.lua
 Options.lua
-

@@ -1,7 +1,50 @@
 {
   "scrapedAt": "2026-08-24",
   "ok": 40,
-  "errors": {},
+  "freshOk": 1,
+  "totalItems": 755,
+  "placeholders": 0,
+  "errors": {
+    "BloodDeathKnight": "no BiS items parsed",
+    "FrostDeathKnight": "no BiS items parsed",
+    "UnholyDeathKnight": "no BiS items parsed",
+    "HavocDemonHunter": "no BiS items parsed",
+    "VengeanceDemonHunter": "no BiS items parsed",
+    "DevourerDemonHunter": "no BiS items parsed",
+    "BalanceDruid": "no BiS items parsed",
+    "FeralDruid": "no BiS items parsed",
+    "GuardianDruid": "no BiS items parsed",
+    "RestorationDruid": "no BiS items parsed",
+    "DevastationEvoker": "no BiS items parsed",
+    "PreservationEvoker": "no BiS items parsed",
+    "AugmentationEvoker": "no BiS items parsed",
+    "BeastMasteryHunter": "no BiS items parsed",
+    "MarksmanshipHunter": "no BiS items parsed",
+    "SurvivalHunter": "no BiS items parsed",
+    "ArcaneMage": "no BiS items parsed",
+    "FireMage": "no BiS items parsed",
+    "FrostMage": "no BiS items parsed",
+    "BrewmasterMonk": "no BiS items parsed",
+    "MistweaverMonk": "no BiS items parsed",
+    "WindwalkerMonk": "no BiS items parsed",
+    "HolyPaladin": "no BiS items parsed",
+    "ProtectionPaladin": "no BiS items parsed",
+    "RetributionPaladin": "no BiS items parsed",
+    "DisciplinePriest": "no BiS items parsed",
+    "HolyPriest": "no BiS items parsed",
+    "ShadowPriest": "no BiS items parsed",
+    "AssassinationRogue": "no BiS items parsed",
+    "OutlawRogue": "no BiS items parsed",
+    "SubtletyRogue": "no BiS items parsed",
+    "ElementalShaman": "no BiS items parsed",
+    "RestorationShaman": "no BiS items parsed",
+    "AfflictionWarlock": "no BiS items parsed",
+    "DemonologyWarlock": "no BiS items parsed",
+    "DestructionWarlock": "no BiS items parsed",
+    "ArmsWarrior": "no BiS items parsed",
+    "FuryWarrior": "no BiS items parsed",
+    "ProtectionWarrior": "no BiS items parsed"
+  },
   "out": {
     "BloodDeathKnight": {
       "count": 22,
@@ -162,7 +205,8 @@
           "rank": "bis"
         }
       ],
-      "url": "https://www.wowhead.com/guide/classes/death-knight/blood/bis-gear"
+      "url": "https://www.wowhead.com/guide/classes/death-knight/blood/bis-gear",
+      "reused": true
     },
     "FrostDeathKnight": {
       "count": 15,
@@ -289,7 +333,8 @@
           "drop": "Ula'tek"
         }
       ],
-      "url": "https://www.wowhead.com/guide/classes/death-knight/frost/bis-gear"
+      "url": "https://www.wowhead.com/guide/classes/death-knight/frost/bis-gear",
+      "reused": true
     },
     "UnholyDeathKnight": {
       "count": 15,
@@ -416,7 +461,8 @@
           "drop": "The Coiled Altar"
         }
       ],
-      "url": "https://www.wowhead.com/guide/classes/death-knight/unholy/bis-gear"
+      "url": "https://www.wowhead.com/guide/classes/death-knight/unholy/bis-gear",
+      "reused": true
     },
     "HavocDemonHunter": {
       "count": 19,
@@ -563,7 +609,8 @@
           "rank": "bis"
         }
       ],
-      "url": "https://www.wowhead.com/guide/classes/demon-hunter/havoc/bis-gear"
+      "url": "https://www.wowhead.com/guide/classes/demon-hunter/havoc/bis-gear",
+      "reused": true
     },
     "VengeanceDemonHunter": {
       "count": 21,
@@ -720,7 +767,8 @@
           "rank": "bis"
         }
       ],
-      "url": "https://www.wowhead.com/guide/classes/demon-hunter/vengeance/bis-gear"
+      "url": "https://www.wowhead.com/guide/classes/demon-hunter/vengeance/bis-gear",
+      "reused": true
     },
     "DevourerDemonHunter": {
       "count": 23,
@@ -887,7 +935,8 @@
           "rank": "bis"
         }
       ],
-      "url": "https://www.wowhead.com/guide/classes/demon-hunter/devourer/bis-gear"
+      "url": "https://www.wowhead.com/guide/classes/demon-hunter/devourer/bis-gear",
+      "reused": true
     },
     "BalanceDruid": {
       "count": 16,
@@ -990,7 +1039,8 @@
           "rank": "bis"
         }
       ],
-      "url": "https://www.wowhead.com/guide/classes/druid/balance/bis-gear"
+      "url": "https://www.wowhead.com/guide/classes/druid/balance/bis-gear",
+      "reused": true
     },
     "FeralDruid": {
       "count": 15,
@@ -1117,7 +1167,8 @@
           "drop": "Ula'tek"
         }
       ],
-      "url": "https://www.wowhead.com/guide/classes/druid/feral/bis-gear"
+      "url": "https://www.wowhead.com/guide/classes/druid/feral/bis-gear",
+      "reused": true
     },
     "GuardianDruid": {
       "count": 15,
@@ -1240,7 +1291,8 @@
           "rank": "bis"
         }
       ],
-      "url": "https://www.wowhead.com/guide/classes/druid/guardian/bis-gear"
+      "url": "https://www.wowhead.com/guide/classes/druid/guardian/bis-gear",
+      "reused": true
     },
     "RestorationDruid": {
       "count": 25,
@@ -1431,7 +1483,8 @@
           "rank": "bis"
         }
       ],
-      "url": "https://www.wowhead.com/guide/classes/druid/restoration/bis-gear"
+      "url": "https://www.wowhead.com/guide/classes/druid/restoration/bis-gear",
+      "reused": true
     },
     "DevastationEvoker": {
       "count": 21,
@@ -1586,7 +1639,8 @@
           "rank": "bis"
         }
       ],
-      "url": "https://www.wowhead.com/guide/classes/evoker/devastation/bis-gear"
+      "url": "https://www.wowhead.com/guide/classes/evoker/devastation/bis-gear",
+      "reused": true
     },
     "PreservationEvoker": {
       "count": 21,
@@ -1739,7 +1793,8 @@
           "rank": "bis"
         }
       ],
-      "url": "https://www.wowhead.com/guide/classes/evoker/preservation/bis-gear"
+      "url": "https://www.wowhead.com/guide/classes/evoker/preservation/bis-gear",
+      "reused": true
     },
     "AugmentationEvoker": {
       "count": 21,
@@ -1894,7 +1949,8 @@
           "rank": "bis"
         }
       ],
-      "url": "https://www.wowhead.com/guide/classes/evoker/augmentation/bis-gear"
+      "url": "https://www.wowhead.com/guide/classes/evoker/augmentation/bis-gear",
+      "reused": true
     },
     "BeastMasteryHunter": {
       "count": 10,
@@ -1981,7 +2037,8 @@
           "drop": "Ula'tek"
         }
       ],
-      "url": "https://www.wowhead.com/guide/classes/hunter/beast-mastery/bis-gear"
+      "url": "https://www.wowhead.com/guide/classes/hunter/beast-mastery/bis-gear",
+      "reused": true
     },
     "MarksmanshipHunter": {
       "count": 20,
@@ -2108,7 +2165,8 @@
           "rank": "bis"
         }
       ],
-      "url": "https://www.wowhead.com/guide/classes/hunter/marksmanship/bis-gear"
+      "url": "https://www.wowhead.com/guide/classes/hunter/marksmanship/bis-gear",
+      "reused": true
     },
     "SurvivalHunter": {
       "count": 20,
@@ -2265,7 +2323,8 @@
           "rank": "bis"
         }
       ],
-      "url": "https://www.wowhead.com/guide/classes/hunter/survival/bis-gear"
+      "url": "https://www.wowhead.com/guide/classes/hunter/survival/bis-gear",
+      "reused": true
     },
     "ArcaneMage": {
       "count": 21,
@@ -2420,7 +2479,8 @@
           "rank": "bis"
         }
       ],
-      "url": "https://www.wowhead.com/guide/classes/mage/arcane/bis-gear"
+      "url": "https://www.wowhead.com/guide/classes/mage/arcane/bis-gear",
+      "reused": true
     },
     "FireMage": {
       "count": 21,
@@ -2575,7 +2635,8 @@
           "rank": "bis"
         }
       ],
-      "url": "https://www.wowhead.com/guide/classes/mage/fire/bis-gear"
+      "url": "https://www.wowhead.com/guide/classes/mage/fire/bis-gear",
+      "reused": true
     },
     "FrostMage": {
       "count": 21,
@@ -2730,7 +2791,8 @@
           "rank": "bis"
         }
       ],
-      "url": "https://www.wowhead.com/guide/classes/mage/frost/bis-gear"
+      "url": "https://www.wowhead.com/guide/classes/mage/frost/bis-gear",
+      "reused": true
     },
     "BrewmasterMonk": {
       "count": 24,
@@ -2895,7 +2957,8 @@
           "rank": "bis"
         }
       ],
-      "url": "https://www.wowhead.com/guide/classes/monk/brewmaster/bis-gear"
+      "url": "https://www.wowhead.com/guide/classes/monk/brewmaster/bis-gear",
+      "reused": true
     },
     "MistweaverMonk": {
       "count": 25,
@@ -3082,7 +3145,8 @@
           "rank": "bis"
         }
       ],
-      "url": "https://www.wowhead.com/guide/classes/monk/mistweaver/bis-gear"
+      "url": "https://www.wowhead.com/guide/classes/monk/mistweaver/bis-gear",
+      "reused": true
     },
     "WindwalkerMonk": {
       "count": 15,
@@ -3203,7 +3267,8 @@
           "rank": "bis"
         }
       ],
-      "url": "https://www.wowhead.com/guide/classes/monk/windwalker/bis-gear"
+      "url": "https://www.wowhead.com/guide/classes/monk/windwalker/bis-gear",
+      "reused": true
     },
     "HolyPaladin": {
       "count": 20,
@@ -3352,7 +3417,8 @@
           "rank": "bis"
         }
       ],
-      "url": "https://www.wowhead.com/guide/classes/paladin/holy/bis-gear"
+      "url": "https://www.wowhead.com/guide/classes/paladin/holy/bis-gear",
+      "reused": true
     },
     "ProtectionPaladin": {
       "count": 16,
@@ -3481,7 +3547,8 @@
           "rank": "bis"
         }
       ],
-      "url": "https://www.wowhead.com/guide/classes/paladin/protection/bis-gear"
+      "url": "https://www.wowhead.com/guide/classes/paladin/protection/bis-gear",
+      "reused": true
     },
     "RetributionPaladin": {
       "count": 20,
@@ -3628,7 +3695,8 @@
           "rank": "bis"
         }
       ],
-      "url": "https://www.wowhead.com/guide/classes/paladin/retribution/bis-gear"
+      "url": "https://www.wowhead.com/guide/classes/paladin/retribution/bis-gear",
+      "reused": true
     },
     "DisciplinePriest": {
       "count": 19,
@@ -3775,7 +3843,8 @@
           "rank": "bis"
         }
       ],
-      "url": "https://www.wowhead.com/guide/classes/priest/discipline/bis-gear"
+      "url": "https://www.wowhead.com/guide/classes/priest/discipline/bis-gear",
+      "reused": true
     },
     "HolyPriest": {
       "count": 18,
@@ -3918,7 +3987,8 @@
           "rank": "bis"
         }
       ],
-      "url": "https://www.wowhead.com/guide/classes/priest/holy/bis-gear"
+      "url": "https://www.wowhead.com/guide/classes/priest/holy/bis-gear",
+      "reused": true
     },
     "ShadowPriest": {
       "count": 19,
@@ -4059,7 +4129,8 @@
           "rank": "bis"
         }
       ],
-      "url": "https://www.wowhead.com/guide/classes/priest/shadow/bis-gear"
+      "url": "https://www.wowhead.com/guide/classes/priest/shadow/bis-gear",
+      "reused": true
     },
     "AssassinationRogue": {
       "count": 20,
@@ -4210,7 +4281,8 @@
           "rank": "bis"
         }
       ],
-      "url": "https://www.wowhead.com/guide/classes/rogue/assassination/bis-gear"
+      "url": "https://www.wowhead.com/guide/classes/rogue/assassination/bis-gear",
+      "reused": true
     },
     "OutlawRogue": {
       "count": 17,
@@ -4345,7 +4417,8 @@
           "rank": "bis"
         }
       ],
-      "url": "https://www.wowhead.com/guide/classes/rogue/outlaw/bis-gear"
+      "url": "https://www.wowhead.com/guide/classes/rogue/outlaw/bis-gear",
+      "reused": true
     },
     "SubtletyRogue": {
       "count": 21,
@@ -4500,7 +4573,8 @@
           "rank": "bis"
         }
       ],
-      "url": "https://www.wowhead.com/guide/classes/rogue/subtlety/bis-gear"
+      "url": "https://www.wowhead.com/guide/classes/rogue/subtlety/bis-gear",
+      "reused": true
     },
     "ElementalShaman": {
       "count": 16,
@@ -4635,39 +4709,44 @@
           "drop": "Altar of Fangs"
         }
       ],
-      "url": "https://www.wowhead.com/guide/classes/shaman/elemental/bis-gear"
+      "url": "https://www.wowhead.com/guide/classes/shaman/elemental/bis-gear",
+      "reused": true
     },
     "EnhancementShaman": {
-      "count": 29,
-      "withDrop": 0,
+      "count": 16,
+      "withDrop": 12,
+      "placeholders": 0,
       "items": [
         {
           "id": 268265,
           "name": "Aqirbane Reliquary",
           "wowhead": "overall",
-          "rank": "bis"
+          "rank": "bis",
+          "drop": "Ula'tek"
         },
         {
           "id": 268209,
           "name": "Aman'muso, Warlord's Vengeance",
           "wowhead": "overall",
-          "rank": "bis"
+          "rank": "bis",
+          "drop": "The Coiled Altar"
         },
         {
           "id": 237850,
           "name": "Farstrider's Chopper",
           "wowhead": "overall",
-          "rank": "bis"
+          "rank": "bis",
+          "drop": "Blacksmithing"
         },
         {
           "id": 271483,
-          "name": "Item 271483",
+          "name": "Serpent Crown of the Ophidian Oracle",
           "wowhead": "overall",
           "rank": "bis"
         },
         {
           "id": 271481,
-          "name": "Item 271481",
+          "name": "Hissing Mantle of the Ophidian Oracle",
           "wowhead": "overall",
           "rank": "bis"
         },
@@ -4675,11 +4754,12 @@
           "id": 268253,
           "name": "Silken Voodoo Drape",
           "wowhead": "overall",
-          "rank": "bis"
+          "rank": "bis",
+          "drop": "The Coiled Altar"
         },
         {
           "id": 271486,
-          "name": "Item 271486",
+          "name": "Fanged Raiment of the Ophidian Oracle",
           "wowhead": "overall",
           "rank": "bis"
         },
@@ -4687,23 +4767,26 @@
           "id": 244584,
           "name": "Farstrider's Plated Bracers",
           "wowhead": "overall",
-          "rank": "bis"
+          "rank": "bis",
+          "drop": "Leatherworking"
         },
         {
           "id": 271484,
           "name": "Hexing Grips of the Ophidian Oracle",
           "wowhead": "overall",
-          "rank": "bis"
+          "rank": "bis",
+          "drop": "Token &ndash; Entombed Sentinels"
         },
         {
           "id": 268254,
           "name": "Serpentine Mixing Belt",
           "wowhead": "overall",
-          "rank": "bis"
+          "rank": "bis",
+          "drop": "Vashnik"
         },
         {
           "id": 271482,
-          "name": "Item 271482",
+          "name": "Leggings of the Ophidian Oracle",
           "wowhead": "overall",
           "rank": "bis"
         },
@@ -4711,109 +4794,36 @@
           "id": 268258,
           "name": "Boots of the Reckless Wayfarer",
           "wowhead": "overall",
-          "rank": "bis"
+          "rank": "bis",
+          "drop": "The Lost Explorers"
         },
         {
           "id": 273792,
           "name": "Band of the Amani Warlord",
           "wowhead": "overall",
-          "rank": "bis"
+          "rank": "bis",
+          "drop": "Altar of Fangs"
         },
         {
           "id": 268252,
           "name": "Apex Brute's Claw Ring",
           "wowhead": "overall",
-          "rank": "bis"
+          "rank": "bis",
+          "drop": "Sszorak"
         },
         {
           "id": 270175,
           "name": "Voracious Heart of Ula'tek",
           "wowhead": "overall",
-          "rank": "bis"
+          "rank": "bis",
+          "drop": "Ula'tek"
         },
         {
           "id": 270173,
           "name": "Zul'jin's Guillotine Technique",
           "wowhead": "overall",
-          "rank": "bis"
-        },
-        {
-          "id": 273072,
-          "name": "Item 273072",
-          "wowhead": "overall",
-          "rank": "bis"
-        },
-        {
-          "id": 244007,
-          "name": "Item 244007",
-          "wowhead": "overall",
-          "rank": "bis"
-        },
-        {
-          "id": 275707,
-          "name": "Item 275707",
-          "wowhead": "overall",
-          "rank": "bis"
-        },
-        {
-          "id": 251220,
-          "name": "Item 251220",
-          "wowhead": "overall",
-          "rank": "bis"
-        },
-        {
-          "id": 243991,
-          "name": "Item 243991",
-          "wowhead": "overall",
-          "rank": "bis"
-        },
-        {
-          "id": 268231,
-          "name": "Item 268231",
-          "wowhead": "overall",
-          "rank": "bis"
-        },
-        {
-          "id": 243977,
-          "name": "Item 243977",
-          "wowhead": "overall",
-          "rank": "bis"
-        },
-        {
-          "id": 271876,
-          "name": "Awoken Dreadfang Cuirass",
-          "wowhead": "overall",
-          "rank": "bis"
-        },
-        {
-          "id": 270912,
-          "name": "Item 270912",
-          "wowhead": "overall",
-          "rank": "bis"
-        },
-        {
-          "id": 244641,
-          "name": "Item 244641",
-          "wowhead": "overall",
-          "rank": "bis"
-        },
-        {
-          "id": 268237,
-          "name": "Item 268237",
-          "wowhead": "overall",
-          "rank": "bis"
-        },
-        {
-          "id": 243953,
-          "name": "Item 243953",
-          "wowhead": "overall",
-          "rank": "bis"
-        },
-        {
-          "id": 243957,
-          "name": "Item 243957",
-          "wowhead": "overall",
-          "rank": "bis"
+          "rank": "bis",
+          "drop": "The Coiled Altar"
         }
       ],
       "url": "https://www.wowhead.com/guide/classes/shaman/enhancement/bis-gear"
@@ -4963,7 +4973,8 @@
           "rank": "bis"
         }
       ],
-      "url": "https://www.wowhead.com/guide/classes/shaman/restoration/bis-gear"
+      "url": "https://www.wowhead.com/guide/classes/shaman/restoration/bis-gear",
+      "reused": true
     },
     "AfflictionWarlock": {
       "count": 16,
@@ -5098,7 +5109,8 @@
           "drop": "King Dazar"
         }
       ],
-      "url": "https://www.wowhead.com/guide/classes/warlock/affliction/bis-gear"
+      "url": "https://www.wowhead.com/guide/classes/warlock/affliction/bis-gear",
+      "reused": true
     },
     "DemonologyWarlock": {
       "count": 20,
@@ -5247,7 +5259,8 @@
           "rank": "bis"
         }
       ],
-      "url": "https://www.wowhead.com/guide/classes/warlock/demonology/bis-gear"
+      "url": "https://www.wowhead.com/guide/classes/warlock/demonology/bis-gear",
+      "reused": true
     },
     "DestructionWarlock": {
       "count": 16,
@@ -5382,7 +5395,8 @@
           "drop": "Nymrissa Wavecaller"
         }
       ],
-      "url": "https://www.wowhead.com/guide/classes/warlock/destruction/bis-gear"
+      "url": "https://www.wowhead.com/guide/classes/warlock/destruction/bis-gear",
+      "reused": true
     },
     "ArmsWarrior": {
       "count": 18,
@@ -5519,7 +5533,8 @@
           "rank": "bis"
         }
       ],
-      "url": "https://www.wowhead.com/guide/classes/warrior/arms/bis-gear"
+      "url": "https://www.wowhead.com/guide/classes/warrior/arms/bis-gear",
+      "reused": true
     },
     "FuryWarrior": {
       "count": 21,
@@ -5672,7 +5687,8 @@
           "rank": "bis"
         }
       ],
-      "url": "https://www.wowhead.com/guide/classes/warrior/fury/bis-gear"
+      "url": "https://www.wowhead.com/guide/classes/warrior/fury/bis-gear",
+      "reused": true
     },
     "ProtectionWarrior": {
       "count": 16,
@@ -5801,7 +5817,8 @@
           "rank": "bis"
         }
       ],
-      "url": "https://www.wowhead.com/guide/classes/warrior/protection/bis-gear"
+      "url": "https://www.wowhead.com/guide/classes/warrior/protection/bis-gear",
+      "reused": true
     }
   }
 }
