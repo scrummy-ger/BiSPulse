@@ -20,6 +20,46 @@ local function entry(opts)
 end
 
 local items = {
+  [34251] = entry({
+    name = "Item 34251",
+    slot = "",
+    drop = "",
+    source = "Wowhead",
+    wowhead = "overall",
+    rank = RANK.BIS,
+    note = nil,
+    priority = true,
+  }),
+  [34252] = entry({
+    name = "Item 34252",
+    slot = "",
+    drop = "",
+    source = "Wowhead",
+    wowhead = "overall",
+    rank = RANK.BIS,
+    note = nil,
+    priority = true,
+  }),
+  [34262] = entry({
+    name = "Item 34262",
+    slot = "",
+    drop = "",
+    source = "Wowhead",
+    wowhead = "overall",
+    rank = RANK.BIS,
+    note = nil,
+    priority = true,
+  }),
+  [34264] = entry({
+    name = "Item 34264",
+    slot = "",
+    drop = "",
+    source = "Wowhead",
+    wowhead = "overall",
+    rank = RANK.BIS,
+    note = nil,
+    priority = true,
+  }),
   [158366] = entry({
     name = "Charged Sandstone Band",
     slot = "Ring",
@@ -32,7 +72,7 @@ local items = {
   }),
   [239648] = entry({
     name = "Martyr's Bindings",
-    slot = "Wrist",
+    slot = "Chest",
     drop = "Crafting",
     source = "Wowhead",
     wowhead = "overall",
@@ -42,7 +82,7 @@ local items = {
   }),
   [239649] = entry({
     name = "Martyr's Waistwrap",
-    slot = "Belt",
+    slot = "Gloves",
     drop = "Crafting",
     source = "Wowhead",
     wowhead = "overall",
@@ -82,7 +122,7 @@ local items = {
   }),
   [268253] = entry({
     name = "Silken Voodoo Drape",
-    slot = "Cloak",
+    slot = "Shoulders",
     drop = "The Coiled Altar",
     source = "Wowhead",
     wowhead = "overall",
@@ -92,7 +132,7 @@ local items = {
   }),
   [268255] = entry({
     name = "Cackling Soultreads",
-    slot = "Boots",
+    slot = "Legs",
     drop = "The Coiled Altar",
     source = "Wowhead",
     wowhead = "overall",
@@ -102,7 +142,7 @@ local items = {
   }),
   [268265] = entry({
     name = "Aqirbane Reliquary",
-    slot = "Neck",
+    slot = "Head",
     drop = "Ula'tek",
     source = "Wowhead",
     wowhead = "overall",
@@ -132,8 +172,8 @@ local items = {
   }),
   [271544] = entry({
     name = "Item 271544",
-    slot = "Shoulders",
-    drop = "Catalyst: The Lost Explorers",
+    slot = "",
+    drop = "",
     source = "Wowhead",
     wowhead = "overall",
     rank = RANK.BIS,
@@ -142,8 +182,8 @@ local items = {
   }),
   [271545] = entry({
     name = "Item 271545",
-    slot = "Legs",
-    drop = "Catalyst: Sszorak",
+    slot = "",
+    drop = "",
     source = "Wowhead",
     wowhead = "overall",
     rank = RANK.BIS,
@@ -152,8 +192,8 @@ local items = {
   }),
   [271547] = entry({
     name = "Item 271547",
-    slot = "Gloves",
-    drop = "Catalyst: Entombed Sentinels",
+    slot = "",
+    drop = "",
     source = "Wowhead",
     wowhead = "overall",
     rank = RANK.BIS,
@@ -162,8 +202,8 @@ local items = {
   }),
   [271549] = entry({
     name = "Item 271549",
-    slot = "Chest",
-    drop = "Catalyst: Vashnik the Malignant",
+    slot = "",
+    drop = "",
     source = "Wowhead",
     wowhead = "overall",
     rank = RANK.BIS,
@@ -172,8 +212,8 @@ local items = {
   }),
   [271874] = entry({
     name = "Item 271874",
-    slot = "Head",
-    drop = "Catalyst: Ula'tek",
+    slot = "",
+    drop = "",
     source = "Wowhead",
     wowhead = "overall",
     rank = RANK.BIS,
@@ -187,7 +227,7 @@ BiSPulseData:Register("WARLOCK", 2, {
   specName = "Demonology",
   patch = "12.1",
   season = "Midnight Season 2",
-  updated = "2026-08-22",
+  updated = "2026-08-24",
   primarySource = "Wowhead",
   guides = {
     wowhead = "https://www.wowhead.com/guide/classes/warlock/demonology/bis-gear",

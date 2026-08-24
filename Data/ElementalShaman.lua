@@ -187,7 +187,7 @@ BiSPulseData:Register("SHAMAN", 1, {
   specName = "Elemental",
   patch = "12.1",
   season = "Midnight Season 2",
-  updated = "2026-08-22",
+  updated = "2026-08-24",
   primarySource = "Wowhead",
   guides = {
     wowhead = "https://www.wowhead.com/guide/classes/shaman/elemental/bis-gear",

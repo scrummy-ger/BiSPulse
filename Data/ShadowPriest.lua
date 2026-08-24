@@ -22,8 +22,8 @@ end
 local items = {
   [239045] = entry({
     name = "Item 239045",
-    slot = "Shoulders",
-    drop = "King's Rest",
+    slot = "",
+    drop = "",
     source = "Wowhead",
     wowhead = "overall",
     rank = RANK.BIS,
@@ -32,8 +32,8 @@ local items = {
   }),
   [239648] = entry({
     name = "Martyr's Bindings",
-    slot = "Wrist",
-    drop = "Crafting/Misc",
+    slot = "",
+    drop = "",
     source = "Wowhead",
     wowhead = "overall",
     rank = RANK.BIS,
@@ -42,8 +42,8 @@ local items = {
   }),
   [239649] = entry({
     name = "Martyr's Waistwrap",
-    slot = "Belt",
-    drop = "Crafting/Misc",
+    slot = "",
+    drop = "",
     source = "Wowhead",
     wowhead = "overall",
     rank = RANK.BIS,
@@ -54,6 +54,16 @@ local items = {
     name = "Freightrunner's Flask",
     slot = "Trinket",
     drop = "Murder Row",
+    source = "Wowhead",
+    wowhead = "overall",
+    rank = RANK.BIS,
+    note = nil,
+    priority = true,
+  }),
+  [251160] = entry({
+    name = "Forest Dream Leg-guards",
+    slot = "",
+    drop = "",
     source = "Wowhead",
     wowhead = "overall",
     rank = RANK.BIS,
@@ -80,6 +90,16 @@ local items = {
     note = nil,
     priority = true,
   }),
+  [268243] = entry({
+    name = "Grasps of the Eternal Shadow",
+    slot = "",
+    drop = "",
+    source = "Wowhead",
+    wowhead = "overall",
+    rank = RANK.BIS,
+    note = nil,
+    priority = true,
+  }),
   [268249] = entry({
     name = "Vile Alchemist's Band",
     slot = "Ring",
@@ -92,7 +112,7 @@ local items = {
   }),
   [268253] = entry({
     name = "Silken Voodoo Drape",
-    slot = "Cloak",
+    slot = "Shoulders",
     drop = "The Coiled Altar",
     source = "Wowhead",
     wowhead = "overall",
@@ -102,7 +122,7 @@ local items = {
   }),
   [268255] = entry({
     name = "Cackling Soultreads",
-    slot = "Boots",
+    slot = "Wrist",
     drop = "The Coiled Altar",
     source = "Wowhead",
     wowhead = "overall",
@@ -112,7 +132,7 @@ local items = {
   }),
   [268265] = entry({
     name = "Aqirbane Reliquary",
-    slot = "Neck",
+    slot = "Head",
     drop = "Ula'tek",
     source = "Wowhead",
     wowhead = "overall",
@@ -142,8 +162,8 @@ local items = {
   }),
   [271554] = entry({
     name = "Item 271554",
-    slot = "Legs",
-    drop = "Catalyst: Den of Nalorakk",
+    slot = "",
+    drop = "",
     source = "Wowhead",
     wowhead = "overall",
     rank = RANK.BIS,
@@ -152,8 +172,8 @@ local items = {
   }),
   [271555] = entry({
     name = "Item 271555",
-    slot = "Head",
-    drop = "Catalyst: Ula'tek",
+    slot = "",
+    drop = "",
     source = "Wowhead",
     wowhead = "overall",
     rank = RANK.BIS,
@@ -162,8 +182,8 @@ local items = {
   }),
   [271556] = entry({
     name = "Item 271556",
-    slot = "Gloves",
-    drop = "Catalyst: The Coiled Altar",
+    slot = "",
+    drop = "",
     source = "Wowhead",
     wowhead = "overall",
     rank = RANK.BIS,
@@ -180,6 +200,16 @@ local items = {
     note = nil,
     priority = true,
   }),
+  [271874] = entry({
+    name = "Venomkeeper's Horrific Cowl",
+    slot = "",
+    drop = "",
+    source = "Wowhead",
+    wowhead = "overall",
+    rank = RANK.BIS,
+    note = nil,
+    priority = true,
+  }),
 }
 
 BiSPulseData:Register("PRIEST", 3, {
@@ -187,7 +217,7 @@ BiSPulseData:Register("PRIEST", 3, {
   specName = "Shadow",
   patch = "12.1",
   season = "Midnight Season 2",
-  updated = "2026-08-22",
+  updated = "2026-08-24",
   primarySource = "Wowhead",
   guides = {
     wowhead = "https://www.wowhead.com/guide/classes/priest/shadow/bis-gear",

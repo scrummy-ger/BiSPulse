@@ -20,9 +20,19 @@ local function entry(opts)
 end
 
 local items = {
+  [159234] = entry({
+    name = "Down-Lined Breeches",
+    slot = "",
+    drop = "",
+    source = "Wowhead",
+    wowhead = "overall",
+    rank = RANK.BIS,
+    note = nil,
+    priority = true,
+  }),
   [239648] = entry({
     name = "Martyr's Bindings",
-    slot = "Wrist",
+    slot = "Chest",
     drop = "Crafting",
     source = "Wowhead",
     wowhead = "overall",
@@ -62,8 +72,18 @@ local items = {
   }),
   [268218] = entry({
     name = "Nek'zali's Spiritwalkers",
-    slot = "Boots",
+    slot = "Legs",
     drop = "Nek'zali the Soulcoiler",
+    source = "Wowhead",
+    wowhead = "overall",
+    rank = RANK.BIS,
+    note = nil,
+    priority = true,
+  }),
+  [268221] = entry({
+    name = "Tidebound Sorcereress's Robes",
+    slot = "",
+    drop = "",
     source = "Wowhead",
     wowhead = "overall",
     rank = RANK.BIS,
@@ -142,7 +162,7 @@ local items = {
   }),
   [271554] = entry({
     name = "Item 271554",
-    slot = "Legs",
+    slot = "",
     drop = "",
     source = "Wowhead",
     wowhead = "overall",
@@ -162,7 +182,7 @@ local items = {
   }),
   [271558] = entry({
     name = "Item 271558",
-    slot = "Chest",
+    slot = "",
     drop = "",
     source = "Wowhead",
     wowhead = "overall",
@@ -187,7 +207,7 @@ BiSPulseData:Register("PRIEST", 2, {
   specName = "Holy",
   patch = "12.1",
   season = "Midnight Season 2",
-  updated = "2026-08-22",
+  updated = "2026-08-24",
   primarySource = "Wowhead",
   guides = {
     wowhead = "https://www.wowhead.com/guide/classes/priest/holy/bis-gear",
