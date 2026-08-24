@@ -70,6 +70,16 @@ local items = {
     note = nil,
     priority = true,
   }),
+  [268215] = entry({
+    name = "Abyssal Broodfiend's Bardiche",
+    slot = "",
+    drop = "",
+    source = "Wowhead",
+    wowhead = "overall",
+    rank = RANK.BIS,
+    note = nil,
+    priority = true,
+  }),
   [268225] = entry({
     name = "Coiled Hex Legguards",
     slot = "Legs",
@@ -122,8 +132,8 @@ local items = {
   }),
   [270173] = entry({
     name = "Zul'jin's Guillotine Technique",
-    slot = "Trinket",
-    drop = "The Coiled Altar",
+    slot = "",
+    drop = "",
     source = "Wowhead",
     wowhead = "overall",
     rank = RANK.BIS,
@@ -132,8 +142,8 @@ local items = {
   }),
   [270175] = entry({
     name = "Voracious Heart of Ula'tek",
-    slot = "Trinket",
-    drop = "Ula'tek",
+    slot = "",
+    drop = "",
     source = "Wowhead",
     wowhead = "overall",
     rank = RANK.BIS,
@@ -167,7 +177,7 @@ BiSPulseData:Register("MONK", 3, {
   specName = "Windwalker",
   patch = "12.1",
   season = "Midnight Season 2",
-  updated = "2026-08-22",
+  updated = "2026-08-24",
   primarySource = "Wowhead",
   guides = {
     wowhead = "https://www.wowhead.com/guide/classes/monk/windwalker/bis-gear",

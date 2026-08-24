@@ -163,7 +163,7 @@ local items = {
   [271531] = entry({
     name = "Enigmatic Dreamwatcher's Lunar Raiment",
     slot = "Chest",
-    drop = "Catalyst: Vashnik the Malignant",
+    drop = "Vashnik the Malignant",
     source = "Wowhead",
     wowhead = "overall",
     rank = RANK.BIS,
@@ -177,7 +177,7 @@ BiSPulseData:Register("DRUID", 2, {
   specName = "Feral",
   patch = "12.1",
   season = "Midnight Season 2",
-  updated = "2026-08-22",
+  updated = "2026-08-24",
   primarySource = "Wowhead",
   guides = {
     wowhead = "https://www.wowhead.com/guide/classes/druid/feral/bis-gear",
