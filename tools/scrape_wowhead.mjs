@@ -339,15 +339,45 @@ function parseOverall(html) {
   return ordered;
 }
 
-async function scrapeSpec(page, stem, cls, spec) {
+async function dismissConsent(page) {
+  const sels = [
+    "#onetrust-accept-btn-handler",
+    "button:has-text('Accept All')",
+    "button:has-text('Accept all')",
+    "button:has-text('I Agree')",
+  ];
+  for (const sel of sels) {
+    try {
+      const btn = page.locator(sel).first();
+      if (await btn.isVisible({ timeout: 800 })) {
+        await btn.click({ timeout: 2000 });
+        await sleep(400);
+        return;
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+}
+
+async function scrapeSpecOnce(page, stem, cls, spec) {
   const url = `https://www.wowhead.com/guide/classes/${cls}/${spec}/bis-gear`;
   await page.goto(url, { waitUntil: "domcontentloaded", timeout: 90000 });
   const title = await page.title();
-  if (/just a moment|attention required|access denied/i.test(title)) {
-    await sleep(10000);
+  if (/just a moment|attention required|access denied|cloudflare/i.test(title)) {
+    await sleep(12000);
   }
-  await page.waitForSelector('a[href*="/item="]', { timeout: 25000 }).catch(() => {});
-  await sleep(600);
+  await dismissConsent(page);
+  await page.waitForSelector('a[href*="/item="]', { timeout: 35000 }).catch(() => {});
+  // Guide body often hydrates after first paint.
+  await sleep(1800);
+  await page
+    .waitForFunction(
+      () => (document.body?.innerText || "").length > 4000,
+      null,
+      { timeout: 15000 }
+    )
+    .catch(() => {});
   let html = await page.content();
   // Prefer live Gatherer names when available in the page context.
   try {
@@ -372,7 +402,6 @@ async function scrapeSpec(page, stem, cls, spec) {
       return out;
     });
     if (gathererNames && Object.keys(gathererNames).length) {
-      // Inject fake href markers so buildNameIndex / upsert can see them.
       const extra = Object.entries(gathererNames)
         .map(
           ([id, name]) =>
@@ -384,10 +413,16 @@ async function scrapeSpec(page, stem, cls, spec) {
   } catch {
     /* ignore */
   }
-  if (html.length < 8000 || /403 ERROR|Request blocked/i.test(html)) {
+  if (
+    html.length < 8000 ||
+    /403 ERROR|Request blocked|Just a moment|cf-browser-verification/i.test(html)
+  ) {
     throw new Error("blocked or empty page");
   }
   const items = parseOverall(html);
+  if (items.length === 0) {
+    throw new Error("no BiS items parsed");
+  }
   const placeholders = items.filter((i) => /^Item \d+$/i.test(i.name || "")).length;
   return {
     count: items.length,
@@ -398,17 +433,51 @@ async function scrapeSpec(page, stem, cls, spec) {
   };
 }
 
+async function scrapeSpec(page, stem, cls, spec) {
+  let lastErr = null;
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    try {
+      const pack = await scrapeSpecOnce(page, stem, cls, spec);
+      if (pack.count >= 8) return pack;
+      lastErr = new Error(`only ${pack.count} items`);
+    } catch (e) {
+      lastErr = e;
+    }
+    await sleep(1500 * attempt);
+  }
+  throw lastErr || new Error("scrape failed");
+}
+
+function loadPreviousOut() {
+  try {
+    if (!fs.existsSync(OUT)) return {};
+    const prev = JSON.parse(fs.readFileSync(OUT, "utf8"));
+    return prev.out || {};
+  } catch {
+    return {};
+  }
+}
+
 async function main() {
-  const browser = await chromium.launch({ headless: true });
+  const browser = await chromium.launch({
+    headless: true,
+    args: ["--disable-blink-features=AutomationControlled"],
+  });
   const context = await browser.newContext({
     locale: "en-US",
     userAgent:
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36",
+    viewport: { width: 1440, height: 900 },
+  });
+  await context.addInitScript(() => {
+    Object.defineProperty(navigator, "webdriver", { get: () => undefined });
   });
   const page = await context.newPage();
   await page.goto("https://www.wowhead.com/", { waitUntil: "domcontentloaded", timeout: 60000 }).catch(() => {});
-  await sleep(1000);
+  await sleep(2000);
+  await dismissConsent(page);
 
+  const previous = loadPreviousOut();
   const out = {};
   const errors = {};
   for (const [stem, cls, spec] of SPECS) {
@@ -423,10 +492,16 @@ async function main() {
     } catch (e) {
       const msg = e && e.message ? e.message : String(e);
       errors[stem] = msg;
-      out[stem] = { count: 0, items: [], placeholders: 0, error: msg };
-      console.log(`FAIL ${msg}`);
+      const prev = previous[stem];
+      if (prev && (prev.count || 0) > 0 && Array.isArray(prev.items) && prev.items.length) {
+        out[stem] = { ...prev, reused: true };
+        console.log(`FAIL ${msg} — reused previous (${prev.count} items)`);
+      } else {
+        out[stem] = { count: 0, items: [], placeholders: 0, error: msg };
+        console.log(`FAIL ${msg}`);
+      }
     }
-    await sleep(700);
+    await sleep(900);
   }
 
   await browser.close();
@@ -434,22 +509,30 @@ async function main() {
   const ok = Object.values(out).filter((x) => x.count > 0).length;
   const totalItems = Object.values(out).reduce((n, p) => n + (p.count || 0), 0);
   const totalPh = Object.values(out).reduce((n, p) => n + (p.placeholders || 0), 0);
+  const freshOk = Object.values(out).filter((x) => x.count > 0 && !x.reused).length;
   const payload = {
     scrapedAt: new Date().toISOString().slice(0, 10),
     ok,
+    freshOk,
     totalItems,
     placeholders: totalPh,
     errors,
     out,
   };
   fs.writeFileSync(OUT, JSON.stringify(payload, null, 2), "utf8");
-  console.log(`\nWrote ${OUT} (${ok}/${SPECS.length} specs, ph=${totalPh}/${totalItems})`);
+  console.log(
+    `\nWrote ${OUT} (${ok}/${SPECS.length} specs, fresh=${freshOk}, ph=${totalPh}/${totalItems})`
+  );
   if (ok < 36) {
-    console.error("Too few specs scraped — not safe to regenerate Data/");
+    console.error("Too few specs available (fresh+reused) — not safe to regenerate Data/");
     process.exit(1);
   }
   if (totalItems > 0 && totalPh / totalItems > 0.45) {
     console.error("Placeholder name rate too high — aborting");
+    process.exit(1);
+  }
+  if (freshOk === 0) {
+    console.error("No fresh specs scraped this run — aborting to avoid no-op PR noise");
     process.exit(1);
   }
 }

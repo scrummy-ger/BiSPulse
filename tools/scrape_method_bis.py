@@ -508,7 +508,8 @@ def load_wowhead_browser_json(path: Path) -> dict[str, dict[int, dict]]:
                 "drop": row.get("drop") or "",
             }
         by_stem[stem] = items
-    return by_stem
+    # Drop empty packs so callers keep existing Lua files.
+    return { stem: items for stem, items in by_stem.items() if items }
 
 
 def finalize_wowhead_items(wh_items: dict[int, dict]) -> dict[int, dict]:
