@@ -6,13 +6,14 @@ on:
     - cron: "0 6 * * 1"
   workflow_dispatch:
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   scrape:
     runs-on: ubuntu-latest
     timeout-minutes: 40
-    permissions:
-      contents: write
-      pull-requests: write
     steps:
       - uses: actions/checkout@v4
 
@@ -38,12 +39,16 @@ jobs:
         run: python tools/scrape_method_bis.py --wowhead-json tools/wowhead_browser_data.json
 
       - name: Open PR if lists changed
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v7
         with:
           commit-message: "chore: refresh Wowhead BiS lists"
           title: "Weekly Wowhead BiS refresh"
           body: |
-            Automatischer Scrape der Wowhead Overall-BiS-Guides.
-            Nach Merge: Addon-Version auf CurseForge/Wago hochladen, damit User Auto-Update bekommen.
+            Automated scrape of Wowhead Overall BiS guides.
+
+            After merge:
+            1. Bump `## Version` in `BiSPulse.toc` if needed
+            2. Upload a new CurseForge/Wago release so players get the lists via auto-update
           branch: chore/wowhead-bis-refresh
           delete-branch: true
+          labels: data, automated
