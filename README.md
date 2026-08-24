@@ -46,9 +46,10 @@ Lokal / CI (Playwright holt die Guides, Python schreibt `Data/*.lua`):
 ```powershell
 cd tools
 .\update_bis.ps1
+python check_data_quality.py
 ```
 
-GitHub Action `.github/workflows/update-bis.yml` läuft montags und öffnet einen PR, wenn sich Listen geändert haben. Nach Merge: Release auf CurseForge/Wago, dann bekommen User die neuen Listen automatisch.
+GitHub Action `.github/workflows/update-bis.yml` läuft montags und öffnet einen PR, wenn sich Listen geändert haben. Die Action bricht ab, wenn zu wenige Specs kommen oder zu viele `Item 12345`-Platzhalter-Namen übrig bleiben. Nach Merge: Release auf CurseForge/Wago.
 
 Im Spiel warnt BiSPulse, wenn die Wowhead-Listen älter als 14 Tage sind.
 

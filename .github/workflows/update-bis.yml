@@ -38,6 +38,9 @@ jobs:
       - name: Generate Data/*.lua
         run: python tools/scrape_method_bis.py --wowhead-json tools/wowhead_browser_data.json
 
+      - name: Data quality gates
+        run: python tools/check_data_quality.py --max-placeholder-rate 0.40 --min-specs 36 --min-items 500
+
       - name: Open PR if lists changed
         uses: peter-evans/create-pull-request@v7
         with:
@@ -45,6 +48,8 @@ jobs:
           title: "Weekly Wowhead BiS refresh"
           body: |
             Automated scrape of Wowhead Overall BiS guides.
+
+            Quality gates: min 36 specs, min 500 items, placeholder names ≤ 40%.
 
             After merge:
             1. Bump `## Version` in `BiSPulse.toc` if needed

@@ -341,6 +341,45 @@ def lua_escape(s: str) -> str:
     return s.replace("\\", "\\\\").replace('"', '\\"')
 
 
+def load_existing_lua_meta(stem: str) -> dict[int, dict]:
+    """Keep better names/drops from the previous Data/*.lua when a scrape is weaker."""
+    path = DATA_DIR / f"{stem}.lua"
+    if not path.is_file():
+        return {}
+    text = path.read_text(encoding="utf-8")
+    out: dict[int, dict] = {}
+    for m in re.finditer(
+        r"\[(\d+)\] = entry\(\{([\s\S]*?)\}\),",
+        text,
+    ):
+        iid = int(m.group(1))
+        body = m.group(2)
+        name_m = re.search(r'name = "((?:\\.|[^"\\])*)"', body)
+        drop_m = re.search(r'drop = "((?:\\.|[^"\\])*)"', body)
+        slot_m = re.search(r'slot = "((?:\\.|[^"\\])*)"', body)
+        name = name_m.group(1).replace('\\"', '"') if name_m else ""
+        drop = drop_m.group(1).replace('\\"', '"') if drop_m else ""
+        slot = slot_m.group(1).replace('\\"', '"') if slot_m else ""
+        out[iid] = {"name": name, "drop": drop, "slot": slot}
+    return out
+
+
+def merge_preserve_quality(new_items: dict[int, dict], stem: str) -> dict[int, dict]:
+    prev = load_existing_lua_meta(stem)
+    for iid, info in new_items.items():
+        old = prev.get(iid) or {}
+        name = info.get("name") or ""
+        if (not name or re.match(r"^Item \d+$", name)) and old.get("name") and not re.match(
+            r"^Item \d+$", old["name"]
+        ):
+            info["name"] = old["name"]
+        if not (info.get("drop") or "").strip() and (old.get("drop") or "").strip():
+            info["drop"] = old["drop"]
+        if not (info.get("slot") or "").strip() and (old.get("slot") or "").strip():
+            info["slot"] = old["slot"]
+    return new_items
+
+
 def write_lua(spec_meta, items: dict[int, dict], wowhead_url: str, updated: str | None = None) -> Path:
     class_file, spec_index, _, _, _, class_name, spec_name = spec_meta
     stem = STEMS[(class_file, spec_index)]
@@ -536,6 +575,7 @@ def main() -> None:
             continue
 
         items = finalize_wowhead_items(wh_items)
+        items = merge_preserve_quality(items, stem)
         path = write_lua(spec, items, wowhead_url)
         scraped[stem] = {
             "count": len(items),

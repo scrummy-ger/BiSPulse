@@ -13,4 +13,5 @@ npm install
 npx playwright install chromium
 node scrape_wowhead.mjs
 python scrape_method_bis.py --wowhead-json wowhead_browser_data.json
+python check_data_quality.py
 Write-Host "Done. Copy Data/*.lua into the WoW AddOns folder and /reload."

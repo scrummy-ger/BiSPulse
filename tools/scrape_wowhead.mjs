@@ -61,7 +61,7 @@ const SPECS = [
 const EMBELLISHMENTS = new Set([240167, 273060, 245790]);
 
 const SLOT_RE =
-  /^(Weapon|Weapons|Offhand|Off[- ]?Hand|Main[- ]?Hand|One[- ]?Hand|Two[- ]?Hand|Head|Helm|Neck|Shoulders?|Back|Cloak|Chest|Wrist|Wrists|Hands|Gloves|Waist|Belt|Legs|Feet|Boots|Finger|Ring|Trinkets?)$/i;
+  /^(Weapon|Weapons|Offhand|Off[- ]?Hand|Main[- ]?Hand|One[- ]?Hand|Two[- ]?Hand|[12]H(?:\s*Weapon)?|MH|OH|Head|Helm|Neck|Shoulders?|Back|Cloak|Chest|Wrist|Wrists|Hands|Gloves|Waist|Belt|Legs|Feet|Boots|Finger|Ring|Trinkets?)$/i;
 
 function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));
@@ -99,8 +99,69 @@ function stripMarkup(s) {
     .replace(/&amp;/g, "&")
     .replace(/&lt;/g, "<")
     .replace(/&gt;/g, ">")
+    .replace(/&larr;|&rarr;|←|→/g, "<-")
     .replace(/\s+/g, " ")
     .trim();
+}
+
+function slugToName(slug) {
+  if (!slug) return "";
+  let name = String(slug)
+    .replace(/_/g, "-")
+    .split("-")
+    .filter(Boolean)
+    .map((p) => p.charAt(0).toUpperCase() + p.slice(1))
+    .join(" ");
+  const reps = [
+    [" Ulatek", " Ula'tek"],
+    ["Ulatek", "Ula'tek"],
+    [" Zuljins ", " Zul'jin's "],
+    ["Zuljins ", "Zul'jin's "],
+    [" Amanmuso", " Aman'muso"],
+    ["Amanmuso", "Aman'muso"],
+    [" Spellbreakers ", " Spellbreaker's "],
+    ["Spellbreakers ", "Spellbreaker's "],
+    [" Warlords ", " Warlord's "],
+    [" Doomhounds ", " Doomhound's "],
+  ];
+  for (const [a, b] of reps) name = name.replace(a, b);
+  return name;
+}
+
+function isPlaceholderName(name) {
+  return !name || /^Item \d+$/i.test(String(name).trim());
+}
+
+function buildNameIndex(html) {
+  const names = {};
+  // Rendered item links
+  for (const m of html.matchAll(
+    /href="\/item=(\d+)\/([^"#?]+)"[^>]*>([^<]*)</gi
+  )) {
+    const id = Number(m[1]);
+    const text = (m[3] || "").trim();
+    if (text && !isPlaceholderName(text)) names[id] = text;
+    else if (!names[id]) names[id] = slugToName(m[2]);
+  }
+  // WH.Gatherer blobs (name_enus)
+  for (const m of html.matchAll(
+    /"(\d{5,7})"\s*:\s*\{[^{}]{0,500}?name_enus"\s*:\s*"((?:\\.|[^"\\])*)"/gi
+  )) {
+    const id = Number(m[1]);
+    try {
+      const text = JSON.parse(`"${m[2]}"`);
+      if (text && !isPlaceholderName(text)) names[id] = text;
+    } catch {
+      /* ignore */
+    }
+  }
+  // Alternate gatherer key order
+  for (const m of html.matchAll(
+    /name_enus"\s*:\s*"((?:\\.|[^"\\])*)"[^{}]{0,200}?"(\d{5,7})"/gi
+  )) {
+    /* skip noisy reverse matches */
+  }
+  return names;
 }
 
 function bisChunk(html) {
@@ -147,81 +208,131 @@ function bisChunk(html) {
     const i = rest.search(p);
     if (i >= 0 && (end < 0 || i < end)) end = i;
   }
-  const hardCap = 35000;
+  const hardCap = 40000;
   if (end < 0 || end > hardCap) end = hardCap;
   return html.slice(start, start + 20 + end);
 }
 
-function parseOverall(html) {
-  const chunk = bisChunk(html);
-  const ordered = [];
-  const seen = new Set();
+/** Pull Slot | Item | Source rows from BBCode + HTML tables. */
+function extractGearRows(html) {
+  const rows = [];
 
-  function push(id, name, slot, drop) {
-    id = Number(id);
-    if (!id || seen.has(id) || EMBELLISHMENTS.has(id)) return;
-    seen.add(id);
-    const entry = {
-      id,
-      name: stripMarkup(name) || `Item ${id}`,
-      wowhead: "overall",
-      rank: "bis",
-    };
-    if (slot) entry.slot = normalizeSlot(slot);
-    if (drop) entry.drop = stripMarkup(drop);
-    ordered.push(entry);
-  }
-
-  for (const tr of chunk.matchAll(/\[tr\]([\s\S]*?)\[\/tr\]/gi)) {
+  for (const tr of html.matchAll(/\[tr\]([\s\S]*?)\[\/tr\]/gi)) {
     const tds = [...tr[1].matchAll(/\[td\]([\s\S]*?)\[\/td\]/gi)].map((m) => m[1]);
     if (tds.length < 2) continue;
     const slotRaw = stripMarkup(tds[0]);
     if (!SLOT_RE.test(slotRaw)) continue;
     const itemM = tds[1].match(/\[item=(\d+)/i) || tr[1].match(/\[item=(\d+)/i);
     if (!itemM) continue;
-    push(itemM[1], null, slotRaw, tds[2] || "");
+    const nameFromCell =
+      tds[1].match(/\[item=\d+[^\]]*\]([^\[]+)/i)?.[1] ||
+      tds[1].match(/href="\/item=\d+\/[^"]+"[^>]*>([^<]+)/i)?.[1] ||
+      null;
+    rows.push({
+      id: Number(itemM[1]),
+      name: nameFromCell,
+      slot: slotRaw,
+      drop: tds[2] || "",
+    });
   }
 
   const htmlRow =
-    /<(?:td|th)[^>]*>\s*(?:<[^>]+>\s*)*([^<]{2,40}?)\s*(?:<\/[^>]+>\s*)*<\/(?:td|th)>\s*<(?:td|th)[^>]*>[\s\S]{0,800}?href="\/item=(\d+)\/([^"#?]+)"[^>]*>([^<]*)<\/a>[\s\S]{0,400}?<\/(?:td|th)>\s*<(?:td|th)[^>]*>([\s\S]*?)<\/(?:td|th)>/gi;
+    /<(?:td|th)[^>]*>\s*(?:<[^>]+>\s*)*([^<]{2,40}?)\s*(?:<\/[^>]+>\s*)*<\/(?:td|th)>\s*<(?:td|th)[^>]*>[\s\S]{0,900}?href="\/item=(\d+)\/([^"#?]+)"[^>]*>([^<]*)<\/a>[\s\S]{0,500}?<\/(?:td|th)>\s*<(?:td|th)[^>]*>([\s\S]*?)<\/(?:td|th)>/gi;
   for (const m of html.matchAll(htmlRow)) {
     const slotRaw = m[1].trim();
     if (!SLOT_RE.test(slotRaw)) continue;
-    push(m[2], m[4] || m[3].replace(/-/g, " "), slotRaw, m[5]);
+    rows.push({
+      id: Number(m[2]),
+      name: m[4] || slugToName(m[3]),
+      slot: slotRaw,
+      drop: m[5],
+    });
   }
 
-  const bbRows =
-    /\[td\](?:\[b\])?([^\[\]]+?)(?:\[\/b\])?\[\/td\][\s\S]{0,400}?\[item=(\d+)/gi;
-  for (const m of chunk.matchAll(bbRows)) {
-    const slotRaw = m[1].trim();
-    if (!SLOT_RE.test(slotRaw.replace(/\[\/?b\]/gi, "").trim())) continue;
-    push(m[2], null, slotRaw, null);
+  // Item | Source only (no slot column) — common in "Raid Drops" tables
+  const itemSource =
+    /href="\/item=(\d+)\/([^"#?]+)"[^>]*>([^<]*)<\/a>[\s\S]{0,200}?<(?:td|th)[^>]*>([\s\S]{2,120}?)<\/(?:td|th)>/gi;
+  for (const m of html.matchAll(itemSource)) {
+    const drop = stripMarkup(m[4]);
+    if (!drop || SLOT_RE.test(drop) || drop.length > 80) continue;
+    if (/^[\d.%\s]+$/.test(drop)) continue;
+    rows.push({
+      id: Number(m[1]),
+      name: m[3] || slugToName(m[2]),
+      slot: null,
+      drop,
+    });
   }
 
+  return rows;
+}
+
+function parseOverall(html) {
+  const chunk = bisChunk(html);
+  const nameById = buildNameIndex(html);
+  const ordered = [];
+  const byId = new Map();
+
+  function upsert(id, name, slot, drop, { allowNew = true } = {}) {
+    id = Number(id);
+    if (!id || EMBELLISHMENTS.has(id)) return;
+    let entry = byId.get(id);
+    if (!entry) {
+      if (!allowNew) return;
+      entry = {
+        id,
+        name: "",
+        wowhead: "overall",
+        rank: "bis",
+      };
+      byId.set(id, entry);
+      ordered.push(entry);
+    }
+    const cleanName = stripMarkup(name);
+    if (cleanName && !isPlaceholderName(cleanName)) {
+      if (isPlaceholderName(entry.name) || cleanName.length >= (entry.name || "").length) {
+        entry.name = cleanName;
+      }
+    }
+    if (slot) {
+      const ns = normalizeSlot(slot);
+      if (ns && (!entry.slot || entry.slot === "")) entry.slot = ns;
+    }
+    const cleanDrop = stripMarkup(drop);
+    if (cleanDrop) {
+      if (!entry.drop || cleanDrop.length > entry.drop.length) entry.drop = cleanDrop;
+    }
+  }
+
+  // 1) Overall BiS chunk — defines which items are BiS (order matters)
+  for (const row of extractGearRows(chunk)) {
+    upsert(row.id, row.name, row.slot, row.drop);
+  }
   for (const m of chunk.matchAll(/\[item=(\d+)/gi)) {
-    push(m[1], null, null, null);
+    upsert(m[1], null, null, null);
   }
-
-  const nameById = {};
   for (const m of chunk.matchAll(/href="\/item=(\d+)\/([^"#?]+)"[^>]*>([^<]*)</gi)) {
-    const id = Number(m[1]);
-    const text = (m[3] || "").trim();
-    if (text) nameById[id] = text;
-    else if (!nameById[id]) nameById[id] = m[2].replace(/-/g, " ");
-  }
-  for (const m of chunk.matchAll(/item=(\d+)/gi)) {
-    push(Number(m[1]), nameById[Number(m[1])], null, null);
+    upsert(m[1], m[3] || slugToName(m[2]), null, null);
   }
 
+  // 2) Rest of guide (Raid Drops / Dungeons / Crafting) — enrich slot+drop only
+  for (const row of extractGearRows(html)) {
+    upsert(row.id, row.name, row.slot, row.drop, { allowNew: false });
+  }
+
+  // Fill missing names from page-wide index / slug
   for (const entry of ordered) {
-    if (entry.name && !entry.name.startsWith("Item ")) continue;
-    const re = new RegExp(
-      'href="/item=' + entry.id + '/([^"#?]+)"[^>]*>([^<]*)<',
-      "i"
-    );
-    const mm = html.match(re);
-    if (mm) {
-      entry.name = (mm[2] || "").trim() || mm[1].replace(/-/g, " ");
+    if (isPlaceholderName(entry.name) && nameById[entry.id]) {
+      entry.name = nameById[entry.id];
+    }
+    if (isPlaceholderName(entry.name)) {
+      const slugM = html.match(
+        new RegExp(`href="/item=${entry.id}/([^"#?]+)"`, "i")
+      );
+      if (slugM) entry.name = slugToName(slugM[1]);
+    }
+    if (isPlaceholderName(entry.name)) {
+      entry.name = `Item ${entry.id}`;
     }
   }
 
@@ -233,16 +344,58 @@ async function scrapeSpec(page, stem, cls, spec) {
   await page.goto(url, { waitUntil: "domcontentloaded", timeout: 90000 });
   const title = await page.title();
   if (/just a moment|attention required|access denied/i.test(title)) {
-    await sleep(8000);
+    await sleep(10000);
   }
   await page.waitForSelector('a[href*="/item="]', { timeout: 25000 }).catch(() => {});
-  await sleep(400);
-  const html = await page.content();
+  await sleep(600);
+  let html = await page.content();
+  // Prefer live Gatherer names when available in the page context.
+  try {
+    const gathererNames = await page.evaluate(() => {
+      const out = {};
+      try {
+        const data =
+          (window.WH &&
+            WH.Gatherer &&
+            typeof WH.Gatherer.getData === "function" &&
+            WH.Gatherer.getData(3)) ||
+          null;
+        if (data && typeof data === "object") {
+          for (const [id, row] of Object.entries(data)) {
+            const n = row && (row.name_enus || row.name || row.name_en);
+            if (n) out[id] = n;
+          }
+        }
+      } catch (e) {
+        /* ignore */
+      }
+      return out;
+    });
+    if (gathererNames && Object.keys(gathererNames).length) {
+      // Inject fake href markers so buildNameIndex / upsert can see them.
+      const extra = Object.entries(gathererNames)
+        .map(
+          ([id, name]) =>
+            `<a href="/item=${id}/x">${String(name).replace(/</g, "")}</a>`
+        )
+        .join("\n");
+      html = html + "\n<!--gatherer-->\n" + extra;
+    }
+  } catch {
+    /* ignore */
+  }
   if (html.length < 8000 || /403 ERROR|Request blocked/i.test(html)) {
     throw new Error("blocked or empty page");
   }
   const items = parseOverall(html);
-  return { count: items.length, withDrop: items.filter((i) => i.drop).length, items, url };
+  const placeholders = items.filter((i) => /^Item \d+$/i.test(i.name || "")).length;
+  return {
+    count: items.length,
+    withDrop: items.filter((i) => i.drop).length,
+    placeholders,
+    items,
+    url,
+  };
 }
 
 async function main() {
@@ -263,12 +416,14 @@ async function main() {
     try {
       const pack = await scrapeSpec(page, stem, cls, spec);
       out[stem] = pack;
-      console.log(`${pack.count} items (${pack.withDrop} drop)`);
+      console.log(
+        `${pack.count} items (${pack.withDrop} drop, ${pack.placeholders} ph)`
+      );
       if (pack.count < 8) errors[stem] = `only ${pack.count} items`;
     } catch (e) {
       const msg = e && e.message ? e.message : String(e);
       errors[stem] = msg;
-      out[stem] = { count: 0, items: [], error: msg };
+      out[stem] = { count: 0, items: [], placeholders: 0, error: msg };
       console.log(`FAIL ${msg}`);
     }
     await sleep(700);
@@ -277,16 +432,24 @@ async function main() {
   await browser.close();
 
   const ok = Object.values(out).filter((x) => x.count > 0).length;
+  const totalItems = Object.values(out).reduce((n, p) => n + (p.count || 0), 0);
+  const totalPh = Object.values(out).reduce((n, p) => n + (p.placeholders || 0), 0);
   const payload = {
     scrapedAt: new Date().toISOString().slice(0, 10),
     ok,
+    totalItems,
+    placeholders: totalPh,
     errors,
     out,
   };
   fs.writeFileSync(OUT, JSON.stringify(payload, null, 2), "utf8");
-  console.log(`\nWrote ${OUT} (${ok}/${SPECS.length} specs)`);
+  console.log(`\nWrote ${OUT} (${ok}/${SPECS.length} specs, ph=${totalPh}/${totalItems})`);
   if (ok < 36) {
     console.error("Too few specs scraped — not safe to regenerate Data/");
+    process.exit(1);
+  }
+  if (totalItems > 0 && totalPh / totalItems > 0.45) {
+    console.error("Placeholder name rate too high — aborting");
     process.exit(1);
   }
 }
