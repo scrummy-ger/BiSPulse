@@ -1,0 +1,322 @@
+{
+  "BloodDeathKnight": {
+    "count": 17,
+    "wowhead_overall": 17,
+    "sources": [
+      "Wowhead"
+    ],
+    "file": "BloodDeathKnight.lua"
+  },
+  "FrostDeathKnight": {
+    "count": 15,
+    "wowhead_overall": 15,
+    "sources": [
+      "Wowhead"
+    ],
+    "file": "FrostDeathKnight.lua"
+  },
+  "UnholyDeathKnight": {
+    "count": 15,
+    "wowhead_overall": 15,
+    "sources": [
+      "Wowhead"
+    ],
+    "file": "UnholyDeathKnight.lua"
+  },
+  "HavocDemonHunter": {
+    "count": 16,
+    "wowhead_overall": 16,
+    "sources": [
+      "Wowhead"
+    ],
+    "file": "HavocDemonHunter.lua"
+  },
+  "VengeanceDemonHunter": {
+    "count": 16,
+    "wowhead_overall": 16,
+    "sources": [
+      "Wowhead"
+    ],
+    "file": "VengeanceDemonHunter.lua"
+  },
+  "DevourerDemonHunter": {
+    "count": 15,
+    "wowhead_overall": 15,
+    "sources": [
+      "Wowhead"
+    ],
+    "file": "DevourerDemonHunter.lua"
+  },
+  "BalanceDruid": {
+    "count": 16,
+    "wowhead_overall": 16,
+    "sources": [
+      "Wowhead"
+    ],
+    "file": "BalanceDruid.lua"
+  },
+  "FeralDruid": {
+    "count": 15,
+    "wowhead_overall": 15,
+    "sources": [
+      "Wowhead"
+    ],
+    "file": "FeralDruid.lua"
+  },
+  "GuardianDruid": {
+    "count": 15,
+    "wowhead_overall": 15,
+    "sources": [
+      "Wowhead"
+    ],
+    "file": "GuardianDruid.lua"
+  },
+  "RestorationDruid": {
+    "count": 20,
+    "wowhead_overall": 20,
+    "sources": [
+      "Wowhead"
+    ],
+    "file": "RestorationDruid.lua"
+  },
+  "DevastationEvoker": {
+    "count": 16,
+    "wowhead_overall": 16,
+    "sources": [
+      "Wowhead"
+    ],
+    "file": "DevastationEvoker.lua"
+  },
+  "PreservationEvoker": {
+    "count": 14,
+    "wowhead_overall": 14,
+    "sources": [
+      "Wowhead"
+    ],
+    "file": "PreservationEvoker.lua"
+  },
+  "AugmentationEvoker": {
+    "count": 16,
+    "wowhead_overall": 16,
+    "sources": [
+      "Wowhead"
+    ],
+    "file": "AugmentationEvoker.lua"
+  },
+  "BeastMasteryHunter": {
+    "count": 15,
+    "wowhead_overall": 15,
+    "sources": [
+      "Wowhead"
+    ],
+    "file": "BeastMasteryHunter.lua"
+  },
+  "MarksmanshipHunter": {
+    "count": 15,
+    "wowhead_overall": 15,
+    "sources": [
+      "Wowhead"
+    ],
+    "file": "MarksmanshipHunter.lua"
+  },
+  "SurvivalHunter": {
+    "count": 19,
+    "wowhead_overall": 19,
+    "sources": [
+      "Wowhead"
+    ],
+    "file": "SurvivalHunter.lua"
+  },
+  "ArcaneMage": {
+    "count": 16,
+    "wowhead_overall": 16,
+    "sources": [
+      "Wowhead"
+    ],
+    "file": "ArcaneMage.lua"
+  },
+  "FireMage": {
+    "count": 18,
+    "wowhead_overall": 18,
+    "sources": [
+      "Wowhead"
+    ],
+    "file": "FireMage.lua"
+  },
+  "FrostMage": {
+    "count": 16,
+    "wowhead_overall": 16,
+    "sources": [
+      "Wowhead"
+    ],
+    "file": "FrostMage.lua"
+  },
+  "BrewmasterMonk": {
+    "count": 12,
+    "wowhead_overall": 12,
+    "sources": [
+      "Wowhead"
+    ],
+    "file": "BrewmasterMonk.lua"
+  },
+  "MistweaverMonk": {
+    "count": 18,
+    "wowhead_overall": 18,
+    "sources": [
+      "Wowhead"
+    ],
+    "file": "MistweaverMonk.lua"
+  },
+  "WindwalkerMonk": {
+    "count": 14,
+    "wowhead_overall": 14,
+    "sources": [
+      "Wowhead"
+    ],
+    "file": "WindwalkerMonk.lua"
+  },
+  "HolyPaladin": {
+    "count": 15,
+    "wowhead_overall": 15,
+    "sources": [
+      "Wowhead"
+    ],
+    "file": "HolyPaladin.lua"
+  },
+  "ProtectionPaladin": {
+    "count": 15,
+    "wowhead_overall": 15,
+    "sources": [
+      "Wowhead"
+    ],
+    "file": "ProtectionPaladin.lua"
+  },
+  "RetributionPaladin": {
+    "count": 15,
+    "wowhead_overall": 15,
+    "sources": [
+      "Wowhead"
+    ],
+    "file": "RetributionPaladin.lua"
+  },
+  "DisciplinePriest": {
+    "count": 16,
+    "wowhead_overall": 16,
+    "sources": [
+      "Wowhead"
+    ],
+    "file": "DisciplinePriest.lua"
+  },
+  "HolyPriest": {
+    "count": 16,
+    "wowhead_overall": 16,
+    "sources": [
+      "Wowhead"
+    ],
+    "file": "HolyPriest.lua"
+  },
+  "ShadowPriest": {
+    "count": 16,
+    "wowhead_overall": 16,
+    "sources": [
+      "Wowhead"
+    ],
+    "file": "ShadowPriest.lua"
+  },
+  "AssassinationRogue": {
+    "count": 16,
+    "wowhead_overall": 16,
+    "sources": [
+      "Wowhead"
+    ],
+    "file": "AssassinationRogue.lua"
+  },
+  "OutlawRogue": {
+    "count": 16,
+    "wowhead_overall": 16,
+    "sources": [
+      "Wowhead"
+    ],
+    "file": "OutlawRogue.lua"
+  },
+  "SubtletyRogue": {
+    "count": 16,
+    "wowhead_overall": 16,
+    "sources": [
+      "Wowhead"
+    ],
+    "file": "SubtletyRogue.lua"
+  },
+  "ElementalShaman": {
+    "count": 16,
+    "wowhead_overall": 16,
+    "sources": [
+      "Wowhead"
+    ],
+    "file": "ElementalShaman.lua"
+  },
+  "EnhancementShaman": {
+    "count": 16,
+    "wowhead_overall": 16,
+    "sources": [
+      "Wowhead"
+    ],
+    "file": "EnhancementShaman.lua"
+  },
+  "RestorationShaman": {
+    "count": 13,
+    "wowhead_overall": 13,
+    "sources": [
+      "Wowhead"
+    ],
+    "file": "RestorationShaman.lua"
+  },
+  "AfflictionWarlock": {
+    "count": 16,
+    "wowhead_overall": 16,
+    "sources": [
+      "Wowhead"
+    ],
+    "file": "AfflictionWarlock.lua"
+  },
+  "DemonologyWarlock": {
+    "count": 16,
+    "wowhead_overall": 16,
+    "sources": [
+      "Wowhead"
+    ],
+    "file": "DemonologyWarlock.lua"
+  },
+  "DestructionWarlock": {
+    "count": 16,
+    "wowhead_overall": 16,
+    "sources": [
+      "Wowhead"
+    ],
+    "file": "DestructionWarlock.lua"
+  },
+  "ArmsWarrior": {
+    "count": 15,
+    "wowhead_overall": 15,
+    "sources": [
+      "Wowhead"
+    ],
+    "file": "ArmsWarrior.lua"
+  },
+  "FuryWarrior": {
+    "count": 16,
+    "wowhead_overall": 16,
+    "sources": [
+      "Wowhead"
+    ],
+    "file": "FuryWarrior.lua"
+  },
+  "ProtectionWarrior": {
+    "count": 15,
+    "wowhead_overall": 15,
+    "sources": [
+      "Wowhead"
+    ],
+    "file": "ProtectionWarrior.lua"
+  }
+}

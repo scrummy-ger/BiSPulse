@@ -1,0 +1,49 @@
+name: Update Wowhead BiS
+
+on:
+  schedule:
+    # Monday 06:00 UTC
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Playwright
+        working-directory: tools
+        run: |
+          npm install playwright
+          npx playwright install --with-deps chromium
+
+      - name: Scrape Wowhead guides
+        working-directory: tools
+        run: node scrape_wowhead.mjs
+
+      - name: Generate Data/*.lua
+        run: python tools/scrape_method_bis.py --wowhead-json tools/wowhead_browser_data.json
+
+      - name: Open PR if lists changed
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: "chore: refresh Wowhead BiS lists"
+          title: "Weekly Wowhead BiS refresh"
+          body: |
+            Automatischer Scrape der Wowhead Overall-BiS-Guides.
+            Nach Merge: Addon-Version auf CurseForge/Wago hochladen, damit User Auto-Update bekommen.
+          branch: chore/wowhead-bis-refresh
+          delete-branch: true

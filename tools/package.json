@@ -1,0 +1,12 @@
+{
+  "name": "bispulse-tools",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "scrape": "node scrape_wowhead.mjs",
+    "generate": "python scrape_method_bis.py --wowhead-json wowhead_browser_data.json"
+  },
+  "devDependencies": {
+    "playwright": "^1.55.0"
+  }
+}

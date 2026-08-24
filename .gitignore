@@ -1,0 +1,34 @@
+# Dependencies / build
+tools/node_modules/
+**/node_modules/
+.package-lock.json
+tools/package-lock.json
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.cursor/
+*.swp
+*.tmp
+
+# Secrets / local env
+.env
+.env.*
+*.pem
+*.key
+credentials.json
+
+# Release artifacts (Desktop copies are enough)
+*.zip
+!Media/**
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Scratch / local scrape dumps (keep wowhead_browser_data.json tracked as seed)
+tools/_cdp_expr.txt
+tools/_test_fetch.py
+tools/bispulse_wowhead_*.html

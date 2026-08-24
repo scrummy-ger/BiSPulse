@@ -1,0 +1,166 @@
+--[[
+  Restoration Shaman BiS — Midnight Patch 12.1
+  Source: Wowhead only
+  Wowhead: https://www.wowhead.com/guide/classes/shaman/restoration/bis-gear
+]]
+
+local RANK = BiSPulseData.RANK
+
+local function entry(opts)
+  return {
+    name = opts.name,
+    slot = opts.slot,
+    drop = opts.drop,
+    source = opts.source,
+    wowhead = opts.wowhead,
+    rank = opts.rank,
+    note = opts.note,
+    priority = opts.priority,
+  }
+end
+
+local items = {
+  [159459] = entry({
+    name = "Ritual Binder's Ring",
+    slot = "Ring",
+    drop = "Kings Rest",
+    source = "Wowhead",
+    wowhead = "overall",
+    rank = RANK.BIS,
+    note = nil,
+    priority = true,
+  }),
+  [251125] = entry({
+    name = "Felsoaked Soles",
+    slot = "Boots",
+    drop = "Murder Row",
+    source = "Wowhead",
+    wowhead = "overall",
+    rank = RANK.BIS,
+    note = nil,
+    priority = true,
+  }),
+  [251200] = entry({
+    name = "Saptorbane Guards",
+    slot = "Wrist",
+    drop = "The Blinding Vale",
+    source = "Wowhead",
+    wowhead = "overall",
+    rank = RANK.BIS,
+    note = nil,
+    priority = true,
+  }),
+  [268216] = entry({
+    name = "Cursed Reliquary Cincture",
+    slot = "Belt",
+    drop = "Nek'zali the Soulcoiler (Raid)",
+    source = "Wowhead",
+    wowhead = "overall",
+    rank = RANK.BIS,
+    note = nil,
+    priority = true,
+  }),
+  [268252] = entry({
+    name = "Apex Brute's Claw Ring",
+    slot = "Ring",
+    drop = "Sszorak (Raid)",
+    source = "Wowhead",
+    wowhead = "overall",
+    rank = RANK.BIS,
+    note = nil,
+    priority = true,
+  }),
+  [268265] = entry({
+    name = "Aqirbane Reliquary",
+    slot = "Neck",
+    drop = "Ula'tek (Raid)",
+    source = "Wowhead",
+    wowhead = "overall",
+    rank = RANK.BIS,
+    note = nil,
+    priority = true,
+  }),
+  [270162] = entry({
+    name = "Soulcoiler Ritual Vessel",
+    slot = "Trinket",
+    drop = "Nek'zali the Soulcoiler (Raid)",
+    source = "Wowhead",
+    wowhead = "overall",
+    rank = RANK.BIS,
+    note = nil,
+    priority = true,
+  }),
+  [270164] = entry({
+    name = "Gebbo's Bottomless Bag",
+    slot = "Trinket",
+    drop = "The Lost Explorers (Raid)",
+    source = "Wowhead",
+    wowhead = "overall",
+    rank = RANK.BIS,
+    note = nil,
+    priority = true,
+  }),
+  [271481] = entry({
+    name = "Item 271481",
+    slot = "Shoulders",
+    drop = "Catalyst: The Coiled Altar (Raid) & Catalyst",
+    source = "Wowhead",
+    wowhead = "overall",
+    rank = RANK.BIS,
+    note = nil,
+    priority = true,
+  }),
+  [271482] = entry({
+    name = "Item 271482",
+    slot = "Legs",
+    drop = "Catalyst: The Coiled Altar (Raid) & Catalyst",
+    source = "Wowhead",
+    wowhead = "overall",
+    rank = RANK.BIS,
+    note = nil,
+    priority = true,
+  }),
+  [271483] = entry({
+    name = "Serpent Crown of the Ophidian Oracle",
+    slot = "Head",
+    drop = "Raid | Vault",
+    source = "Wowhead",
+    wowhead = "overall",
+    rank = RANK.BIS,
+    note = nil,
+    priority = true,
+  }),
+  [271484] = entry({
+    name = "Item 271484",
+    slot = "Gloves",
+    drop = "Catalyst: Nymrissa Wavebinder (Raid) & Catalyst",
+    source = "Wowhead",
+    wowhead = "overall",
+    rank = RANK.BIS,
+    note = nil,
+    priority = true,
+  }),
+  [271486] = entry({
+    name = "Item 271486",
+    slot = "Chest",
+    drop = "Catalyst: Ula'tek (Raid) & Catalyst",
+    source = "Wowhead",
+    wowhead = "overall",
+    rank = RANK.BIS,
+    note = nil,
+    priority = true,
+  }),
+}
+
+BiSPulseData:Register("SHAMAN", 3, {
+  className = "Shaman",
+  specName = "Restoration",
+  patch = "12.1",
+  season = "Midnight Season 2",
+  updated = "2026-08-22",
+  primarySource = "Wowhead",
+  guides = {
+    wowhead = "https://www.wowhead.com/guide/classes/shaman/restoration/bis-gear",
+  },
+  items = items,
+})

@@ -1,0 +1,64 @@
+## Interface: 120100
+## Title: BiSPulse
+## Title-deDE: BiSPulse
+## Notes: Wowhead BiS rankings for all Retail specs.
+## Notes-deDE: BiS-Rankings von Wowhead — alle Retail-Specs.
+## Author: D
+## Version: 1.5.5
+## SavedVariables: BiSPulseDB
+## IconTexture: Interface\AddOns\BiSPulse\Media\BiSPulseIcon
+## Category: Combat
+## DefaultState: enabled
+## AllowLoadGameType: mainline
+
+Util.lua
+Locales/enUS.lua
+Locales/deDE.lua
+Data/Registry.lua
+Data/BloodDeathKnight.lua
+Data/FrostDeathKnight.lua
+Data/UnholyDeathKnight.lua
+Data/HavocDemonHunter.lua
+Data/VengeanceDemonHunter.lua
+Data/DevourerDemonHunter.lua
+Data/BalanceDruid.lua
+Data/FeralDruid.lua
+Data/GuardianDruid.lua
+Data/RestorationDruid.lua
+Data/DevastationEvoker.lua
+Data/PreservationEvoker.lua
+Data/AugmentationEvoker.lua
+Data/BeastMasteryHunter.lua
+Data/MarksmanshipHunter.lua
+Data/SurvivalHunter.lua
+Data/ArcaneMage.lua
+Data/FireMage.lua
+Data/FrostMage.lua
+Data/BrewmasterMonk.lua
+Data/MistweaverMonk.lua
+Data/WindwalkerMonk.lua
+Data/HolyPaladin.lua
+Data/ProtectionPaladin.lua
+Data/RetributionPaladin.lua
+Data/DisciplinePriest.lua
+Data/HolyPriest.lua
+Data/ShadowPriest.lua
+Data/AssassinationRogue.lua
+Data/OutlawRogue.lua
+Data/SubtletyRogue.lua
+Data/ElementalShaman.lua
+Data/EnhancementShaman.lua
+Data/RestorationShaman.lua
+Data/AfflictionWarlock.lua
+Data/DemonologyWarlock.lua
+Data/DestructionWarlock.lua
+Data/ArmsWarrior.lua
+Data/FuryWarrior.lua
+Data/ProtectionWarrior.lua
+Core.lua
+Tooltip.lua
+Toast.lua
+Alerts.lua
+LootBadges.lua
+Minimap.lua
+Options.lua
