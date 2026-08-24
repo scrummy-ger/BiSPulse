@@ -20,9 +20,10 @@ Death Knight · Demon Hunter (inkl. Devourer) · Druid · Evoker · Hunter · Ma
 
 ## Features
 
-- **Tooltip-Ranking** — Rank, Score, Wowhead-Liste
-- **Custom Toast** — Icon + Rank + Score-Bar
+- **Tooltip-Ranking** — Rank, Score, Wowhead-Liste (Main + optional Offspec)
+- **Custom Toast** — Icon + Rank + Score + ilvl-Vergleich
 - **Loot-Badges** — Badge + Glow im Loot-Fenster
+- **Offspec-Tracking** — Alerts/Checkliste für eine zweite Spec
 - **Minimap-Button** + **BiS-Checkliste**
 - Deutsch + Englisch
 
