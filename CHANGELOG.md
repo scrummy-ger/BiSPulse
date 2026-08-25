@@ -1,29 +1,23 @@
 # Changelog
 
-## Unreleased
-
-### DE
-- Wowhead-Scrape: Trinket-Tiers und Raid/M+-Listen als Strong/Alt (Mindest-Rank-Filter greift)
-- Bessere Drop-Texte; lokaler Full-Scrape + Quality-Gates
-- Hinweis am Mindest-Rank: gilt für Toast/Badges, Tooltip zeigt alles
-
-### EN
-- Wowhead scrape: trinket tiers and raid/M+ lists as Strong/Alt (min-rank filter actually works)
-- Better drop text; local full scrape + quality gates
-- Min-rank hint: applies to toast/badges; tooltips still show every rank
-
 ## 1.5.5
 
 ### DE
 - Neu: Offspec-Tracking (Option + Spec-Auswahl)
 - Toast/Badges/Tooltip können Offspec-BiS anzeigen
 - Checkliste: Umschalter Main / Offspec (ohne Layout-Überlappung)
+- Strong/Alt-Ranks aus Wowhead (Trinket-Tiers & Nebenlisten) — Mindest-Rank-Filter greift
+- Bessere Drop-Angaben und aktualisierte BiS-Listen
+- Hinweis am Mindest-Rank: gilt für Toast/Badges; Tooltips zeigen weiterhin alle Ranks
 - Warnung bei veralteten Wowhead-Listen (bereits ab 1.5.4)
 
 ### EN
 - New: Offspec tracking (option + spec picker)
 - Toast/badges/tooltip can show offspec BiS
 - Checklist: Main / Offspec toggle (no header overlap)
+- Strong/Alt ranks from Wowhead (trinket tiers & secondary lists) — min-rank filter actually works
+- Better drop text and refreshed BiS lists
+- Min-rank hint: applies to toast/badges; tooltips still show every rank
 - Stale Wowhead list warning (from 1.5.4)
 
 ## 1.5.4
