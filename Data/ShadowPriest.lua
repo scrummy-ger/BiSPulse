@@ -21,7 +21,7 @@ end
 
 local items = {
   [239045] = entry({
-    name = "Item 239045",
+    name = "Mantle of Ceremonial Ascension",
     slot = "",
     drop = "",
     source = "Wowhead",
@@ -161,7 +161,7 @@ local items = {
     priority = true,
   }),
   [271554] = entry({
-    name = "Item 271554",
+    name = "Enveloping Legwraps of the Cosmic Penitent",
     slot = "",
     drop = "",
     source = "Wowhead",
@@ -171,7 +171,7 @@ local items = {
     priority = true,
   }),
   [271555] = entry({
-    name = "Item 271555",
+    name = "Cosmic Penitent's Truesight",
     slot = "",
     drop = "",
     source = "Wowhead",
@@ -181,7 +181,7 @@ local items = {
     priority = true,
   }),
   [271556] = entry({
-    name = "Item 271556",
+    name = "Cosmic Penitent's Celestial Grips",
     slot = "",
     drop = "",
     source = "Wowhead",
@@ -217,7 +217,7 @@ BiSPulseData:Register("PRIEST", 3, {
   specName = "Shadow",
   patch = "12.1",
   season = "Midnight Season 2",
-  updated = "2026-08-24",
+  updated = "2026-08-25",
   primarySource = "Wowhead",
   guides = {
     wowhead = "https://www.wowhead.com/guide/classes/priest/shadow/bis-gear",

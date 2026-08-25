@@ -191,7 +191,7 @@ local items = {
     priority = true,
   }),
   [271517] = entry({
-    name = "Item 271517",
+    name = "Tassels of the Monkey King",
     slot = "",
     drop = "",
     source = "Wowhead",
@@ -201,7 +201,7 @@ local items = {
     priority = true,
   }),
   [271518] = entry({
-    name = "Item 271518",
+    name = "Pantaloons of the Monkey King",
     slot = "",
     drop = "",
     source = "Wowhead",
@@ -211,7 +211,7 @@ local items = {
     priority = true,
   }),
   [271519] = entry({
-    name = "Item 271519",
+    name = "Monkey King's Unyielding Visage",
     slot = "",
     drop = "",
     source = "Wowhead",
@@ -221,7 +221,7 @@ local items = {
     priority = true,
   }),
   [271520] = entry({
-    name = "Item 271520",
+    name = "Monkey King's Fighting Fists",
     slot = "",
     drop = "",
     source = "Wowhead",
@@ -231,7 +231,7 @@ local items = {
     priority = true,
   }),
   [271522] = entry({
-    name = "Item 271522",
+    name = "Battle Gi of the Monkey King",
     slot = "",
     drop = "",
     source = "Wowhead",
@@ -267,7 +267,7 @@ BiSPulseData:Register("MONK", 1, {
   specName = "Brewmaster",
   patch = "12.1",
   season = "Midnight Season 2",
-  updated = "2026-08-24",
+  updated = "2026-08-25",
   primarySource = "Wowhead",
   guides = {
     wowhead = "https://www.wowhead.com/guide/classes/monk/brewmaster/bis-gear",

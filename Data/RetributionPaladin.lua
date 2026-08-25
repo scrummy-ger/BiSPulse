@@ -31,7 +31,7 @@ local items = {
     priority = true,
   }),
   [251138] = entry({
-    name = "Item 251138",
+    name = "Cinderfury Shoulderguards",
     slot = "",
     drop = "",
     source = "Wowhead",
@@ -41,7 +41,7 @@ local items = {
     priority = true,
   }),
   [251214] = entry({
-    name = "Item 251214",
+    name = "Bonds of the Hash'ura",
     slot = "",
     drop = "",
     source = "Wowhead",
@@ -81,7 +81,7 @@ local items = {
     priority = true,
   }),
   [268222] = entry({
-    name = "Item 268222",
+    name = "Reckless Spirit Breastplate",
     slot = "",
     drop = "",
     source = "Wowhead",
@@ -91,7 +91,7 @@ local items = {
     priority = true,
   }),
   [268229] = entry({
-    name = "Item 268229",
+    name = "Skullguard of the Risen Sacrifice",
     slot = "",
     drop = "",
     source = "Wowhead",
@@ -161,7 +161,7 @@ local items = {
     priority = true,
   }),
   [271463] = entry({
-    name = "Item 271463",
+    name = "Pauldrons of the Consecrated Flame",
     slot = "",
     drop = "",
     source = "Wowhead",
@@ -171,7 +171,7 @@ local items = {
     priority = true,
   }),
   [271464] = entry({
-    name = "Item 271464",
+    name = "Greaves of the Consecrated Flame",
     slot = "",
     drop = "",
     source = "Wowhead",
@@ -181,7 +181,7 @@ local items = {
     priority = true,
   }),
   [271465] = entry({
-    name = "Item 271465",
+    name = "Warhelm of the Consecrated Flame",
     slot = "",
     drop = "",
     source = "Wowhead",
@@ -191,7 +191,7 @@ local items = {
     priority = true,
   }),
   [271466] = entry({
-    name = "Item 271466",
+    name = "Gauntlets of the Consecrated Flame",
     slot = "",
     drop = "",
     source = "Wowhead",
@@ -201,7 +201,7 @@ local items = {
     priority = true,
   }),
   [271468] = entry({
-    name = "Item 271468",
+    name = "Bulwark of the Consecrated Flame",
     slot = "",
     drop = "",
     source = "Wowhead",
@@ -211,7 +211,7 @@ local items = {
     priority = true,
   }),
   [271878] = entry({
-    name = "Item 271878",
+    name = "Chausses of Unbound Rancor",
     slot = "",
     drop = "",
     source = "Wowhead",
@@ -227,7 +227,7 @@ BiSPulseData:Register("PALADIN", 3, {
   specName = "Retribution",
   patch = "12.1",
   season = "Midnight Season 2",
-  updated = "2026-08-24",
+  updated = "2026-08-25",
   primarySource = "Wowhead",
   guides = {
     wowhead = "https://www.wowhead.com/guide/classes/paladin/retribution/bis-gear",

@@ -87,7 +87,7 @@ function addon:UpdateLootBadges()
       if link and i <= num then
         local itemID = self:GetItemIDFromLink(link)
         local eval = itemID and self:BuildBestEvaluation(itemID, link)
-        if eval and self:MeetsMinRank(eval.info.rank) then
+        if eval and self:MeetsMinRank(eval.info.rank) and self:MeetsContentFilter(eval.info) then
           local r, g, b = HexToRGB(self:RankColor(eval.info.rank))
           badge:SetBackdropBorderColor(r, g, b, 1)
           local label = RankShort(eval.info.rank)

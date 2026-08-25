@@ -21,7 +21,7 @@ end
 
 local items = {
   [193752] = entry({
-    name = "Item 193752",
+    name = "Galerattle Gauntlets",
     slot = "",
     drop = "",
     source = "Wowhead",
@@ -31,7 +31,7 @@ local items = {
     priority = true,
   }),
   [244581] = entry({
-    name = "Item 244581",
+    name = "Farstrider's Trophy Belt",
     slot = "",
     drop = "",
     source = "Wowhead",
@@ -41,7 +41,7 @@ local items = {
     priority = true,
   }),
   [244584] = entry({
-    name = "Item 244584",
+    name = "Farstrider's Plated Bracers",
     slot = "",
     drop = "",
     source = "Wowhead",
@@ -51,7 +51,7 @@ local items = {
     priority = true,
   }),
   [251136] = entry({
-    name = "Item 251136",
+    name = "Signet of Snarling Servitude",
     slot = "",
     drop = "",
     source = "Wowhead",
@@ -71,7 +71,7 @@ local items = {
     priority = true,
   }),
   [268230] = entry({
-    name = "Item 268230",
+    name = "Crown of the Eternal Fang",
     slot = "",
     drop = "",
     source = "Wowhead",
@@ -81,7 +81,7 @@ local items = {
     priority = true,
   }),
   [268231] = entry({
-    name = "Item 268231",
+    name = "Soulslither Spaulders",
     slot = "",
     drop = "",
     source = "Wowhead",
@@ -91,7 +91,7 @@ local items = {
     priority = true,
   }),
   [268233] = entry({
-    name = "Item 268233",
+    name = "Ferocious Scaleboots",
     slot = "",
     drop = "",
     source = "Wowhead",
@@ -101,7 +101,7 @@ local items = {
     priority = true,
   }),
   [268237] = entry({
-    name = "Item 268237",
+    name = "Cuisses of the Uncoiled Union",
     slot = "",
     drop = "",
     source = "Wowhead",
@@ -111,7 +111,7 @@ local items = {
     priority = true,
   }),
   [268249] = entry({
-    name = "Item 268249",
+    name = "Vile Alchemist's Band",
     slot = "",
     drop = "",
     source = "Wowhead",
@@ -121,7 +121,7 @@ local items = {
     priority = true,
   }),
   [268253] = entry({
-    name = "Item 268253",
+    name = "Silken Voodoo Drape",
     slot = "",
     drop = "",
     source = "Wowhead",
@@ -161,7 +161,7 @@ local items = {
     priority = true,
   }),
   [271490] = entry({
-    name = "Item 271490",
+    name = "Jaws of the Skulking Viper",
     slot = "",
     drop = "",
     source = "Wowhead",
@@ -171,7 +171,7 @@ local items = {
     priority = true,
   }),
   [271491] = entry({
-    name = "Item 271491",
+    name = "Skulking Viper's Coiled Legwraps",
     slot = "",
     drop = "",
     source = "Wowhead",
@@ -181,7 +181,7 @@ local items = {
     priority = true,
   }),
   [271492] = entry({
-    name = "Item 271492",
+    name = "Skulking Viper's Weeping Fangs",
     slot = "",
     drop = "",
     source = "Wowhead",
@@ -191,7 +191,7 @@ local items = {
     priority = true,
   }),
   [271493] = entry({
-    name = "Item 271493",
+    name = "Skulking Viper's Hidepiercers",
     slot = "",
     drop = "",
     source = "Wowhead",
@@ -201,7 +201,7 @@ local items = {
     priority = true,
   }),
   [271495] = entry({
-    name = "Item 271495",
+    name = "Skulking Viper's Scuteplate",
     slot = "",
     drop = "",
     source = "Wowhead",
@@ -227,7 +227,7 @@ BiSPulseData:Register("HUNTER", 2, {
   specName = "Marksmanship",
   patch = "12.1",
   season = "Midnight Season 2",
-  updated = "2026-08-24",
+  updated = "2026-08-25",
   primarySource = "Wowhead",
   guides = {
     wowhead = "https://www.wowhead.com/guide/classes/hunter/marksmanship/bis-gear",

@@ -31,7 +31,7 @@ local items = {
     priority = true,
   }),
   [193752] = entry({
-    name = "Item 193752",
+    name = "Galerattle Gauntlets",
     slot = "",
     drop = "",
     source = "Wowhead",
@@ -61,7 +61,7 @@ local items = {
     priority = true,
   }),
   [268230] = entry({
-    name = "Item 268230",
+    name = "Crown of the Eternal Fang",
     slot = "",
     drop = "",
     source = "Wowhead",
@@ -71,7 +71,7 @@ local items = {
     priority = true,
   }),
   [268231] = entry({
-    name = "Item 268231",
+    name = "Soulslither Spaulders",
     slot = "",
     drop = "",
     source = "Wowhead",
@@ -91,7 +91,7 @@ local items = {
     priority = true,
   }),
   [268237] = entry({
-    name = "Item 268237",
+    name = "Cuisses of the Uncoiled Union",
     slot = "",
     drop = "",
     source = "Wowhead",
@@ -171,7 +171,7 @@ local items = {
     priority = true,
   }),
   [271499] = entry({
-    name = "Item 271499",
+    name = "Calamitous Echo's Sundered Peaks",
     slot = "",
     drop = "",
     source = "Wowhead",
@@ -181,7 +181,7 @@ local items = {
     priority = true,
   }),
   [271500] = entry({
-    name = "Item 271500",
+    name = "Earthen Pillars of Calamity",
     slot = "",
     drop = "",
     source = "Wowhead",
@@ -191,7 +191,7 @@ local items = {
     priority = true,
   }),
   [271501] = entry({
-    name = "Item 271501",
+    name = "Calamitous Echo's Magmashapers",
     slot = "",
     drop = "",
     source = "Wowhead",
@@ -201,7 +201,7 @@ local items = {
     priority = true,
   }),
   [271502] = entry({
-    name = "Item 271502",
+    name = "Calamitous Echo's Ebon Greathorns",
     slot = "",
     drop = "",
     source = "Wowhead",
@@ -211,7 +211,7 @@ local items = {
     priority = true,
   }),
   [271504] = entry({
-    name = "Item 271504",
+    name = "Searing Caldera of Calamity",
     slot = "",
     drop = "",
     source = "Wowhead",
@@ -221,7 +221,7 @@ local items = {
     priority = true,
   }),
   [271876] = entry({
-    name = "Item 271876",
+    name = "Awoken Dreadfang Cuirass",
     slot = "",
     drop = "",
     source = "Wowhead",
@@ -237,7 +237,7 @@ BiSPulseData:Register("EVOKER", 1, {
   specName = "Devastation",
   patch = "12.1",
   season = "Midnight Season 2",
-  updated = "2026-08-24",
+  updated = "2026-08-25",
   primarySource = "Wowhead",
   guides = {
     wowhead = "https://www.wowhead.com/guide/classes/evoker/devastation/bis-gear",

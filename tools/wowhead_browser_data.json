@@ -1,8 +1,8 @@
 {
-  "scrapedAt": "2026-08-24",
+  "scrapedAt": "2026-08-25",
   "ok": 40,
   "freshOk": 34,
-  "totalItems": 640,
+  "totalItems": 595,
   "placeholders": 0,
   "errors": {
     "DevastationEvoker": "no BiS items parsed",
@@ -1500,67 +1500,68 @@
         },
         {
           "id": 268230,
-          "name": "Item 268230",
+          "name": "Crown of the Eternal Fang",
           "wowhead": "overall",
           "rank": "bis"
         },
         {
           "id": 271501,
-          "name": "Item 271501",
+          "name": "Calamitous Echo's Magmashapers",
           "wowhead": "overall",
           "rank": "bis"
         },
         {
           "id": 268231,
-          "name": "Item 268231",
+          "name": "Soulslither Spaulders",
           "wowhead": "overall",
           "rank": "bis"
         },
         {
           "id": 271499,
-          "name": "Item 271499",
+          "name": "Calamitous Echo's Sundered Peaks",
           "wowhead": "overall",
           "rank": "bis"
         },
         {
           "id": 271876,
-          "name": "Item 271876",
+          "name": "Awoken Dreadfang Cuirass",
           "wowhead": "overall",
           "rank": "bis"
         },
         {
           "id": 271504,
-          "name": "Item 271504",
+          "name": "Searing Caldera of Calamity",
           "wowhead": "overall",
           "rank": "bis"
         },
         {
           "id": 193752,
-          "name": "Item 193752",
+          "name": "Galerattle Gauntlets",
           "wowhead": "overall",
           "rank": "bis"
         },
         {
           "id": 271502,
-          "name": "Item 271502",
+          "name": "Calamitous Echo's Ebon Greathorns",
           "wowhead": "overall",
           "rank": "bis"
         },
         {
           "id": 268237,
-          "name": "Item 268237",
+          "name": "Cuisses of the Uncoiled Union",
           "wowhead": "overall",
           "rank": "bis"
         },
         {
           "id": 271500,
-          "name": "Item 271500",
+          "name": "Earthen Pillars of Calamity",
           "wowhead": "overall",
           "rank": "bis"
         }
       ],
       "url": "https://www.wowhead.com/guide/classes/evoker/devastation/bis-gear",
-      "reused": true
+      "reused": true,
+      "placeholders": 0
     },
     "PreservationEvoker": {
       "count": 14,
@@ -1866,7 +1867,8 @@
         }
       ],
       "url": "https://www.wowhead.com/guide/classes/hunter/beast-mastery/bis-gear",
-      "reused": true
+      "reused": true,
+      "placeholders": 0
     },
     "MarksmanshipHunter": {
       "count": 20,
@@ -1880,13 +1882,13 @@
         },
         {
           "id": 268230,
-          "name": "Item 268230",
+          "name": "Crown of the Eternal Fang",
           "wowhead": "overall",
           "rank": "bis"
         },
         {
           "id": 271492,
-          "name": "Item 271492",
+          "name": "Skulking Viper's Weeping Fangs",
           "wowhead": "overall",
           "rank": "bis"
         },
@@ -1898,19 +1900,19 @@
         },
         {
           "id": 268231,
-          "name": "Item 268231",
+          "name": "Soulslither Spaulders",
           "wowhead": "overall",
           "rank": "bis"
         },
         {
           "id": 271490,
-          "name": "Item 271490",
+          "name": "Jaws of the Skulking Viper",
           "wowhead": "overall",
           "rank": "bis"
         },
         {
           "id": 268253,
-          "name": "Item 268253",
+          "name": "Silken Voodoo Drape",
           "wowhead": "overall",
           "rank": "bis"
         },
@@ -1922,61 +1924,61 @@
         },
         {
           "id": 271495,
-          "name": "Item 271495",
+          "name": "Skulking Viper's Scuteplate",
           "wowhead": "overall",
           "rank": "bis"
         },
         {
           "id": 244584,
-          "name": "Item 244584",
+          "name": "Farstrider's Plated Bracers",
           "wowhead": "overall",
           "rank": "bis"
         },
         {
           "id": 193752,
-          "name": "Item 193752",
+          "name": "Galerattle Gauntlets",
           "wowhead": "overall",
           "rank": "bis"
         },
         {
           "id": 271493,
-          "name": "Item 271493",
+          "name": "Skulking Viper's Hidepiercers",
           "wowhead": "overall",
           "rank": "bis"
         },
         {
           "id": 244581,
-          "name": "Item 244581",
+          "name": "Farstrider's Trophy Belt",
           "wowhead": "overall",
           "rank": "bis"
         },
         {
           "id": 268237,
-          "name": "Item 268237",
+          "name": "Cuisses of the Uncoiled Union",
           "wowhead": "overall",
           "rank": "bis"
         },
         {
           "id": 271491,
-          "name": "Item 271491",
+          "name": "Skulking Viper's Coiled Legwraps",
           "wowhead": "overall",
           "rank": "bis"
         },
         {
           "id": 268233,
-          "name": "Item 268233",
+          "name": "Ferocious Scaleboots",
           "wowhead": "overall",
           "rank": "bis"
         },
         {
           "id": 251136,
-          "name": "Item 251136",
+          "name": "Signet of Snarling Servitude",
           "wowhead": "overall",
           "rank": "bis"
         },
         {
           "id": 268249,
-          "name": "Item 268249",
+          "name": "Vile Alchemist's Band",
           "wowhead": "overall",
           "rank": "bis"
         },
@@ -1994,7 +1996,8 @@
         }
       ],
       "url": "https://www.wowhead.com/guide/classes/hunter/marksmanship/bis-gear",
-      "reused": true
+      "reused": true,
+      "placeholders": 0
     },
     "SurvivalHunter": {
       "count": 15,
@@ -2544,7 +2547,7 @@
         },
         {
           "id": 271519,
-          "name": "Item 271519",
+          "name": "Monkey King's Unyielding Visage",
           "wowhead": "overall",
           "rank": "bis"
         },
@@ -2556,7 +2559,7 @@
         },
         {
           "id": 271517,
-          "name": "Item 271517",
+          "name": "Tassels of the Monkey King",
           "wowhead": "overall",
           "rank": "bis"
         },
@@ -2568,7 +2571,7 @@
         },
         {
           "id": 271522,
-          "name": "Item 271522",
+          "name": "Battle Gi of the Monkey King",
           "wowhead": "overall",
           "rank": "bis"
         },
@@ -2580,7 +2583,7 @@
         },
         {
           "id": 271520,
-          "name": "Item 271520",
+          "name": "Monkey King's Fighting Fists",
           "wowhead": "overall",
           "rank": "bis"
         },
@@ -2592,7 +2595,7 @@
         },
         {
           "id": 271518,
-          "name": "Item 271518",
+          "name": "Pantaloons of the Monkey King",
           "wowhead": "overall",
           "rank": "bis"
         },
@@ -2622,7 +2625,8 @@
         }
       ],
       "url": "https://www.wowhead.com/guide/classes/monk/brewmaster/bis-gear",
-      "reused": true
+      "reused": true,
+      "placeholders": 0
     },
     "MistweaverMonk": {
       "count": 11,
@@ -3234,67 +3238,68 @@
         },
         {
           "id": 268229,
-          "name": "Item 268229",
+          "name": "Skullguard of the Risen Sacrifice",
           "wowhead": "overall",
           "rank": "bis"
         },
         {
           "id": 271465,
-          "name": "Item 271465",
+          "name": "Warhelm of the Consecrated Flame",
           "wowhead": "overall",
           "rank": "bis"
         },
         {
           "id": 251138,
-          "name": "Item 251138",
+          "name": "Cinderfury Shoulderguards",
           "wowhead": "overall",
           "rank": "bis"
         },
         {
           "id": 271463,
-          "name": "Item 271463",
+          "name": "Pauldrons of the Consecrated Flame",
           "wowhead": "overall",
           "rank": "bis"
         },
         {
           "id": 268222,
-          "name": "Item 268222",
+          "name": "Reckless Spirit Breastplate",
           "wowhead": "overall",
           "rank": "bis"
         },
         {
           "id": 271468,
-          "name": "Item 271468",
+          "name": "Bulwark of the Consecrated Flame",
           "wowhead": "overall",
           "rank": "bis"
         },
         {
           "id": 251214,
-          "name": "Item 251214",
+          "name": "Bonds of the Hash'ura",
           "wowhead": "overall",
           "rank": "bis"
         },
         {
           "id": 271466,
-          "name": "Item 271466",
+          "name": "Gauntlets of the Consecrated Flame",
           "wowhead": "overall",
           "rank": "bis"
         },
         {
           "id": 271878,
-          "name": "Item 271878",
+          "name": "Chausses of Unbound Rancor",
           "wowhead": "overall",
           "rank": "bis"
         },
         {
           "id": 271464,
-          "name": "Item 271464",
+          "name": "Greaves of the Consecrated Flame",
           "wowhead": "overall",
           "rank": "bis"
         }
       ],
       "url": "https://www.wowhead.com/guide/classes/paladin/retribution/bis-gear",
-      "reused": true
+      "reused": true,
+      "placeholders": 0
     },
     "DisciplinePriest": {
       "count": 15,
@@ -3656,13 +3661,13 @@
         },
         {
           "id": 271555,
-          "name": "Item 271555",
+          "name": "Cosmic Penitent's Truesight",
           "wowhead": "overall",
           "rank": "bis"
         },
         {
           "id": 239045,
-          "name": "Item 239045",
+          "name": "Mantle of Ceremonial Ascension",
           "wowhead": "overall",
           "rank": "bis"
         },
@@ -3680,7 +3685,7 @@
         },
         {
           "id": 271556,
-          "name": "Item 271556",
+          "name": "Cosmic Penitent's Celestial Grips",
           "wowhead": "overall",
           "rank": "bis"
         },
@@ -3698,13 +3703,14 @@
         },
         {
           "id": 271554,
-          "name": "Item 271554",
+          "name": "Enveloping Legwraps of the Cosmic Penitent",
           "wowhead": "overall",
           "rank": "bis"
         }
       ],
       "url": "https://www.wowhead.com/guide/classes/priest/shadow/bis-gear",
-      "reused": true
+      "reused": true,
+      "placeholders": 0
     },
     "AssassinationRogue": {
       "count": 15,

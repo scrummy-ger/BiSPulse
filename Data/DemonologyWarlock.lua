@@ -147,7 +147,7 @@ BiSPulseData:Register("WARLOCK", 2, {
   specName = "Demonology",
   patch = "12.1",
   season = "Midnight Season 2",
-  updated = "2026-08-24",
+  updated = "2026-08-25",
   primarySource = "Wowhead",
   guides = {
     wowhead = "https://www.wowhead.com/guide/classes/warlock/demonology/bis-gear",

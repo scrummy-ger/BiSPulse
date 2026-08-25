@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.5.6
+
+### DE
+- Content-Filter: Overall / Raid / Mythic+ / Alle (Alerts + Checkliste)
+- Neue Option: Bank (und Warband-Bank) als Besitz zählen
+- Checkliste: Filter nach Rank und Slot plus Suche in Name/Drop
+- Datenqualität: keine Item-Platzhalter-Namen mehr; Drop-Texte aktualisiert
+
+### EN
+- Content filter: Overall / Raid / Mythic+ / All (alerts + checklist)
+- New option: count bank (and warband bank) as owned
+- Checklist: filter by rank and slot plus name/drop search
+- Data quality: no more Item placeholder names; refreshed drop text
+
 ## 1.5.5
 
 ### DE

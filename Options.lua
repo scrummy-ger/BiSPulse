@@ -21,6 +21,9 @@ local function CreateCheckbox(parent, label, key, y)
         addon:RefreshChecklist()
       end
     end
+    if key == "countBankAsOwned" and addon.RefreshChecklist then
+      addon:RefreshChecklist()
+    end
   end)
   cb.bisKey = key
   return cb
@@ -96,6 +99,9 @@ function addon:BuildOptions()
             addon:RefreshChecklist()
           end
         end
+        if key == "countBankAsOwned" and addon.RefreshChecklist then
+          addon:RefreshChecklist()
+        end
       end)
       btn.bisKey = key
       checks[#checks + 1] = btn
@@ -114,6 +120,7 @@ function addon:BuildOptions()
   add(L["OPTS_SOUND"], "sound")
   add(L["OPTS_ONLY_MINE"], "onlyMine")
   add(L["OPTS_ALERT_IF_OWNED"], "alertIfOwned")
+  add(L["OPTS_COUNT_BANK"], "countBankAsOwned")
   add(L["OPTS_ALERT_ON_DOWNGRADE"], "alertOnDowngrade")
   add(L["OPTS_TRACK_OFFSPEC"], "trackOffspec")
   panel.checks = checks
@@ -129,25 +136,65 @@ function addon:BuildOptions()
     offspecDropdown:SetPoint("TOPLEFT", offspecLabel, "BOTTOMLEFT", -16, -2)
     UIDropDownMenu_SetWidth(offspecDropdown, 200)
     UIDropDownMenu_Initialize(offspecDropdown, function()
-      local choices = addon:GetClassSpecChoices(false)
-      local autoInfo = UIDropDownMenu_CreateInfo()
-      autoInfo.text = L["OPTS_OFFSPEC_AUTO"]
-      autoInfo.value = 0
-      autoInfo.func = function()
+      local info = UIDropDownMenu_CreateInfo()
+      info.text = L["OPTS_OFFSPEC_AUTO"]
+      info.value = 0
+      info.func = function()
         addon:GetDB().offspecIndex = 0
         UIDropDownMenu_SetText(offspecDropdown, L["OPTS_OFFSPEC_AUTO"])
         if addon.RefreshChecklist then
           addon:RefreshChecklist()
         end
       end
-      UIDropDownMenu_AddButton(autoInfo)
+      UIDropDownMenu_AddButton(info)
+      local choices = addon:GetClassSpecChoices(true)
       for _, choice in ipairs(choices) do
-        local info = UIDropDownMenu_CreateInfo()
-        info.text = choice.name
-        info.value = choice.index
-        info.func = function()
+        local cinfo = UIDropDownMenu_CreateInfo()
+        cinfo.text = choice.name
+        cinfo.value = choice.index
+        cinfo.func = function()
           addon:GetDB().offspecIndex = choice.index
           UIDropDownMenu_SetText(offspecDropdown, choice.name)
+          if addon.RefreshChecklist then
+            addon:RefreshChecklist()
+          end
+        end
+        UIDropDownMenu_AddButton(cinfo)
+      end
+    end)
+  end)
+
+  if hasOffspecDropdown and offspecDropdown then
+    panel.offspecDropdown = offspecDropdown
+    y = y - 40
+  else
+    y = y - 8
+  end
+
+  local contentLabel = panel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+  contentLabel:SetPoint("TOPLEFT", 16, y - 8)
+  contentLabel:SetText(L["OPTS_CONTENT_MODE"])
+
+  local contentModes = {
+    { value = "all", text = L["OPTS_CONTENT_ALL"] },
+    { value = "overall", text = L["CONTENT_OVERALL"] },
+    { value = "raid", text = L["CONTENT_RAID"] },
+    { value = "mythic", text = L["CONTENT_MYTHIC"] },
+  }
+
+  local contentDropdown
+  local hasContentDropdown = pcall(function()
+    contentDropdown = CreateFrame("Frame", "BiSPulseContentModeDropdown", panel, "UIDropDownMenuTemplate")
+    contentDropdown:SetPoint("TOPLEFT", contentLabel, "BOTTOMLEFT", -16, -8)
+    UIDropDownMenu_SetWidth(contentDropdown, 180)
+    UIDropDownMenu_Initialize(contentDropdown, function()
+      for _, m in ipairs(contentModes) do
+        local info = UIDropDownMenu_CreateInfo()
+        info.text = m.text
+        info.value = m.value
+        info.func = function()
+          addon:GetDB().contentMode = m.value
+          UIDropDownMenu_SetText(contentDropdown, m.text)
           if addon.RefreshChecklist then
             addon:RefreshChecklist()
           end
@@ -156,12 +203,54 @@ function addon:BuildOptions()
       end
     end)
   end)
-  if hasOffspecDropdown then
-    panel.offspecDropdown = offspecDropdown
-    y = y - 40
-  else
-    y = y - 8
+
+  if not hasContentDropdown then
+    local cycle = CreateFrame("Button", nil, panel, "UIPanelButtonTemplate")
+    cycle:SetSize(180, 24)
+    cycle:SetPoint("TOPLEFT", contentLabel, "BOTTOMLEFT", 0, -8)
+    local function sync()
+      local current = addon:GetDB().contentMode or "all"
+      for _, m in ipairs(contentModes) do
+        if m.value == current then
+          cycle:SetText(m.text)
+          return
+        end
+      end
+    end
+    cycle:SetScript("OnClick", function()
+      local order = { "all", "overall", "raid", "mythic" }
+      local current = addon:GetDB().contentMode or "all"
+      local idx = 1
+      for i, v in ipairs(order) do
+        if v == current then
+          idx = i
+          break
+        end
+      end
+      addon:GetDB().contentMode = order[(idx % #order) + 1]
+      sync()
+      if addon.RefreshChecklist then
+        addon:RefreshChecklist()
+      end
+    end)
+    sync()
+    panel.contentCycle = cycle
   end
+
+  local contentHint = panel:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
+  if hasContentDropdown and contentDropdown then
+    contentHint:SetPoint("TOPLEFT", contentDropdown, "BOTTOMLEFT", 20, -2)
+  elseif panel.contentCycle then
+    contentHint:SetPoint("TOPLEFT", panel.contentCycle, "BOTTOMLEFT", 0, -2)
+  else
+    contentHint:SetPoint("TOPLEFT", contentLabel, "BOTTOMLEFT", 0, -36)
+  end
+  contentHint:SetWidth(400)
+  contentHint:SetJustifyH("LEFT")
+  contentHint:SetText(L["OPTS_CONTENT_HINT"] or "")
+  panel.contentHint = contentHint
+  panel.contentDropdown = contentDropdown
+  y = y - 70
 
   local rankLabel = panel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
   rankLabel:SetPoint("TOPLEFT", 16, y - 8)
@@ -282,6 +371,23 @@ function addon:BuildOptions()
       for _, r in ipairs(ranks) do
         if r.value == current then
           UIDropDownMenu_SetText(dropdown, r.text)
+          break
+        end
+      end
+    end
+    if panel.contentDropdown and UIDropDownMenu_SetText then
+      local current = db.contentMode or "all"
+      for _, m in ipairs(contentModes) do
+        if m.value == current then
+          UIDropDownMenu_SetText(panel.contentDropdown, m.text)
+          break
+        end
+      end
+    elseif panel.contentCycle then
+      local current = db.contentMode or "all"
+      for _, m in ipairs(contentModes) do
+        if m.value == current then
+          panel.contentCycle:SetText(m.text)
           break
         end
       end

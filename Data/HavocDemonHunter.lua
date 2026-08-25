@@ -167,7 +167,7 @@ BiSPulseData:Register("DEMONHUNTER", 1, {
   specName = "Havoc",
   patch = "12.1",
   season = "Midnight Season 2",
-  updated = "2026-08-24",
+  updated = "2026-08-25",
   primarySource = "Wowhead",
   guides = {
     wowhead = "https://www.wowhead.com/guide/classes/demon-hunter/havoc/bis-gear",

@@ -12,10 +12,15 @@ local defaults = {
   sound = true,
   onlyMine = false,
   alertIfOwned = false,
+  countBankAsOwned = false,
   alertOnDowngrade = false,
   trackOffspec = false,
   offspecIndex = 0, -- 0 = auto (first other spec of your class)
   checklistView = "main", -- "main" | "off"
+  contentMode = "all", -- all | overall | raid | mythic
+  checklistRankFilter = "all", -- all | bis | strong | alt | ok
+  checklistSlotFilter = "all",
+  checklistSearch = "",
   minRank = "strong", -- bis | strong | alt | ok
   customToast = true,
   raidWarning = false,
@@ -156,6 +161,83 @@ function addon:GetItemIDFromLink(link)
 end
 
 -- Equipped or in bags (not bank). Returns hyperlink + where.
+local function ContainerItemLink(bag, slot)
+  if C_Container and C_Container.GetContainerItemLink then
+    return C_Container.GetContainerItemLink(bag, slot)
+  end
+  if GetContainerItemLink then
+    return GetContainerItemLink(bag, slot)
+  end
+  return nil
+end
+
+local function ContainerNumSlots(bag)
+  if C_Container and C_Container.GetContainerNumSlots then
+    return C_Container.GetContainerNumSlots(bag) or 0
+  end
+  if GetContainerNumSlots then
+    return GetContainerNumSlots(bag) or 0
+  end
+  return 0
+end
+
+local function ScanBagsForItem(self, itemID, bags, where)
+  for _, bag in ipairs(bags) do
+    if bag ~= nil then
+      local slots = ContainerNumSlots(bag)
+      for slot = 1, slots do
+        local link = ContainerItemLink(bag, slot)
+        if link and self:GetItemIDFromLink(link) == itemID then
+          return link, where
+        end
+      end
+    end
+  end
+  return nil, nil
+end
+
+local function CollectBankBagIDs()
+  local bags = {}
+  local function add(id)
+    if id == nil then
+      return
+    end
+    for _, existing in ipairs(bags) do
+      if existing == id then
+        return
+      end
+    end
+    bags[#bags + 1] = id
+  end
+
+  -- Classic bank container + bank bags
+  if BANK_CONTAINER ~= nil then
+    add(BANK_CONTAINER)
+  end
+  if REAGENTBANK_CONTAINER ~= nil then
+    add(REAGENTBANK_CONTAINER)
+  end
+  local bagSlots = NUM_BAG_SLOTS or 4
+  local bankSlots = NUM_BANKBAGSLOTS or 7
+  for i = bagSlots + 1, bagSlots + bankSlots do
+    add(i)
+  end
+
+  -- Modern Enum.BagIndex (bank / account bank tabs) when present
+  local BagIndex = Enum and Enum.BagIndex
+  if BagIndex then
+    for key, id in pairs(BagIndex) do
+      if type(id) == "number" and type(key) == "string" then
+        if key:find("Bank", 1, true) or key:find("Account", 1, true) or key:find("Reagent", 1, true) then
+          add(id)
+        end
+      end
+    end
+  end
+
+  return bags
+end
+
 function addon:FindOwnedItem(itemID)
   if not itemID then
     return nil, nil
@@ -166,26 +248,25 @@ function addon:FindOwnedItem(itemID)
       return link, "equipped"
     end
   end
+
+  local wornBags = {}
   local maxBag = NUM_TOTAL_EQUIPPED_BAG_SLOTS or NUM_BAG_SLOTS or 4
   for bag = 0, maxBag do
-    local slots = 0
-    if C_Container and C_Container.GetContainerNumSlots then
-      slots = C_Container.GetContainerNumSlots(bag) or 0
-    elseif GetContainerNumSlots then
-      slots = GetContainerNumSlots(bag) or 0
-    end
-    for slot = 1, slots do
-      local link
-      if C_Container and C_Container.GetContainerItemLink then
-        link = C_Container.GetContainerItemLink(bag, slot)
-      elseif GetContainerItemLink then
-        link = GetContainerItemLink(bag, slot)
-      end
-      if link and self:GetItemIDFromLink(link) == itemID then
-        return link, "bags"
-      end
+    wornBags[#wornBags + 1] = bag
+  end
+  local link, where = ScanBagsForItem(self, itemID, wornBags, "bags")
+  if link then
+    return link, where
+  end
+
+  local db = self:GetDB()
+  if db and db.countBankAsOwned then
+    link, where = ScanBagsForItem(self, itemID, CollectBankBagIDs(), "bank")
+    if link then
+      return link, where
     end
   end
+
   return nil, nil
 end
 
@@ -420,6 +501,36 @@ function addon:MeetsMinRank(rank)
   local have = DATA.RANK_ORDER[rank] or 0
   local need = DATA.RANK_ORDER[minRank] or 3
   return have >= need
+end
+
+-- Content filter: Overall (+ trinket) is always the baseline.
+-- raid/mythic modes additionally include their tagged extras and hide the other.
+function addon:MeetsContentFilter(info)
+  if not info then
+    return false
+  end
+  local mode = (self:GetDB() and self:GetDB().contentMode) or "all"
+  if mode == "all" then
+    return true
+  end
+  local wh = info.wowhead
+  if type(wh) ~= "string" or wh == "" then
+    wh = "overall"
+  end
+  -- Ignore full guide URLs sometimes stored by older generators
+  if wh:find("http", 1, true) then
+    wh = "overall"
+  end
+  if mode == "overall" then
+    return wh == "overall" or wh == "trinket"
+  end
+  if mode == "raid" then
+    return wh == "overall" or wh == "trinket" or wh == "raid"
+  end
+  if mode == "mythic" then
+    return wh == "overall" or wh == "trinket" or wh == "mythic"
+  end
+  return true
 end
 
 local frame = CreateFrame("Frame")

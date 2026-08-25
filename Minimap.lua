@@ -151,9 +151,9 @@ local function BuildSortedEntries(pack)
     return list
   end
   for itemID, info in pairs(pack.items) do
-    local isPrimary = info and (info.rank == "bis" or info.wowhead == "overall")
-    if isPrimary then
-      if not (info.slot == "Embellishment" or (info.note and info.note:find("Embellishment", 1, true))) then
+    if info and not (info.slot == "Embellishment" or (info.note and info.note:find("Embellishment", 1, true))) then
+      if addon:MeetsContentFilter(info) then
+        -- Checklist shows BiS + Strong (and lower only if content extras).
         list[#list + 1] = { id = itemID, info = info }
       end
     end
@@ -169,7 +169,51 @@ local function BuildSortedEntries(pack)
   return list
 end
 
-local CHECKLIST_LAYOUT_REV = 3
+local function EntryPassesChecklistFilters(entry, db)
+  if not entry or not entry.info then
+    return false
+  end
+  local rankFilter = (db and db.checklistRankFilter) or "all"
+  if rankFilter ~= "all" and entry.info.rank ~= rankFilter then
+    return false
+  end
+  local slotFilter = (db and db.checklistSlotFilter) or "all"
+  if slotFilter ~= "all" then
+    local slot = entry.info.slot or ""
+    if slot ~= slotFilter then
+      return false
+    end
+  end
+  local q = (db and db.checklistSearch) or ""
+  q = tostring(q):lower():gsub("^%s+", ""):gsub("%s+$", "")
+  if q ~= "" then
+    local name = (entry.info.name or ""):lower()
+    local drop = (entry.info.drop or ""):lower()
+    if not name:find(q, 1, true) and not drop:find(q, 1, true) then
+      return false
+    end
+  end
+  return true
+end
+
+local function CollectSlotsFromPack(pack)
+  local seen = {}
+  local slots = {}
+  if not pack or not pack.items then
+    return slots
+  end
+  for _, info in pairs(pack.items) do
+    local slot = info and info.slot
+    if slot and slot ~= "" and slot ~= "Embellishment" and not seen[slot] then
+      seen[slot] = true
+      slots[#slots + 1] = slot
+    end
+  end
+  table.sort(slots)
+  return slots
+end
+
+local CHECKLIST_LAYOUT_REV = 4
 
 local function EnsureChecklist()
   if checklist then
@@ -183,7 +227,7 @@ local function EnsureChecklist()
 
   local f = CreateFrame("Frame", "BiSPulseChecklist", UIParent, "BackdropTemplate")
   f.layoutRev = CHECKLIST_LAYOUT_REV
-  f:SetSize(460, 500)
+  f:SetSize(460, 540)
   f:SetPoint("CENTER", UIParent, "CENTER", 180, 0)
   f:SetFrameStrata("FULLSCREEN_DIALOG")
   f:SetFrameLevel(1000)
@@ -273,11 +317,137 @@ local function EnsureChecklist()
   f.subtitle = subtitle
 
   local progress = f:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-  progress:SetPoint("TOPLEFT", subtitle, "BOTTOMLEFT", 0, -8)
+  progress:SetPoint("TOPLEFT", subtitle, "BOTTOMLEFT", 0, -6)
   f.progress = progress
 
+  -- Filter row: rank + slot + search
+  local rankBtn = CreateFrame("Button", nil, f, "UIPanelButtonTemplate")
+  rankBtn:SetSize(100, 22)
+  rankBtn:SetPoint("TOPLEFT", progress, "BOTTOMLEFT", 0, -8)
+  local function SyncRankBtn()
+    local db = addon:GetDB()
+    local v = (db and db.checklistRankFilter) or "all"
+    if v == "all" then
+      rankBtn:SetText(L["CHECKLIST_FILTER_ALL"] or "All")
+    else
+      rankBtn:SetText(addon:RankLabel(v))
+    end
+  end
+  rankBtn:SetScript("OnClick", function()
+    local order = { "all", "bis", "strong", "alt", "ok" }
+    local db = addon:GetDB()
+    if not db then
+      return
+    end
+    local current = db.checklistRankFilter or "all"
+    local idx = 1
+    for i, v in ipairs(order) do
+      if v == current then
+        idx = i
+        break
+      end
+    end
+    db.checklistRankFilter = order[(idx % #order) + 1]
+    SyncRankBtn()
+    addon:RefreshChecklist()
+  end)
+  f.rankFilterBtn = rankBtn
+  f.SyncRankBtn = SyncRankBtn
+
+  local slotBtn = CreateFrame("Button", nil, f, "UIPanelButtonTemplate")
+  slotBtn:SetSize(100, 22)
+  slotBtn:SetPoint("LEFT", rankBtn, "RIGHT", 6, 0)
+  local function SyncSlotBtn()
+    local db = addon:GetDB()
+    local v = (db and db.checklistSlotFilter) or "all"
+    if v == "all" then
+      slotBtn:SetText(L["CHECKLIST_FILTER_ALL"] or "All")
+    else
+      slotBtn:SetText(v)
+    end
+  end
+  slotBtn:SetScript("OnClick", function()
+    local db = addon:GetDB()
+    if not db then
+      return
+    end
+    local pack = addon:GetChecklistPack()
+    local slots = CollectSlotsFromPack(pack)
+    local order = { "all" }
+    for _, s in ipairs(slots) do
+      order[#order + 1] = s
+    end
+    local current = db.checklistSlotFilter or "all"
+    local idx = 1
+    for i, v in ipairs(order) do
+      if v == current then
+        idx = i
+        break
+      end
+    end
+    db.checklistSlotFilter = order[(idx % #order) + 1]
+    SyncSlotBtn()
+    addon:RefreshChecklist()
+  end)
+  f.slotFilterBtn = slotBtn
+  f.SyncSlotBtn = SyncSlotBtn
+
+  local search = CreateFrame("EditBox", "BiSPulseChecklistSearch", f, "InputBoxTemplate")
+  search:SetSize(200, 20)
+  search:SetPoint("LEFT", slotBtn, "RIGHT", 10, 0)
+  search:SetAutoFocus(false)
+  search:SetMaxLetters(40)
+  search:SetScript("OnEnterPressed", function(self)
+    self:ClearFocus()
+  end)
+  search:SetScript("OnTextChanged", function(self, userInput)
+    if not userInput then
+      return
+    end
+    local db = addon:GetDB()
+    if db then
+      db.checklistSearch = self:GetText() or ""
+    end
+    if addon._checklistSearchTimer then
+      addon._checklistSearchTimer:Cancel()
+    end
+    addon._checklistSearchTimer = C_Timer.NewTimer(0.2, function()
+      addon:RefreshChecklist()
+    end)
+  end)
+  search:SetScript("OnEditFocusGained", function(self)
+    if self:GetText() == "" then
+      -- placeholder via fontstring below
+    end
+  end)
+  f.searchBox = search
+
+  local searchHint = f:CreateFontString(nil, "OVERLAY", "GameFontDisableSmall")
+  searchHint:SetPoint("LEFT", search, "LEFT", 6, 0)
+  searchHint:SetText(L["CHECKLIST_SEARCH"] or "Search…")
+  f.searchHint = searchHint
+  search:HookScript("OnTextChanged", function(self)
+    if f.searchHint then
+      if (self:GetText() or "") == "" and not self:HasFocus() then
+        f.searchHint:Show()
+      else
+        f.searchHint:Hide()
+      end
+    end
+  end)
+  search:HookScript("OnEditFocusGained", function()
+    if f.searchHint then
+      f.searchHint:Hide()
+    end
+  end)
+  search:HookScript("OnEditFocusLost", function(self)
+    if f.searchHint and (self:GetText() or "") == "" then
+      f.searchHint:Show()
+    end
+  end)
+
   local scroll = CreateFrame("ScrollFrame", "BiSPulseChecklistScroll", f, "UIPanelScrollFrameTemplate")
-  scroll:SetPoint("TOPLEFT", 14, -92)
+  scroll:SetPoint("TOPLEFT", 14, -128)
   scroll:SetPoint("BOTTOMRIGHT", -34, 48)
   f.scroll = scroll
 
@@ -407,8 +577,8 @@ function addon:RefreshChecklist()
     pack.updated or "?"
   ))
 
+  local db = self:GetDB()
   if f.mainBtn and f.offBtn then
-    local db = self:GetDB()
     local onOff = db and db.checklistView == "off" and db.trackOffspec and self:GetOffspecPack()
     if onOff then
       f.offBtn:Disable()
@@ -420,6 +590,34 @@ function addon:RefreshChecklist()
   end
 
   local entries = BuildSortedEntries(pack)
+  local filtered = {}
+  for _, entry in ipairs(entries) do
+    if EntryPassesChecklistFilters(entry, db) then
+      filtered[#filtered + 1] = entry
+    end
+  end
+  entries = filtered
+
+  if f.SyncRankBtn then
+    f.SyncRankBtn()
+  end
+  if f.SyncSlotBtn then
+    f.SyncSlotBtn()
+  end
+  if f.searchBox and db then
+    local want = db.checklistSearch or ""
+    if f.searchBox:GetText() ~= want and not f.searchBox:HasFocus() then
+      f.searchBox:SetText(want)
+    end
+    if f.searchHint then
+      if want == "" and not f.searchBox:HasFocus() then
+        f.searchHint:Show()
+      else
+        f.searchHint:Hide()
+      end
+    end
+  end
+
   local ownedCount = 0
   local y = 0
   local rows = f.content.rows
@@ -444,6 +642,8 @@ function addon:RefreshChecklist()
     row.name:SetText(ResolveItemName(entry.id, entry.info.name))
     if entry.info.rank == "bis" then
       row.name:SetTextColor(1, 0.85, 0.2)
+    elseif entry.info.rank == "strong" then
+      row.name:SetTextColor(0, 1, 0.59)
     else
       row.name:SetTextColor(0.85, 0.9, 1)
     end
@@ -459,6 +659,8 @@ function addon:RefreshChecklist()
       dropParts[#dropParts + 1] = (L["CHECKLIST_EQUIPPED"] or "equipped")
     elseif owned and where == "bags" then
       dropParts[#dropParts + 1] = (L["CHECKLIST_BAGS"] or "bags")
+    elseif owned and where == "bank" then
+      dropParts[#dropParts + 1] = (L["CHECKLIST_BANK"] or "bank")
     end
     local dropText = table.concat(dropParts, " · ")
     row.dropText = entry.info.drop or ""

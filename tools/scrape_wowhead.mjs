@@ -175,6 +175,7 @@ function bisChunk(html) {
     /Overall BiS/i,
     /Best-in-Slot Gear for/i,
     /Best in Slot Gear for/i,
+    /Best[- ]in[- ]Slot/i,
     /toc=\\"BiS Gear\\"/i,
     /toc="BiS Gear"/i,
   ];
@@ -186,7 +187,8 @@ function bisChunk(html) {
       const i = slice.search(p);
       if (i < 0) break;
       const abs = from + i;
-      if (abs >= 25000) {
+      // Prefer body content (skip early nav/chrome), but accept earlier for short pages
+      if (abs >= 15000 || from > 0) {
         start = abs;
         break;
       }
@@ -195,8 +197,12 @@ function bisChunk(html) {
     if (start >= 0) break;
   }
   if (start < 0) {
-    const i = html.slice(40000).search(/\[item=\d+/i);
-    start = i >= 0 ? 40000 + i - 200 : 40000;
+    const slice = html.slice(20000);
+    let i = slice.search(/\[item=\d+/i);
+    if (i < 0) {
+      i = slice.search(/\/item=\d+\//i);
+    }
+    start = i >= 0 ? 20000 + i - 200 : 20000;
   }
 
   const endPats = [
@@ -214,7 +220,7 @@ function bisChunk(html) {
     const i = rest.search(p);
     if (i >= 0 && (end < 0 || i < end)) end = i;
   }
-  const hardCap = 40000;
+  const hardCap = 50000;
   if (end < 0 || end > hardCap) end = hardCap;
   return html.slice(start, start + 20 + end);
 }

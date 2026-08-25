@@ -35,7 +35,10 @@ function addon:AlertItem(itemID, itemLink, reason)
   if not self:MeetsMinRank(eval.info.rank) then
     return
   end
-  -- Skip toast if the player already has this item (bags/equipped), unless opted in.
+  if not self:MeetsContentFilter(eval.info) then
+    return
+  end
+  -- Skip toast if the player already has this item (bags/equipped/bank), unless opted in.
   if reason ~= "preview" and not db.alertIfOwned then
     local owned = self.PlayerOwnsItem and self:PlayerOwnsItem(itemID)
     if owned then
