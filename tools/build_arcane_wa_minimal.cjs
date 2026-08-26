@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Minimal single-icon Arcane S2 trackers for ThisWeeksAuras.
- * Shorter import strings = less truncation when copying from chat/PR.
+ * Includes subtle GSE modifier hints (Shift/Ctrl/Alt from Master_Arcanist-12.1).
  */
 const fs = require("fs");
 const path = require("path");
@@ -23,7 +23,100 @@ function uid(seed) {
   return ("bps" + seed + "xxxxxxxx").slice(0, 11);
 }
 
-function minimalIcon({ id, spellId, label, xOffset = 0, yOffset = -80, stacks = false }) {
+function labelSubRegion({ text, fontSize = 14, yOffset = -2 }) {
+  return {
+    type: "subtext",
+    text_text: text,
+    text_visible: true,
+    text_fontSize: fontSize,
+    text_color: [1, 0.92, 0.45, 1],
+    text_font: "Friz Quadrata TT",
+    text_justify: "CENTER",
+    text_selfPoint: "TOP",
+    text_anchorPoint: "BOTTOM",
+    text_anchorXOffset: 0,
+    text_anchorYOffset: yOffset,
+    text_shadowColor: [0, 0, 0, 1],
+    text_shadowXOffset: 1,
+    text_shadowYOffset: -1,
+    text_automaticWidth: "Auto",
+    text_fixedWidth: 80,
+    text_wordWrap: "WordWrap",
+    text_fontType: "OUTLINE",
+  };
+}
+
+function keySubRegion(text, { visible = true, alpha = 0.55 } = {}) {
+  return {
+    type: "subtext",
+    text_text: text,
+    text_visible: visible,
+    text_fontSize: 11,
+    text_color: [1, 1, 1, alpha],
+    text_font: "Friz Quadrata TT",
+    text_justify: "RIGHT",
+    text_selfPoint: "BOTTOMRIGHT",
+    text_anchorPoint: "BOTTOMRIGHT",
+    text_anchorXOffset: -3,
+    text_anchorYOffset: 3,
+    text_shadowColor: [0, 0, 0, 0.85],
+    text_shadowXOffset: 1,
+    text_shadowYOffset: -1,
+    text_automaticWidth: "Auto",
+    text_fixedWidth: 36,
+    text_wordWrap: "WordWrap",
+    text_fontType: "OUTLINE",
+  };
+}
+
+/**
+ * GSE Master_Arcanist-12.1 modifiers:
+ *   Shift = Arcane Barrage (Salvo 20+ / Arcane Soul)
+ *   Ctrl  = Arcane Orb
+ *   Alt   = Arcane Surge
+ * CC + Prismatic fire automatically in the macro loop (no modifier).
+ */
+function minimalIcon({
+  id,
+  spellId,
+  label,
+  xOffset = 0,
+  yOffset = -80,
+  stacks = false,
+  keyHint = null,
+  keyWhen = "always",
+  keyAlpha = 0.55,
+}) {
+  const subRegions = [];
+  const conditions = [];
+
+  if (stacks) {
+    subRegions.push(labelSubRegion({ text: `%s\n${label}`, fontSize: 18 }));
+  } else {
+    subRegions.push(labelSubRegion({ text: label }));
+  }
+
+  let keySubIndex = null;
+  if (keyHint) {
+    keySubIndex = subRegions.length + 1;
+    const visible = keyWhen !== "stacks20";
+    subRegions.push(keySubRegion(keyHint, { visible, alpha: keyAlpha }));
+
+    if (keyWhen === "stacks20") {
+      conditions.push({
+        check: { trigger: 1, variable: "stacks", op: ">=", value: "20" },
+        changes: [
+          { property: `sub.${keySubIndex}.text_visible`, value: true },
+          { property: `sub.${keySubIndex}.text_color`, value: [1, 0.95, 0.55, 0.9] },
+        ],
+      });
+      conditions.push({
+        check: { trigger: 1, variable: "stacks", op: "<", value: "20" },
+        changes: [{ property: `sub.${keySubIndex}.text_visible`, value: false }],
+      });
+    }
+  }
+
   return {
     id,
     uid: uid(id.replace(/\W/g, "").slice(0, 6)),
@@ -33,7 +126,7 @@ function minimalIcon({ id, spellId, label, xOffset = 0, yOffset = -80, stacks = 
     authorOptions: [],
     config: {},
     information: {},
-    conditions: [],
+    conditions,
     actions: { init: {}, start: {}, finish: {} },
     animation: {
       start: { type: "none", duration_type: "seconds", easeType: "none", easeStrength: 3 },
@@ -93,59 +186,44 @@ function minimalIcon({ id, spellId, label, xOffset = 0, yOffset = -80, stacks = 
         untrigger: {},
       },
     ],
-    subRegions: stacks
-      ? [
-          {
-            type: "subtext",
-            text_text: `%s\n${label}`,
-            text_visible: true,
-            text_fontSize: 18,
-            text_color: [1, 0.92, 0.45, 1],
-            text_font: "Friz Quadrata TT",
-            text_justify: "CENTER",
-            text_selfPoint: "TOP",
-            text_anchorPoint: "BOTTOM",
-            text_anchorXOffset: 0,
-            text_anchorYOffset: -2,
-            text_shadowColor: [0, 0, 0, 1],
-            text_shadowXOffset: 1,
-            text_shadowYOffset: -1,
-            text_automaticWidth: "Auto",
-            text_fixedWidth: 80,
-            text_wordWrap: "WordWrap",
-            text_fontType: "OUTLINE",
-          },
-        ]
-      : [
-          {
-            type: "subtext",
-            text_text: label,
-            text_visible: true,
-            text_fontSize: 14,
-            text_color: [1, 0.92, 0.45, 1],
-            text_font: "Friz Quadrata TT",
-            text_justify: "CENTER",
-            text_selfPoint: "TOP",
-            text_anchorPoint: "BOTTOM",
-            text_anchorXOffset: 0,
-            text_anchorYOffset: -2,
-            text_shadowColor: [0, 0, 0, 1],
-            text_shadowXOffset: 1,
-            text_shadowYOffset: -1,
-            text_automaticWidth: "Auto",
-            text_fixedWidth: 80,
-            text_wordWrap: "WordWrap",
-            text_fontType: "OUTLINE",
-          },
-        ],
+    subRegions,
   };
 }
 
 const icons = [
-  { file: "BiSPulse_Arcane_Salvo_WA.txt", id: "BPS Salvo", spellId: 1242974, label: "SALVO", stacks: true },
-  { file: "BiSPulse_Arcane_Clearcasting_WA.txt", id: "BPS Clearcasting", spellId: 263725, label: "CC", stacks: false },
-  { file: "BiSPulse_Arcane_Prismatic_WA.txt", id: "BPS Prismatic", spellId: 1295942, label: "PRISMATIC", stacks: false },
-  { file: "BiSPulse_Arcane_Soul_WA.txt", id: "BPS Arcane Soul", spellId: 451038, label: "SOUL", stacks: false },
+  {
+    file: "BiSPulse_Arcane_Salvo_WA.txt",
+    id: "BPS Salvo",
+    spellId: 1242974,
+    label: "SALVO",
+    stacks: true,
+    keyHint: "⇧",
+    keyWhen: "stacks20",
+  },
+  {
+    file: "BiSPulse_Arcane_Clearcasting_WA.txt",
+    id: "BPS Clearcasting",
+    spellId: 263725,
+    label: "CC",
+    stacks: false,
+  },
+  {
+    file: "BiSPulse_Arcane_Prismatic_WA.txt",
+    id: "BPS Prismatic",
+    spellId: 1295942,
+    label: "PRISMATIC",
+    stacks: false,
+  },
+  {
+    file: "BiSPulse_Arcane_Soul_WA.txt",
+    id: "BPS Arcane Soul",
+    spellId: 451038,
+    label: "SOUL",
+    stacks: false,
+    keyHint: "⇧",
+    keyWhen: "always",
+    keyAlpha: 0.65,
+  },
 ];
 
 const outDir = __dirname;
@@ -167,6 +245,11 @@ const lines = [
   "# BiSPulse Arcane S2 — import ONE string at a time into ThisWeeksAuras",
   "# Copy the entire line after IMPORT: (no spaces, no line breaks)",
   "# Best: open the .txt file from GitHub raw link in Notepad, Ctrl+A, Ctrl+C",
+  "#",
+  "# GSE key hints (Master_Arcanist-12.1):",
+  "#   Salvo @20 stacks + Arcane Soul → ⇧ (Shift) = Arcane Barrage",
+  "#   Clearcasting + Prismatic → auto in macro (no modifier)",
+  "#   Ctrl = Orb, Alt = Surge (not shown on these 4 icons)",
   "",
   ...icons.map((spec) => {
     const encoded = fs.readFileSync(path.join(outDir, spec.file), "utf8").trim();
