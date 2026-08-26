@@ -1,10 +1,7 @@
 #!/usr/bin/env node
 /**
  * Arcane S2 GSE callout auras for ThisWeeksAuras.
- * Shows icons only when rotation says to act — with matching GSE modifier hints.
- *
- * Master_Arcanist-12.1: Shift=Barrage | Ctrl=Orb | Alt=Surge | no mod = macro loop
- * Method Spellslinger ST: Barrage @20 Salvo, Missiles if CC & <15 Salvo, Prismatic priority
+ * Salvo @20 uses condition-based stack check (trigger stack filter is unreliable in TWA).
  */
 const fs = require("fs");
 const path = require("path");
@@ -26,6 +23,8 @@ function uid(seed) {
   return ("bps" + seed + "xxxxxxxx").slice(0, 11);
 }
 
+const SALVO_BUFF_IDS = ["1242974", "384452"];
+
 const MACRO_KEY_OPTION = {
   type: "input",
   key: "macroKey",
@@ -35,8 +34,9 @@ const MACRO_KEY_OPTION = {
   width: 1,
 };
 
-function aura2Trigger(spellId, { stacksMin = null } = {}) {
-  const t = {
+function aura2Trigger(spellIds) {
+  const ids = (Array.isArray(spellIds) ? spellIds : [spellIds]).map(String);
+  return {
     type: "aura2",
     event: "Health",
     subeventPrefix: "SPELL",
@@ -48,16 +48,24 @@ function aura2Trigger(spellId, { stacksMin = null } = {}) {
     ownOnly: true,
     useName: false,
     useExactSpellId: true,
-    auraspellids: [String(spellId)],
+    auraspellids: ids,
     matchesShowOn: "showOnActive",
     unitExists: false,
   };
-  if (stacksMin != null) {
-    t.useStacks = true;
-    t.stacksOperator = ">=";
-    t.stacks = String(stacksMin);
-  }
-  return t;
+}
+
+function stacksAtLeastConditions(min) {
+  const v = String(min);
+  return [
+    {
+      check: { trigger: 1, variable: "stacks", op: ">=", value: v },
+      changes: [{ property: "alpha", value: 1 }],
+    },
+    {
+      check: { trigger: 1, variable: "stacks", op: "<", value: v },
+      changes: [{ property: "alpha", value: 0 }],
+    },
+  ];
 }
 
 function subtext(text, anchor, opts = {}) {
@@ -93,7 +101,7 @@ function subtext(text, anchor, opts = {}) {
 
 function calloutAura({
   id,
-  spellId,
+  spellIds,
   xOffset = 0,
   yOffset = -80,
   triggers,
@@ -102,9 +110,11 @@ function calloutAura({
   actionLabel,
   keyLine,
   showStacks = false,
-  stacksMin = null,
+  startHidden = false,
 }) {
-  const triggerList = triggers || [{ trigger: aura2Trigger(spellId, { stacksMin }), untrigger: {} }];
+  const triggerList =
+    triggers ||
+    [{ trigger: aura2Trigger(spellIds), untrigger: {} }];
 
   const subRegions = [];
   if (showStacks) {
@@ -167,7 +177,7 @@ function calloutAura({
     cooldownEdge: false,
     useCooldownModRate: true,
     inverse: false,
-    alpha: 1,
+    alpha: startHidden ? 0 : 1,
     progressSource: [-1, ""],
     adjustedMax: "",
     adjustedMin: "",
@@ -178,39 +188,53 @@ function calloutAura({
   };
 }
 
-// Salvo: only @20 stacks → Shift+Barrage (Method #2, Polished Focus)
+// Salvo: track buff always, show only @20 via conditions (matches Elsmere stack logic)
 const salvo = calloutAura({
   id: "BPS Salvo",
-  spellId: 1242974,
+  spellIds: SALVO_BUFF_IDS,
   xOffset: -90,
-  stacksMin: 20,
   showStacks: true,
+  startHidden: true,
+  conditions: stacksAtLeastConditions(20),
   actionLabel: "BARRAGE",
   keyLine: "SHIFT+%macroKey",
 });
 
-// Soul window → Shift+Barrage spam (Method / Icy: Barrage during Arcane Soul)
 const soul = calloutAura({
   id: "BPS Arcane Soul",
-  spellId: 451038,
+  spellIds: 451038,
   xOffset: 90,
   actionLabel: "BARRAGE",
   keyLine: "SHIFT+%macroKey",
 });
 
-// CC → macro only (GSE auto Missiles). If Salvo @20 also shows, SHIFT wins.
+// CC hidden while Salvo >= 20 (Barrage takes priority)
 const cc = calloutAura({
   id: "BPS Clearcasting",
-  spellId: 263725,
+  spellIds: 263725,
   xOffset: -30,
   actionLabel: "MISSILES",
   keyLine: "%macroKey",
+  triggers: [
+    { trigger: aura2Trigger(263725), untrigger: {} },
+    { trigger: aura2Trigger(SALVO_BUFF_IDS), untrigger: {} },
+  ],
+  triggerCombination: 1,
+  conditions: [
+    {
+      check: { trigger: 2, variable: "stacks", op: ">=", value: "20" },
+      changes: [{ property: "alpha", value: 0 }],
+    },
+    {
+      check: { trigger: 2, variable: "stacks", op: "<", value: "20" },
+      changes: [{ property: "alpha", value: 1 }],
+    },
+  ],
 });
 
-// Prismatic proc → macro only (Method #1/#4 priority)
 const prismatic = calloutAura({
   id: "BPS Prismatic",
-  spellId: 1295942,
+  spellIds: 1295942,
   xOffset: 30,
   actionLabel: "PRISMATIC",
   keyLine: "%macroKey",
@@ -224,7 +248,6 @@ const icons = [
 ];
 
 const outDir = __dirname;
-const lengths = [];
 
 for (const spec of icons) {
   const payload = { d: spec.data, v: 2000, s: "12.1.0", m: "d" };
@@ -232,29 +255,21 @@ for (const spec of icons) {
   const back = decodeSync(encoded);
   if (!back.d || back.d.id !== spec.data.id) throw new Error("roundtrip failed: " + spec.data.id);
   fs.writeFileSync(path.join(outDir, spec.file), encoded + "\n");
-  lengths.push({ file: spec.file, len: encoded.length, id: spec.data.id });
 }
 
 const allPath = path.join(outDir, "BiSPulse_Arcane_S2_Import_All.txt");
-const lines = [
-  "# BiSPulse Arcane S2 GSE Callouts — ThisWeeksAuras",
-  "# Raw file → Notepad Ctrl+A → Import (one at a time)",
-  "# In /twa → Aura wählen → GSE-Makro Taste eintragen (z.B. 1, F1, R)",
-  "#",
-  "# Logik (Method Spellslinger + Master_Arcanist-12.1):",
-  "#   Salvo @20     → erscheint nur bei 20 Stacks → SHIFT + Makro = Barrage",
-  "#   Arcane Soul   → SHIFT + Makro = Barrage spam",
-  "#   Clearcasting  → Makro (Missiles auto) — ausgeblendet bei Salvo 20+",
-  "#   Prismatic!    → Makro (sofort casten)",
-  "",
-  ...icons.map((spec) => {
-    const encoded = fs.readFileSync(path.join(outDir, spec.file), "utf8").trim();
-    return `## ${spec.data.id}\nIMPORT:\n${encoded}\n`;
-  }),
-];
-fs.writeFileSync(allPath, lines.join("\n"));
+fs.writeFileSync(
+  allPath,
+  [
+    "# BiSPulse Arcane S2 GSE Callouts",
+    "# Salvo: IDs 1242974 + 384452, sichtbar ab 20 Stacks (Conditions, nicht Trigger-Filter)",
+    "# Re-import Salvo + Clearcasting nach Update",
+    "",
+    ...icons.map((spec) => {
+      const encoded = fs.readFileSync(path.join(outDir, spec.file), "utf8").trim();
+      return `## ${spec.data.id}\nIMPORT:\n${encoded}\n`;
+    }),
+  ].join("\n")
+);
 
-console.log("Wrote Arcane GSE callout imports:");
-for (const row of lengths) {
-  console.log(`  ${row.file}: ${row.len} chars (${row.id})`);
-}
+console.log("Wrote", icons.length, "Arcane callout imports");
