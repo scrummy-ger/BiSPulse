@@ -103,7 +103,6 @@ function calloutAura({
   keyLine,
   showStacks = false,
   stacksMin = null,
-  iconSpellId = null,
 }) {
   const triggerList = triggers || [{ trigger: aura2Trigger(spellId, { stacksMin }), untrigger: {} }];
 
@@ -158,8 +157,7 @@ function calloutAura({
     frameStrata: 1,
     icon: true,
     desaturate: false,
-    iconSource: iconSpellId || spellId,
-    displayIcon: iconSpellId || spellId,
+    iconSource: -1,
     color: [1, 1, 1, 1],
     zoom: 0,
     keepAspectRatio: false,
@@ -188,8 +186,7 @@ const salvo = calloutAura({
   stacksMin: 20,
   showStacks: true,
   actionLabel: "BARRAGE",
-  keyLine: "SHIFT + %macroKey",
-  iconSpellId: 44425,
+  keyLine: "SHIFT+%macroKey",
 });
 
 // Soul window → Shift+Barrage spam (Method / Icy: Barrage during Arcane Soul)
@@ -198,8 +195,7 @@ const soul = calloutAura({
   spellId: 451038,
   xOffset: 90,
   actionLabel: "BARRAGE",
-  keyLine: "SHIFT + %macroKey",
-  iconSpellId: 44425,
+  keyLine: "SHIFT+%macroKey",
 });
 
 // CC → macro only (GSE auto Missiles). If Salvo @20 also shows, SHIFT wins.
@@ -209,7 +205,6 @@ const cc = calloutAura({
   xOffset: -30,
   actionLabel: "MISSILES",
   keyLine: "%macroKey",
-  iconSpellId: 5143,
 });
 
 // Prismatic proc → macro only (Method #1/#4 priority)
