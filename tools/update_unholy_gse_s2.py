@@ -54,6 +54,22 @@ def encode_gse3(buf: bytes) -> str:
     return "!GSE3!" + base64.b64encode(c.compress(buf) + c.flush()).decode("ascii")
 
 
+def migrate_macros_to_versions(export: str) -> str:
+    """GSE 3.3.07+ stores panels under Versions (was Macros). Addon refuses Macros-only imports."""
+    import cbor2
+
+    buf = decode_gse3(export)
+    obj = cbor2.loads(buf)
+    payload = obj[b"payload"]
+    for _name, seq in payload[b"Sequences"].items():
+        if b"Macros" in seq and b"Versions" not in seq:
+            seq[b"Versions"] = seq.pop(b"Macros")
+        md = seq[b"MetaData"]
+        md[b"GSEVersion"] = 3330
+        md[b"TOC"] = 120100
+    return encode_gse3(cbor2.dumps(obj))
+
+
 def fit(text: str, length: int) -> bytes:
     text = text.replace("\r\n", "\n").rstrip("\n")
     candidates = [text]
@@ -354,11 +370,14 @@ def main():
     buf = patch_macros(buf)
     print("macros patched", len(buf))
     buf = patch_meta(buf)
-    export = encode_gse3(buf)
+    export = migrate_macros_to_versions(encode_gse3(buf))
     out = OUT / "Orb_UDK_WightKing_S2_export.txt"
     out.write_text(export + "\n", encoding="utf-8")
 
     buf2 = decode_gse3(export)
+    assert b"Versions" in buf2
+    # Collection-level empty Macros key may remain; sequence panels must use Versions.
+    assert buf2.count(b"Versions") >= 2
     print("roundtrip", len(buf2))
     i = 0
     idx = 0
