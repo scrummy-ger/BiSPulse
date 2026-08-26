@@ -1,10 +1,7 @@
-"""Build Master Arcanist Arcane Mage GSE for Midnight Season 2 / 12.1.
+"""Build a lightweight Master Arcanist Arcane Mage GSE for Midnight S2.
 
-Approximates Method Spellslinger priority + Salvo/Clearcasting rules.
-GSE cannot read Arcane Salvo stacks — Semi panel uses Shift for Barrage.
-
-Source priority: Method Arcane Mage 12.1 + user priority list.
-Talents: Method Spellslinger ST / M+.
+Keeps the original Vinimagis shape (few top-level Actions + small Priority
+loop) so GSE does not blow the script execution limit on compile/import.
 """
 from __future__ import annotations
 
@@ -16,7 +13,7 @@ import cbor2
 
 OUT = Path("/workspace/tools/Master_Arcanist_Arcane_S2_export.txt")
 
-BLAST = 30451  # Prismatic Bolt overrides this button when procced
+BLAST = 30451  # Prismatic Bolt overrides this button
 BARRAGE = 44425
 MISSILES = 5143
 ORB = 153626
@@ -33,108 +30,164 @@ TALENT_MPLUS = (
 
 HELP = (
     "S2 Spellslinger | Shift=Barrage (Salvo 20+) | Ctrl=Orb | Alt=Surge\n"
-    "TotM+Surge auto on CD | Missiles on Clearcasting | Blast fills (Prismatic Bolt)\n"
-    "Semi: hold Shift at 20 Salvo | Auto: Barrage on interval (less precise)"
+    "Auto: TotM, Missiles (Clearcasting), Orb, Blast/Prismatic Bolt, Evocation"
 )
 
 
-def mods(extra: str) -> str:
-    return (
-        f"/cast [mod:shift,nochanneling] {BARRAGE}\n"
-        f"/cast [mod:ctrl,nochanneling] {ORB}\n"
-        f"/cast [mod:alt,nochanneling] {SURGE}\n"
-        f"{extra}"
-    )
+def b(s: str) -> bytes:
+    return s.encode("utf-8")
 
 
-def action(macro: str, *, interval: int | None = None, repeat: bool = False) -> dict:
-    node: dict = {
-        b"Type": b"Repeat" if repeat else b"Action",
+def macro(*lines: str) -> bytes:
+    # Keep well under the 255 WoW macro limit
+    text = "\n".join(lines)
+    assert len(text) <= 255, f"macro too long ({len(text)}): {text!r}"
+    return text.encode("utf-8")
+
+
+def block(kind: str, body: bytes, interval: int | None = None) -> dict:
+    node = {
+        b"Type": b(kind),
         b"type": b"macro",
-        b"macro": macro.encode(),
+        b"macro": body,
     }
     if interval is not None:
-        node[b"Interval"] = str(interval).encode()
+        node[b"Interval"] = b(str(interval))
     return node
 
 
-def make_loop(blocks: list[tuple], *, sequential: bool = False) -> dict:
-    loop: dict = {
+# Shared mod prefix (same idea as original hge/alt|shift|ctrl lines)
+MOD_BARRAGE = f"/cast [mod:shift,nochanneling] {BARRAGE}"
+MOD_ORB = f"/cast [mod:ctrl,nochanneling] {ORB}"
+MOD_SURGE = f"/cast [mod:alt,nochanneling] {SURGE}"
+
+
+def panel_st() -> dict:
+    """Single light panel — mirrors original Master Arcanist layout."""
+    # 1) Mana
+    evoc = block(
+        "Repeat",
+        macro(f"/cast [nochanneling] {EVOCATION}"),
+        interval=3,
+    )
+    # 2) Cooldowns: TotM + Surge (Barrage/Orb/Surge still via mods)
+    cds = block(
+        "Action",
+        macro(
+            MOD_BARRAGE,
+            MOD_ORB,
+            MOD_SURGE,
+            f"/cast [nochanneling] {SURGE}",
+            f"/cast [nochanneling] {TOTM}",
+        ),
+        interval=3,
+    )
+    # 3) Small Priority loop (3 steps only — do not explode compile)
+    loop = {
         b"Type": b"Loop",
-        b"Repeat": 1,
-        b"StepFunction": b"Sequential" if sequential else b"Priority",
+        b"Repeat": 2,
+        b"StepFunction": b"Priority",
+        1: block(
+            "Action",
+            macro(
+                MOD_BARRAGE,
+                MOD_ORB,
+                MOD_SURGE,
+                f"/castsequence [nochanneling] {BLAST}",
+            ),
+            interval=3,
+        ),
+        2: block(
+            "Action",
+            macro(
+                MOD_BARRAGE,
+                MOD_ORB,
+                MOD_SURGE,
+                f"/castsequence [nochanneling] {MISSILES}",
+            ),
+            interval=3,
+        ),
+        3: block(
+            "Action",
+            macro(
+                MOD_BARRAGE,
+                MOD_ORB,
+                MOD_SURGE,
+                f"/cast [nochanneling] {ORB}",
+            ),
+            interval=3,
+        ),
     }
-    for i, (macro, interval, is_repeat) in enumerate(blocks, start=1):
-        loop[i] = action(macro, interval=interval, repeat=is_repeat)
-    return loop
-
-
-def panel(label: str, blocks: list[tuple]) -> dict:
     return {
-        b"Label": label.encode(),
-        b"Actions": [make_loop(blocks)],
-        b"InbuiltVariables": {b"Combat": True},
+        b"Label": b"Spellslinger",
+        b"Actions": [evoc, cds, loop],
+        b"InbuiltVariables": [],
     }
-
-
-def panel_st_semi() -> dict:
-    return panel(
-        "ST Semi (Shift Barrage)",
-        [
-            (mods(f"/cast [nochanneling] {TOTM}"), 2, True),
-            (mods(f"/cast [nochanneling] {SURGE}"), 2, False),
-            (mods(f"/cast [nochanneling] {MISSILES}"), 2, True),
-            (mods(f"/cast [nochanneling] {ORB}"), 3, False),
-            (mods(f"/cast [nochanneling] {BLAST}"), 1, True),
-            (mods(f"/cast [nochanneling] {BLAST}"), None, False),
-            (mods(f"/cast [nochanneling] {BLAST}"), None, False),
-            (mods(f"/cast [nochanneling] {ORB}"), None, False),
-            (mods(f"/cast [nochanneling] {BLAST}"), None, False),
-            (mods(f"/cast [nochanneling] {EVOCATION}"), 8, True),
-        ],
-    )
-
-
-def panel_st_auto() -> dict:
-    return panel(
-        "ST Auto",
-        [
-            (mods(f"/cast [nochanneling] {TOTM}"), 2, True),
-            (mods(f"/cast [nochanneling] {SURGE}"), 2, False),
-            (mods(f"/cast [nochanneling] {MISSILES}"), 2, True),
-            (mods(f"/cast [nochanneling] {ORB}"), 3, False),
-            (mods(f"/cast [nochanneling] {BARRAGE}"), 5, False),
-            (mods(f"/cast [nochanneling] {BLAST}"), 1, True),
-            (mods(f"/cast [nochanneling] {BLAST}"), None, False),
-            (mods(f"/cast [nochanneling] {BLAST}"), None, False),
-            (mods(f"/cast [nochanneling] {ORB}"), None, False),
-            (mods(f"/cast [nochanneling] {BLAST}"), None, False),
-            (mods(f"/cast [nochanneling] {EVOCATION}"), 8, True),
-        ],
-    )
 
 
 def panel_aoe() -> dict:
-    return panel(
-        "AoE Auto",
-        [
-            (mods(f"/cast [nochanneling] {TOTM}"), 2, True),
-            (mods(f"/cast [nochanneling] {SURGE}"), 2, False),
-            (mods(f"/cast [nochanneling] {ORB}"), 2, True),
-            (mods(f"/cast [nochanneling] {MISSILES}"), 2, True),
-            (mods(f"/cast [nochanneling] {BARRAGE}"), 4, False),
-            (mods(f"/cast [nochanneling] {BLAST}"), 1, True),
-            (mods(f"/cast [nochanneling] {BLAST}"), None, False),
-            (mods(f"/cast [nochanneling] {ORB}"), None, False),
-            (mods(f"/cast [nochanneling] {BLAST}"), None, False),
-            (mods(f"/cast [nochanneling] {EVOCATION}"), 8, True),
-        ],
+    """AoE: Orb before Missiles in the priority loop."""
+    evoc = block(
+        "Repeat",
+        macro(f"/cast [nochanneling] {EVOCATION}"),
+        interval=3,
     )
+    cds = block(
+        "Action",
+        macro(
+            MOD_BARRAGE,
+            MOD_ORB,
+            MOD_SURGE,
+            f"/cast [nochanneling] {SURGE}",
+            f"/cast [nochanneling] {TOTM}",
+        ),
+        interval=3,
+    )
+    loop = {
+        b"Type": b"Loop",
+        b"Repeat": 2,
+        b"StepFunction": b"Priority",
+        1: block(
+            "Action",
+            macro(
+                MOD_BARRAGE,
+                MOD_ORB,
+                MOD_SURGE,
+                f"/cast [nochanneling] {ORB}",
+            ),
+            interval=3,
+        ),
+        2: block(
+            "Action",
+            macro(
+                MOD_BARRAGE,
+                MOD_ORB,
+                MOD_SURGE,
+                f"/castsequence [nochanneling] {MISSILES}",
+            ),
+            interval=3,
+        ),
+        3: block(
+            "Action",
+            macro(
+                MOD_BARRAGE,
+                MOD_ORB,
+                MOD_SURGE,
+                f"/castsequence [nochanneling] {BLAST}",
+            ),
+            interval=3,
+        ),
+    }
+    return {
+        b"Label": b"Spellslinger AoE",
+        b"Actions": [evoc, cds, loop],
+        b"InbuiltVariables": [],
+    }
 
 
 def build_sequence() -> dict:
     return {
-        b"Versions": [panel_st_semi(), panel_st_auto(), panel_aoe()],
+        b"Versions": [panel_st(), panel_aoe()],
         b"WeakAuras": {},
         b"LastUpdated": b"20260826",
         b"MetaData": {
@@ -146,15 +199,14 @@ def build_sequence() -> dict:
             b"Default": 1,
             b"SpecID": 62,
             b"ManualIntervention": True,
-            b"EnforceCompatability": True,
             b"Talents": {
                 b"Spellslinger ST": {
                     b"TalentSet": TALENT_ST.encode(),
-                    b"Description": b"Method Spellslinger Single Target 12.1",
+                    b"Description": b"Method Spellslinger ST 12.1",
                 },
                 b"Spellslinger M+": {
                     b"TalentSet": TALENT_MPLUS.encode(),
-                    b"Description": b"Method Spellslinger Mythic+ / Raid Cleave 12.1",
+                    b"Description": b"Method Spellslinger M+ 12.1",
                 },
             },
             b"Helplink": b"https://www.method.gg/guides/arcane-mage/playstyle-and-rotation",
@@ -185,10 +237,17 @@ def main() -> None:
     obj = cbor2.loads(zlib.decompress(base64.b64decode(export[6:]), -15))
     seq = obj[b"payload"][b"Sequences"][b"Master_Arcanist-12.1"]
     assert b"Versions" in seq and b"Macros" not in seq
-    assert len(seq[b"Versions"]) == 3
-    text = str(obj)
-    assert "319836" not in text and "1229376" not in text
-    assert str(BLAST) in text and str(BARRAGE) in text and str(TOTM) in text
+    assert len(seq[b"Versions"]) == 2
+    for ver in seq[b"Versions"]:
+        assert len(ver[b"Actions"]) == 3
+        for node in ver[b"Actions"]:
+            if b"macro" in node:
+                assert len(node[b"macro"]) <= 255
+            if node.get(b"Type") == b"Loop":
+                kids = [k for k in node if isinstance(k, int)]
+                assert kids == [1, 2, 3]
+                for k in kids:
+                    assert len(node[k][b"macro"]) <= 255
     print("Wrote", OUT, "len", len(export))
     print("panels:", [v[b"Label"].decode() for v in seq[b"Versions"]])
     print(export)
