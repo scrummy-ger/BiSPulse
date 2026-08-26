@@ -118,17 +118,28 @@ function calloutAura({
 
   const subRegions = [];
   if (showStacks) {
+    // Stack count: upper half of icon only
     subRegions.push(
-      subtext("%s", "CENTER/CENTER", { fontSize: 24, color: [1, 0.85, 0.2, 1] })
+      subtext("%s", "CENTER/CENTER", {
+        fontSize: 20,
+        color: [1, 0.85, 0.2, 1],
+        yOffset: -6,
+      })
     );
   }
+  // Action label: directly under icon
   subRegions.push(
-    subtext(actionLabel, "TOP/BOTTOM", { fontSize: 13, yOffset: -4, color: [1, 0.92, 0.45, 1] })
+    subtext(actionLabel, "TOP/BOTTOM", {
+      fontSize: 12,
+      yOffset: 4,
+      color: [1, 0.92, 0.45, 1],
+    })
   );
+  // Key hint: below label (positive offset = further down)
   subRegions.push(
     subtext(keyLine, "TOP/BOTTOM", {
-      fontSize: 15,
-      yOffset: -20,
+      fontSize: 13,
+      yOffset: 18,
       color: [0.75, 1, 0.85, 1],
     })
   );
