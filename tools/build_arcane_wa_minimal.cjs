@@ -23,7 +23,46 @@ function uid(seed) {
   return ("bps" + seed + "xxxxxxxx").slice(0, 11);
 }
 
-function labelSubRegion({ text, fontSize = 14, yOffset = -2 }) {
+const MACRO_KEY_AUTHOR_OPTION = {
+  type: "string",
+  key: "macroKey",
+  name: "GSE-Makro-Taste",
+  desc: "Taste deines Master_Arcanist-12.1 Makros (z.B. F1). Leer = MAKRO.",
+  default: "",
+  useDesc: true,
+  width: 1,
+};
+
+const MACRO_KEY_CUSTOM_TEXT = `function()
+  local key = aura_env.config and aura_env.config.macroKey
+  if key and key ~= "" then return key end
+  return "MAKRO"
+end`;
+
+function stacksSubRegion() {
+  return {
+    type: "subtext",
+    text_text: "%s",
+    text_visible: true,
+    text_fontSize: 22,
+    text_color: [0.55, 0.85, 1, 1],
+    text_font: "Friz Quadrata TT",
+    text_justify: "CENTER",
+    text_selfPoint: "CENTER",
+    text_anchorPoint: "CENTER",
+    text_anchorXOffset: 0,
+    text_anchorYOffset: 0,
+    text_shadowColor: [0, 0, 0, 1],
+    text_shadowXOffset: 1,
+    text_shadowYOffset: -1,
+    text_automaticWidth: "Auto",
+    text_fixedWidth: 56,
+    text_wordWrap: "WordWrap",
+    text_fontType: "OUTLINE",
+  };
+}
+
+function labelSubRegion({ text, fontSize = 13, yOffset = -6 }) {
   return {
     type: "subtext",
     text_text: text,
@@ -46,24 +85,24 @@ function labelSubRegion({ text, fontSize = 14, yOffset = -2 }) {
   };
 }
 
-function keySubRegion(text, { visible = true, alpha = 0.55 } = {}) {
+function keySubRegion(text, { alpha = 0.55, fontSize = 10, yOffset = 3 } = {}) {
   return {
     type: "subtext",
     text_text: text,
-    text_visible: visible,
-    text_fontSize: 11,
+    text_visible: true,
+    text_fontSize: fontSize,
     text_color: [1, 1, 1, alpha],
     text_font: "Friz Quadrata TT",
-    text_justify: "RIGHT",
-    text_selfPoint: "BOTTOMRIGHT",
-    text_anchorPoint: "BOTTOMRIGHT",
-    text_anchorXOffset: -3,
-    text_anchorYOffset: 3,
+    text_justify: "CENTER",
+    text_selfPoint: "BOTTOM",
+    text_anchorPoint: "BOTTOM",
+    text_anchorXOffset: 0,
+    text_anchorYOffset: yOffset,
     text_shadowColor: [0, 0, 0, 0.85],
     text_shadowXOffset: 1,
     text_shadowYOffset: -1,
     text_automaticWidth: "Auto",
-    text_fixedWidth: 36,
+    text_fixedWidth: 48,
     text_wordWrap: "WordWrap",
     text_fontType: "OUTLINE",
   };
@@ -86,36 +125,41 @@ function minimalIcon({
   keyHint = null,
   keyWhen = "always",
   keyAlpha = 0.55,
+  macroKeyOption = false,
 }) {
   const subRegions = [];
   const conditions = [];
 
   if (stacks) {
-    subRegions.push(labelSubRegion({ text: `%s\n${label}`, fontSize: 18 }));
-  } else {
-    subRegions.push(labelSubRegion({ text: label }));
+    subRegions.push(stacksSubRegion());
   }
+  subRegions.push(labelSubRegion({ text: label, fontSize: stacks ? 12 : 13 }));
 
   let keySubIndex = null;
   if (keyHint) {
     keySubIndex = subRegions.length + 1;
-    const visible = keyWhen !== "stacks20";
-    subRegions.push(keySubRegion(keyHint, { visible, alpha: keyAlpha }));
+    subRegions.push(keySubRegion(keyHint, { alpha: keyAlpha }));
 
     if (keyWhen === "stacks20") {
       conditions.push({
         check: { trigger: 1, variable: "stacks", op: ">=", value: "20" },
         changes: [
           { property: `sub.${keySubIndex}.text_visible`, value: true },
-          { property: `sub.${keySubIndex}.text_color`, value: [1, 0.95, 0.55, 0.9] },
+          { property: `sub.${keySubIndex}.text_color`, value: [1, 0.95, 0.55, 0.92] },
         ],
       });
       conditions.push({
         check: { trigger: 1, variable: "stacks", op: "<", value: "20" },
-        changes: [{ property: `sub.${keySubIndex}.text_visible`, value: false }],
+        changes: [
+          { property: `sub.${keySubIndex}.text_visible`, value: true },
+          { property: `sub.${keySubIndex}.text_color`, value: [1, 1, 1, 0.32] },
+        ],
       });
     }
   }
+
+  const authorOptions = macroKeyOption ? [MACRO_KEY_AUTHOR_OPTION] : [];
+  const config = macroKeyOption ? { macroKey: "" } : {};
 
   return {
     id,
@@ -123,8 +167,10 @@ function minimalIcon({
     regionType: "icon",
     internalVersion: 89,
     tocversion: 120100,
-    authorOptions: [],
-    config: {},
+    authorOptions,
+    config,
+    customText: macroKeyOption ? MACRO_KEY_CUSTOM_TEXT : undefined,
+    customTextUpdate: macroKeyOption ? "update" : undefined,
     information: {},
     conditions,
     actions: { init: {}, start: {}, finish: {} },
@@ -156,7 +202,7 @@ function minimalIcon({
     zoom: 0,
     keepAspectRatio: false,
     cooldown: true,
-    cooldownTextDisabled: false,
+    cooldownTextDisabled: true,
     cooldownSwipe: true,
     cooldownEdge: false,
     useCooldownModRate: true,
@@ -197,8 +243,9 @@ const icons = [
     spellId: 1242974,
     label: "SALVO",
     stacks: true,
-    keyHint: "⇧",
+    keyHint: "SHIFT",
     keyWhen: "stacks20",
+    keyAlpha: 0.32,
   },
   {
     file: "BiSPulse_Arcane_Clearcasting_WA.txt",
@@ -206,6 +253,9 @@ const icons = [
     spellId: 263725,
     label: "CC",
     stacks: false,
+    keyHint: "%c",
+    keyAlpha: 0.7,
+    macroKeyOption: true,
   },
   {
     file: "BiSPulse_Arcane_Prismatic_WA.txt",
@@ -213,6 +263,9 @@ const icons = [
     spellId: 1295942,
     label: "PRISMATIC",
     stacks: false,
+    keyHint: "%c",
+    keyAlpha: 0.7,
+    macroKeyOption: true,
   },
   {
     file: "BiSPulse_Arcane_Soul_WA.txt",
@@ -220,9 +273,9 @@ const icons = [
     spellId: 451038,
     label: "SOUL",
     stacks: false,
-    keyHint: "⇧",
+    keyHint: "SHIFT",
     keyWhen: "always",
-    keyAlpha: 0.65,
+    keyAlpha: 0.75,
   },
 ];
 
@@ -235,6 +288,9 @@ for (const spec of icons) {
   const encoded = encodeSync(payload);
   const back = decodeSync(encoded);
   if (!back.d || back.d.id !== spec.id) throw new Error("roundtrip failed: " + spec.id);
+  if (back.d.cooldownTextDisabled !== true) {
+    throw new Error("cooldown text not disabled: " + spec.id);
+  }
   const out = path.join(outDir, spec.file);
   fs.writeFileSync(out, encoded + "\n");
   lengths.push({ file: spec.file, len: encoded.length, id: spec.id });
@@ -246,9 +302,13 @@ const lines = [
   "# Copy the entire line after IMPORT: (no spaces, no line breaks)",
   "# Best: open the .txt file from GitHub raw link in Notepad, Ctrl+A, Ctrl+C",
   "#",
+  "# Layout: stacks (center) | label (below icon) | key hint (icon bottom)",
+  "# Cooldown numbers on the icon are disabled to avoid overlap.",
+  "#",
   "# GSE key hints (Master_Arcanist-12.1):",
-  "#   Salvo @20 stacks + Arcane Soul → ⇧ (Shift) = Arcane Barrage",
-  "#   Clearcasting + Prismatic → auto in macro (no modifier)",
+  "#   Salvo → SHIFT (dim below 20 stacks, bright at 20+) = Arcane Barrage",
+  "#   Arcane Soul → SHIFT = Arcane Barrage",
+  "#   Clearcasting + Prismatic → macro key (Custom Options: GSE-Makro-Taste, fallback MAKRO)",
   "#   Ctrl = Orb, Alt = Surge (not shown on these 4 icons)",
   "",
   ...icons.map((spec) => {
