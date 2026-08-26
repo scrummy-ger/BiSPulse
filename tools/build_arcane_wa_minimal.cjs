@@ -1,7 +1,10 @@
 #!/usr/bin/env node
 /**
- * Minimal single-icon Arcane S2 trackers for ThisWeeksAuras.
- * Includes subtle GSE modifier hints (Shift/Ctrl/Alt from Master_Arcanist-12.1).
+ * Arcane S2 GSE callout auras for ThisWeeksAuras.
+ * Shows icons only when rotation says to act — with matching GSE modifier hints.
+ *
+ * Master_Arcanist-12.1: Shift=Barrage | Ctrl=Orb | Alt=Surge | no mod = macro loop
+ * Method Spellslinger ST: Barrage @20 Salvo, Missiles if CC & <15 Salvo, Prismatic priority
  */
 const fs = require("fs");
 const path = require("path");
@@ -23,143 +26,103 @@ function uid(seed) {
   return ("bps" + seed + "xxxxxxxx").slice(0, 11);
 }
 
-const MACRO_KEY_AUTHOR_OPTION = {
-  type: "string",
+const MACRO_KEY_OPTION = {
+  type: "input",
   key: "macroKey",
-  name: "GSE-Makro-Taste",
-  desc: "Taste deines Master_Arcanist-12.1 Makros (z.B. F1). Leer = MAKRO.",
-  default: "",
-  useDesc: true,
+  default: "1",
+  name: "GSE-Makro Taste",
+  useDesc: false,
   width: 1,
 };
 
-const MACRO_KEY_CUSTOM_TEXT = `function()
-  local key = aura_env.config and aura_env.config.macroKey
-  if key and key ~= "" then return key end
-  return "MAKRO"
-end`;
-
-function stacksSubRegion() {
-  return {
-    type: "subtext",
-    text_text: "%s",
-    text_visible: true,
-    text_fontSize: 22,
-    text_color: [0.55, 0.85, 1, 1],
-    text_font: "Friz Quadrata TT",
-    text_justify: "CENTER",
-    text_selfPoint: "CENTER",
-    text_anchorPoint: "CENTER",
-    text_anchorXOffset: 0,
-    text_anchorYOffset: 0,
-    text_shadowColor: [0, 0, 0, 1],
-    text_shadowXOffset: 1,
-    text_shadowYOffset: -1,
-    text_automaticWidth: "Auto",
-    text_fixedWidth: 56,
-    text_wordWrap: "WordWrap",
-    text_fontType: "OUTLINE",
+function aura2Trigger(spellId, { stacksMin = null } = {}) {
+  const t = {
+    type: "aura2",
+    event: "Health",
+    subeventPrefix: "SPELL",
+    subeventSuffix: "_CAST_START",
+    names: [],
+    spellIds: [],
+    unit: "player",
+    debuffType: "HELPFUL",
+    ownOnly: true,
+    useName: false,
+    useExactSpellId: true,
+    auraspellids: [String(spellId)],
+    matchesShowOn: "showOnActive",
+    unitExists: false,
   };
+  if (stacksMin != null) {
+    t.useStacks = true;
+    t.stacksOperator = ">=";
+    t.stacks = String(stacksMin);
+  }
+  return t;
 }
 
-function labelSubRegion({ text, fontSize = 13, yOffset = -6 }) {
+function subtext(text, anchor, opts = {}) {
+  const {
+    fontSize = 13,
+    color = [1, 0.92, 0.45, 1],
+    visible = true,
+    yOffset = 0,
+    xOffset = 0,
+  } = opts;
+  const [selfPoint, anchorPoint] = anchor.split("/");
   return {
     type: "subtext",
     text_text: text,
-    text_visible: true,
+    text_visible: visible,
     text_fontSize: fontSize,
-    text_color: [1, 0.92, 0.45, 1],
+    text_color: color,
     text_font: "Friz Quadrata TT",
     text_justify: "CENTER",
-    text_selfPoint: "TOP",
-    text_anchorPoint: "BOTTOM",
-    text_anchorXOffset: 0,
+    text_selfPoint: selfPoint,
+    text_anchorPoint: anchorPoint,
+    text_anchorXOffset: xOffset,
     text_anchorYOffset: yOffset,
     text_shadowColor: [0, 0, 0, 1],
     text_shadowXOffset: 1,
     text_shadowYOffset: -1,
     text_automaticWidth: "Auto",
-    text_fixedWidth: 80,
+    text_fixedWidth: 100,
     text_wordWrap: "WordWrap",
     text_fontType: "OUTLINE",
   };
 }
 
-function keySubRegion(text, { alpha = 0.55, fontSize = 10, yOffset = 3 } = {}) {
-  return {
-    type: "subtext",
-    text_text: text,
-    text_visible: true,
-    text_fontSize: fontSize,
-    text_color: [1, 1, 1, alpha],
-    text_font: "Friz Quadrata TT",
-    text_justify: "CENTER",
-    text_selfPoint: "BOTTOM",
-    text_anchorPoint: "BOTTOM",
-    text_anchorXOffset: 0,
-    text_anchorYOffset: yOffset,
-    text_shadowColor: [0, 0, 0, 0.85],
-    text_shadowXOffset: 1,
-    text_shadowYOffset: -1,
-    text_automaticWidth: "Auto",
-    text_fixedWidth: 48,
-    text_wordWrap: "WordWrap",
-    text_fontType: "OUTLINE",
-  };
-}
-
-/**
- * GSE Master_Arcanist-12.1 modifiers:
- *   Shift = Arcane Barrage (Salvo 20+ / Arcane Soul)
- *   Ctrl  = Arcane Orb
- *   Alt   = Arcane Surge
- * CC + Prismatic fire automatically in the macro loop (no modifier).
- */
-function minimalIcon({
+function calloutAura({
   id,
   spellId,
-  label,
   xOffset = 0,
   yOffset = -80,
-  stacks = false,
-  keyHint = null,
-  keyWhen = "always",
-  keyAlpha = 0.55,
-  macroKeyOption = false,
+  triggers,
+  triggerCombination = "any",
+  conditions = [],
+  actionLabel,
+  keyLine,
+  showStacks = false,
+  stacksMin = null,
+  iconSpellId = null,
 }) {
+  const triggerList = triggers || [{ trigger: aura2Trigger(spellId, { stacksMin }), untrigger: {} }];
+
   const subRegions = [];
-  const conditions = [];
-
-  if (stacks) {
-    subRegions.push(stacksSubRegion());
+  if (showStacks) {
+    subRegions.push(
+      subtext("%s", "CENTER/CENTER", { fontSize: 24, color: [1, 0.85, 0.2, 1] })
+    );
   }
-  subRegions.push(labelSubRegion({ text: label, fontSize: stacks ? 12 : 13 }));
-
-  let keySubIndex = null;
-  if (keyHint) {
-    keySubIndex = subRegions.length + 1;
-    subRegions.push(keySubRegion(keyHint, { alpha: keyAlpha }));
-
-    if (keyWhen === "stacks20") {
-      conditions.push({
-        check: { trigger: 1, variable: "stacks", op: ">=", value: "20" },
-        changes: [
-          { property: `sub.${keySubIndex}.text_visible`, value: true },
-          { property: `sub.${keySubIndex}.text_color`, value: [1, 0.95, 0.55, 0.92] },
-        ],
-      });
-      conditions.push({
-        check: { trigger: 1, variable: "stacks", op: "<", value: "20" },
-        changes: [
-          { property: `sub.${keySubIndex}.text_visible`, value: true },
-          { property: `sub.${keySubIndex}.text_color`, value: [1, 1, 1, 0.32] },
-        ],
-      });
-    }
-  }
-
-  const authorOptions = macroKeyOption ? [MACRO_KEY_AUTHOR_OPTION] : [];
-  const config = macroKeyOption ? { macroKey: "" } : {};
+  subRegions.push(
+    subtext(actionLabel, "TOP/BOTTOM", { fontSize: 13, yOffset: -4, color: [1, 0.92, 0.45, 1] })
+  );
+  subRegions.push(
+    subtext(keyLine, "TOP/BOTTOM", {
+      fontSize: 15,
+      yOffset: -20,
+      color: [0.75, 1, 0.85, 1],
+    })
+  );
 
   return {
     id,
@@ -167,10 +130,8 @@ function minimalIcon({
     regionType: "icon",
     internalVersion: 89,
     tocversion: 120100,
-    authorOptions,
-    config,
-    customText: macroKeyOption ? MACRO_KEY_CUSTOM_TEXT : undefined,
-    customTextUpdate: macroKeyOption ? "update" : undefined,
+    authorOptions: [MACRO_KEY_OPTION],
+    config: {},
     information: {},
     conditions,
     actions: { init: {}, start: {}, finish: {} },
@@ -197,13 +158,14 @@ function minimalIcon({
     frameStrata: 1,
     icon: true,
     desaturate: false,
-    iconSource: -1,
+    iconSource: iconSpellId || spellId,
+    displayIcon: iconSpellId || spellId,
     color: [1, 1, 1, 1],
     zoom: 0,
     keepAspectRatio: false,
-    cooldown: true,
+    cooldown: false,
     cooldownTextDisabled: true,
-    cooldownSwipe: true,
+    cooldownSwipe: false,
     cooldownEdge: false,
     useCooldownModRate: true,
     inverse: false,
@@ -211,115 +173,93 @@ function minimalIcon({
     progressSource: [-1, ""],
     adjustedMax: "",
     adjustedMin: "",
-    triggers: [
-      {
-        trigger: {
-          type: "aura2",
-          event: "Health",
-          subeventPrefix: "SPELL",
-          subeventSuffix: "_CAST_START",
-          names: [],
-          spellIds: [],
-          unit: "player",
-          debuffType: "HELPFUL",
-          ownOnly: true,
-          useName: false,
-          useExactSpellId: true,
-          auraspellids: [String(spellId)],
-          matchesShowOn: "showOnActive",
-          unitExists: false,
-        },
-        untrigger: {},
-      },
-    ],
+    numTriggers: triggerList.length,
+    triggerCombination,
+    triggers: triggerList,
     subRegions,
   };
 }
 
+// Salvo: only @20 stacks → Shift+Barrage (Method #2, Polished Focus)
+const salvo = calloutAura({
+  id: "BPS Salvo",
+  spellId: 1242974,
+  xOffset: -90,
+  stacksMin: 20,
+  showStacks: true,
+  actionLabel: "BARRAGE",
+  keyLine: "SHIFT + %macroKey",
+  iconSpellId: 44425,
+});
+
+// Soul window → Shift+Barrage spam (Method / Icy: Barrage during Arcane Soul)
+const soul = calloutAura({
+  id: "BPS Arcane Soul",
+  spellId: 451038,
+  xOffset: 90,
+  actionLabel: "BARRAGE",
+  keyLine: "SHIFT + %macroKey",
+  iconSpellId: 44425,
+});
+
+// CC → macro only (GSE auto Missiles). If Salvo @20 also shows, SHIFT wins.
+const cc = calloutAura({
+  id: "BPS Clearcasting",
+  spellId: 263725,
+  xOffset: -30,
+  actionLabel: "MISSILES",
+  keyLine: "%macroKey",
+  iconSpellId: 5143,
+});
+
+// Prismatic proc → macro only (Method #1/#4 priority)
+const prismatic = calloutAura({
+  id: "BPS Prismatic",
+  spellId: 1295942,
+  xOffset: 30,
+  actionLabel: "PRISMATIC",
+  keyLine: "%macroKey",
+});
+
 const icons = [
-  {
-    file: "BiSPulse_Arcane_Salvo_WA.txt",
-    id: "BPS Salvo",
-    spellId: 1242974,
-    label: "SALVO",
-    stacks: true,
-    keyHint: "SHIFT",
-    keyWhen: "stacks20",
-    keyAlpha: 0.32,
-  },
-  {
-    file: "BiSPulse_Arcane_Clearcasting_WA.txt",
-    id: "BPS Clearcasting",
-    spellId: 263725,
-    label: "CC",
-    stacks: false,
-    keyHint: "%c",
-    keyAlpha: 0.7,
-    macroKeyOption: true,
-  },
-  {
-    file: "BiSPulse_Arcane_Prismatic_WA.txt",
-    id: "BPS Prismatic",
-    spellId: 1295942,
-    label: "PRISMATIC",
-    stacks: false,
-    keyHint: "%c",
-    keyAlpha: 0.7,
-    macroKeyOption: true,
-  },
-  {
-    file: "BiSPulse_Arcane_Soul_WA.txt",
-    id: "BPS Arcane Soul",
-    spellId: 451038,
-    label: "SOUL",
-    stacks: false,
-    keyHint: "SHIFT",
-    keyWhen: "always",
-    keyAlpha: 0.75,
-  },
+  { file: "BiSPulse_Arcane_Salvo_WA.txt", data: salvo },
+  { file: "BiSPulse_Arcane_Clearcasting_WA.txt", data: cc },
+  { file: "BiSPulse_Arcane_Prismatic_WA.txt", data: prismatic },
+  { file: "BiSPulse_Arcane_Soul_WA.txt", data: soul },
 ];
 
 const outDir = __dirname;
 const lengths = [];
 
 for (const spec of icons) {
-  const data = minimalIcon(spec);
-  const payload = { d: data, v: 2000, s: "12.1.0", m: "d" };
+  const payload = { d: spec.data, v: 2000, s: "12.1.0", m: "d" };
   const encoded = encodeSync(payload);
   const back = decodeSync(encoded);
-  if (!back.d || back.d.id !== spec.id) throw new Error("roundtrip failed: " + spec.id);
-  if (back.d.cooldownTextDisabled !== true) {
-    throw new Error("cooldown text not disabled: " + spec.id);
-  }
-  const out = path.join(outDir, spec.file);
-  fs.writeFileSync(out, encoded + "\n");
-  lengths.push({ file: spec.file, len: encoded.length, id: spec.id });
+  if (!back.d || back.d.id !== spec.data.id) throw new Error("roundtrip failed: " + spec.data.id);
+  fs.writeFileSync(path.join(outDir, spec.file), encoded + "\n");
+  lengths.push({ file: spec.file, len: encoded.length, id: spec.data.id });
 }
 
 const allPath = path.join(outDir, "BiSPulse_Arcane_S2_Import_All.txt");
 const lines = [
-  "# BiSPulse Arcane S2 — import ONE string at a time into ThisWeeksAuras",
-  "# Copy the entire line after IMPORT: (no spaces, no line breaks)",
-  "# Best: open the .txt file from GitHub raw link in Notepad, Ctrl+A, Ctrl+C",
+  "# BiSPulse Arcane S2 GSE Callouts — ThisWeeksAuras",
+  "# Raw file → Notepad Ctrl+A → Import (one at a time)",
+  "# In /twa → Aura wählen → GSE-Makro Taste eintragen (z.B. 1, F1, R)",
   "#",
-  "# Layout: stacks (center) | label (below icon) | key hint (icon bottom)",
-  "# Cooldown numbers on the icon are disabled to avoid overlap.",
-  "#",
-  "# GSE key hints (Master_Arcanist-12.1):",
-  "#   Salvo → SHIFT (dim below 20 stacks, bright at 20+) = Arcane Barrage",
-  "#   Arcane Soul → SHIFT = Arcane Barrage",
-  "#   Clearcasting + Prismatic → macro key (Custom Options: GSE-Makro-Taste, fallback MAKRO)",
-  "#   Ctrl = Orb, Alt = Surge (not shown on these 4 icons)",
+  "# Logik (Method Spellslinger + Master_Arcanist-12.1):",
+  "#   Salvo @20     → erscheint nur bei 20 Stacks → SHIFT + Makro = Barrage",
+  "#   Arcane Soul   → SHIFT + Makro = Barrage spam",
+  "#   Clearcasting  → Makro (Missiles auto) — ausgeblendet bei Salvo 20+",
+  "#   Prismatic!    → Makro (sofort casten)",
   "",
   ...icons.map((spec) => {
     const encoded = fs.readFileSync(path.join(outDir, spec.file), "utf8").trim();
-    return `## ${spec.id}\nIMPORT:\n${encoded}\n`;
+    return `## ${spec.data.id}\nIMPORT:\n${encoded}\n`;
   }),
 ];
 fs.writeFileSync(allPath, lines.join("\n"));
 
-console.log("Wrote minimal Arcane WA imports:");
+console.log("Wrote Arcane GSE callout imports:");
 for (const row of lengths) {
   console.log(`  ${row.file}: ${row.len} chars (${row.id})`);
 }
-console.log("Combined guide:", allPath);
