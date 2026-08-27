@@ -8,5 +8,8 @@
   },
   "devDependencies": {
     "playwright": "^1.49.1"
+  },
+  "dependencies": {
+    "node-weakauras-parser": "^3.2.11"
   }
 }
