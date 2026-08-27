@@ -1,7 +1,8 @@
 """Build Master Arcanist Arcane Mage GSE for Midnight S2.
 
-Priority: Arcane Surge + Prismatic Bolt fire immediately when ready on every
-press (Method Spellslinger). Lightweight panel shape to avoid GSE script limits.
+Restores the proven light Vinimagis layout (few Actions + Priority loop) so
+the sequence actually advances. Prismatic Bolt is tried before each filler;
+Arcane Surge is Alt-only (never auto).
 """
 from __future__ import annotations
 
@@ -14,7 +15,7 @@ import cbor2
 OUT = Path("/workspace/tools/Master_Arcanist_Arcane_S2_export.txt")
 
 BLAST = 30451
-PRISMATIC = 1295942  # must cast by ID — Blast ID will NOT fire the proc
+PRISMATIC = 1295942  # must cast by ID — Blast ID does not fire the proc
 BARRAGE = 44425
 MISSILES = 5143
 ORB = 153626
@@ -30,9 +31,9 @@ TALENT_MPLUS = (
 )
 
 HELP = (
-    "S2 Spellslinger | Auto: Prismatic ASAP (no overcap)\n"
-    "Shift=Barrage (Salvo 20+) | Ctrl=Orb | Alt=Surge (manual only — never auto)\n"
-    "Also auto: TotM, Missiles (CC), Orb, Blast, Evocation"
+    "S2 Spellslinger | Prismatic before filler (no overcap)\n"
+    "Shift=Barrage (Salvo 20+) | Ctrl=Orb | Alt=Surge (manual only)\n"
+    "Auto: TotM, Missiles (CC), Orb, Blast, Evocation"
 )
 
 
@@ -57,56 +58,53 @@ def block(kind: str, body: bytes, interval: int | None = None) -> dict:
     return node
 
 
-# Manual overrides still available
 MOD_BARRAGE = f"/cast [mod:shift,nochanneling] {BARRAGE}"
 MOD_ORB = f"/cast [mod:ctrl,nochanneling] {ORB}"
 MOD_SURGE = f"/cast [mod:alt,nochanneling] {SURGE}"
-
-# Prismatic first — unused casts fail through; stops overcap.
-# Surge is NEVER auto-cast (wastes CD at pack end); only Alt when you want it.
 CAST_PRISMATIC = f"/cast [nochanneling] {PRISMATIC}"
-CAST_TOTM = f"/cast [nochanneling] {TOTM}"
 
 
-def prefix(*extra: str) -> list[str]:
-    """Shared head of every combat press: mods → Prismatic → TotM."""
-    return [MOD_BARRAGE, MOD_ORB, MOD_SURGE, CAST_PRISMATIC, CAST_TOTM, *extra]
+def combat(*casts: str) -> bytes:
+    """Mods + Prismatic, then the filler cast(s). Always ends with a usable filler."""
+    return macro(MOD_BARRAGE, MOD_ORB, MOD_SURGE, CAST_PRISMATIC, *casts)
 
 
 def panel_st() -> dict:
-    """ST: Prismatic first; Surge only via Alt; then Blast / Missiles / Orb."""
+    """Light ST panel — matches the layout that imported and ran cleanly."""
     evoc = block(
         "Repeat",
         macro(f"/cast [nochanneling] {EVOCATION}"),
         interval=3,
     )
-    # Dedicated CD poke: Prismatic + TotM (no auto Surge)
+    # TotM only here (not on every filler press — that stalled the rotation)
     cds = block(
         "Action",
-        macro(*prefix()),
-        interval=1,
+        macro(
+            MOD_BARRAGE,
+            MOD_ORB,
+            MOD_SURGE,
+            f"/cast [nochanneling] {TOTM}",
+        ),
+        interval=3,
     )
     loop = {
         b"Type": b"Loop",
         b"Repeat": 2,
         b"StepFunction": b"Priority",
-        # 1) Prismatic (above) then Blast filler
         1: block(
             "Action",
-            macro(*prefix(f"/castsequence [nochanneling] {BLAST}")),
-            interval=1,
+            combat(f"/castsequence [nochanneling] {BLAST}"),
+            interval=3,
         ),
-        # 2) Clearcasting → Missiles (after Prismatic attempt)
         2: block(
             "Action",
-            macro(*prefix(f"/castsequence [nochanneling] {MISSILES}")),
-            interval=1,
+            combat(f"/castsequence [nochanneling] {MISSILES}"),
+            interval=3,
         ),
-        # 3) Orb for charges
         3: block(
             "Action",
-            macro(*prefix(f"/cast [nochanneling] {ORB}")),
-            interval=1,
+            combat(f"/cast [nochanneling] {ORB}"),
+            interval=3,
         ),
     }
     return {
@@ -117,7 +115,7 @@ def panel_st() -> dict:
 
 
 def panel_aoe() -> dict:
-    """AoE: Orb before Missiles; Prismatic first; Surge only via Alt."""
+    """AoE: Orb before Missiles; same light shell."""
     evoc = block(
         "Repeat",
         macro(f"/cast [nochanneling] {EVOCATION}"),
@@ -125,8 +123,13 @@ def panel_aoe() -> dict:
     )
     cds = block(
         "Action",
-        macro(*prefix()),
-        interval=1,
+        macro(
+            MOD_BARRAGE,
+            MOD_ORB,
+            MOD_SURGE,
+            f"/cast [nochanneling] {TOTM}",
+        ),
+        interval=3,
     )
     loop = {
         b"Type": b"Loop",
@@ -134,18 +137,18 @@ def panel_aoe() -> dict:
         b"StepFunction": b"Priority",
         1: block(
             "Action",
-            macro(*prefix(f"/cast [nochanneling] {ORB}")),
-            interval=1,
+            combat(f"/cast [nochanneling] {ORB}"),
+            interval=3,
         ),
         2: block(
             "Action",
-            macro(*prefix(f"/castsequence [nochanneling] {MISSILES}")),
-            interval=1,
+            combat(f"/castsequence [nochanneling] {MISSILES}"),
+            interval=3,
         ),
         3: block(
             "Action",
-            macro(*prefix(f"/castsequence [nochanneling] {BLAST}")),
-            interval=1,
+            combat(f"/castsequence [nochanneling] {BLAST}"),
+            interval=3,
         ),
     }
     return {
@@ -213,26 +216,19 @@ def main() -> None:
         for node in ver[b"Actions"]:
             if b"macro" in node:
                 assert len(node[b"macro"]) <= 255
-                text = node[b"macro"].decode()
-                if node.get(b"Type") != b"Repeat":
-                    assert str(PRISMATIC) in text, "Prismatic missing from combat macro"
-                    # Auto Surge must stay out (pack-end waste); Alt-only is OK
-                    assert f"[nochanneling] {SURGE}" not in text.replace(
-                        f"[mod:alt,nochanneling] {SURGE}", ""
-                    ), "auto Surge must not be in combat macro"
             if node.get(b"Type") == b"Loop":
                 kids = [k for k in node if isinstance(k, int)]
                 assert kids == [1, 2, 3]
                 for k in kids:
-                    assert len(node[k][b"macro"]) <= 255
                     text = node[k][b"macro"].decode()
+                    assert len(text) <= 255
                     assert str(PRISMATIC) in text
                     assert f"/cast [nochanneling] {SURGE}" not in text
+                    assert str(TOTM) not in text, "TotM must not block filler steps"
+    sample = seq[b"Versions"][0][b"Actions"][2][1][b"macro"].decode()
     print("Wrote", OUT, "len", len(export))
     print("panels:", [v[b"Label"].decode() for v in seq[b"Versions"]])
-    # show one sample macro for sanity
-    sample = seq[b"Versions"][0][b"Actions"][2][1][b"macro"].decode()
-    print("ST step1 macro:\n", sample)
+    print("ST step1:\n" + sample)
     print(export)
 
 
