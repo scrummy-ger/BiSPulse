@@ -1,7 +1,7 @@
-"""Build a lightweight Master Arcanist Arcane Mage GSE for Midnight S2.
+"""Build Master Arcanist Arcane Mage GSE for Midnight S2.
 
-Keeps the original Vinimagis shape (few top-level Actions + small Priority
-loop) so GSE does not blow the script execution limit on compile/import.
+Priority: Arcane Surge + Prismatic Bolt fire immediately when ready on every
+press (Method Spellslinger). Lightweight panel shape to avoid GSE script limits.
 """
 from __future__ import annotations
 
@@ -13,7 +13,8 @@ import cbor2
 
 OUT = Path("/workspace/tools/Master_Arcanist_Arcane_S2_export.txt")
 
-BLAST = 30451  # Prismatic Bolt overrides this button
+BLAST = 30451
+PRISMATIC = 1295942  # must cast by ID — Blast ID will NOT fire the proc
 BARRAGE = 44425
 MISSILES = 5143
 ORB = 153626
@@ -29,8 +30,9 @@ TALENT_MPLUS = (
 )
 
 HELP = (
-    "S2 Spellslinger | Shift=Barrage (Salvo 20+) | Ctrl=Orb | Alt=Surge\n"
-    "Auto: TotM, Missiles (Clearcasting), Orb, Blast/Prismatic Bolt, Evocation"
+    "S2 Spellslinger | Auto: Surge + Prismatic ASAP (no overcap)\n"
+    "Shift=Barrage (Salvo 20+) | Ctrl=Orb | Alt=Surge (manual)\n"
+    "Also auto: TotM, Missiles (CC), Orb, Blast, Evocation"
 )
 
 
@@ -39,7 +41,6 @@ def b(s: str) -> bytes:
 
 
 def macro(*lines: str) -> bytes:
-    # Keep well under the 255 WoW macro limit
     text = "\n".join(lines)
     assert len(text) <= 255, f"macro too long ({len(text)}): {text!r}"
     return text.encode("utf-8")
@@ -56,66 +57,56 @@ def block(kind: str, body: bytes, interval: int | None = None) -> dict:
     return node
 
 
-# Shared mod prefix (same idea as original hge/alt|shift|ctrl lines)
+# Manual overrides still available
 MOD_BARRAGE = f"/cast [mod:shift,nochanneling] {BARRAGE}"
 MOD_ORB = f"/cast [mod:ctrl,nochanneling] {ORB}"
 MOD_SURGE = f"/cast [mod:alt,nochanneling] {SURGE}"
 
+# Always try first — unused casts fail through; stops Surge/Prismatic overcap
+CAST_SURGE = f"/cast [nochanneling] {SURGE}"
+CAST_PRISMATIC = f"/cast [nochanneling] {PRISMATIC}"
+CAST_TOTM = f"/cast [nochanneling] {TOTM}"
+
+
+def prefix(*extra: str) -> list[str]:
+    """Shared head of every combat press: mods → Surge → Prismatic → TotM."""
+    return [MOD_BARRAGE, MOD_ORB, MOD_SURGE, CAST_SURGE, CAST_PRISMATIC, CAST_TOTM, *extra]
+
 
 def panel_st() -> dict:
-    """Single light panel — mirrors original Master Arcanist layout."""
-    # 1) Mana
+    """ST: Surge/Prismatic first; then Blast / Missiles / Orb."""
     evoc = block(
         "Repeat",
         macro(f"/cast [nochanneling] {EVOCATION}"),
         interval=3,
     )
-    # 2) Cooldowns: TotM + Surge (Barrage/Orb/Surge still via mods)
+    # Dedicated CD poke every press cycle (Surge+Prismatic again for safety)
     cds = block(
         "Action",
-        macro(
-            MOD_BARRAGE,
-            MOD_ORB,
-            MOD_SURGE,
-            f"/cast [nochanneling] {SURGE}",
-            f"/cast [nochanneling] {TOTM}",
-        ),
-        interval=3,
+        macro(*prefix()),
+        interval=1,
     )
-    # 3) Small Priority loop (3 steps only — do not explode compile)
     loop = {
         b"Type": b"Loop",
         b"Repeat": 2,
         b"StepFunction": b"Priority",
+        # 1) Prismatic (above) then Blast filler
         1: block(
             "Action",
-            macro(
-                MOD_BARRAGE,
-                MOD_ORB,
-                MOD_SURGE,
-                f"/castsequence [nochanneling] {BLAST}",
-            ),
-            interval=3,
+            macro(*prefix(f"/castsequence [nochanneling] {BLAST}")),
+            interval=1,
         ),
+        # 2) Clearcasting → Missiles (after Prismatic attempt)
         2: block(
             "Action",
-            macro(
-                MOD_BARRAGE,
-                MOD_ORB,
-                MOD_SURGE,
-                f"/castsequence [nochanneling] {MISSILES}",
-            ),
-            interval=3,
+            macro(*prefix(f"/castsequence [nochanneling] {MISSILES}")),
+            interval=1,
         ),
+        # 3) Orb for charges
         3: block(
             "Action",
-            macro(
-                MOD_BARRAGE,
-                MOD_ORB,
-                MOD_SURGE,
-                f"/cast [nochanneling] {ORB}",
-            ),
-            interval=3,
+            macro(*prefix(f"/cast [nochanneling] {ORB}")),
+            interval=1,
         ),
     }
     return {
@@ -126,7 +117,7 @@ def panel_st() -> dict:
 
 
 def panel_aoe() -> dict:
-    """AoE: Orb before Missiles in the priority loop."""
+    """AoE: Orb before Missiles; Surge/Prismatic still first on every press."""
     evoc = block(
         "Repeat",
         macro(f"/cast [nochanneling] {EVOCATION}"),
@@ -134,14 +125,8 @@ def panel_aoe() -> dict:
     )
     cds = block(
         "Action",
-        macro(
-            MOD_BARRAGE,
-            MOD_ORB,
-            MOD_SURGE,
-            f"/cast [nochanneling] {SURGE}",
-            f"/cast [nochanneling] {TOTM}",
-        ),
-        interval=3,
+        macro(*prefix()),
+        interval=1,
     )
     loop = {
         b"Type": b"Loop",
@@ -149,33 +134,18 @@ def panel_aoe() -> dict:
         b"StepFunction": b"Priority",
         1: block(
             "Action",
-            macro(
-                MOD_BARRAGE,
-                MOD_ORB,
-                MOD_SURGE,
-                f"/cast [nochanneling] {ORB}",
-            ),
-            interval=3,
+            macro(*prefix(f"/cast [nochanneling] {ORB}")),
+            interval=1,
         ),
         2: block(
             "Action",
-            macro(
-                MOD_BARRAGE,
-                MOD_ORB,
-                MOD_SURGE,
-                f"/castsequence [nochanneling] {MISSILES}",
-            ),
-            interval=3,
+            macro(*prefix(f"/castsequence [nochanneling] {MISSILES}")),
+            interval=1,
         ),
         3: block(
             "Action",
-            macro(
-                MOD_BARRAGE,
-                MOD_ORB,
-                MOD_SURGE,
-                f"/castsequence [nochanneling] {BLAST}",
-            ),
-            interval=3,
+            macro(*prefix(f"/castsequence [nochanneling] {BLAST}")),
+            interval=1,
         ),
     }
     return {
@@ -189,7 +159,7 @@ def build_sequence() -> dict:
     return {
         b"Versions": [panel_st(), panel_aoe()],
         b"WeakAuras": {},
-        b"LastUpdated": b"20260826",
+        b"LastUpdated": b"20260827",
         b"MetaData": {
             b"Name": b"Master_Arcanist-12.1",
             b"Author": b"Vinimagis@Stormrage / BiSPulse S2",
@@ -243,13 +213,23 @@ def main() -> None:
         for node in ver[b"Actions"]:
             if b"macro" in node:
                 assert len(node[b"macro"]) <= 255
+                text = node[b"macro"].decode()
+                if node.get(b"Type") != b"Repeat":
+                    assert str(PRISMATIC) in text, "Prismatic missing from combat macro"
+                    assert str(SURGE) in text, "Surge missing from combat macro"
             if node.get(b"Type") == b"Loop":
                 kids = [k for k in node if isinstance(k, int)]
                 assert kids == [1, 2, 3]
                 for k in kids:
                     assert len(node[k][b"macro"]) <= 255
+                    text = node[k][b"macro"].decode()
+                    assert str(PRISMATIC) in text
+                    assert str(SURGE) in text
     print("Wrote", OUT, "len", len(export))
     print("panels:", [v[b"Label"].decode() for v in seq[b"Versions"]])
+    # show one sample macro for sanity
+    sample = seq[b"Versions"][0][b"Actions"][2][1][b"macro"].decode()
+    print("ST step1 macro:\n", sample)
     print(export)
 
 
