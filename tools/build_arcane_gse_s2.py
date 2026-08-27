@@ -30,8 +30,8 @@ TALENT_MPLUS = (
 )
 
 HELP = (
-    "S2 Spellslinger | Auto: Surge + Prismatic ASAP (no overcap)\n"
-    "Shift=Barrage (Salvo 20+) | Ctrl=Orb | Alt=Surge (manual)\n"
+    "S2 Spellslinger | Auto: Prismatic ASAP (no overcap)\n"
+    "Shift=Barrage (Salvo 20+) | Ctrl=Orb | Alt=Surge (manual only — never auto)\n"
     "Also auto: TotM, Missiles (CC), Orb, Blast, Evocation"
 )
 
@@ -62,25 +62,25 @@ MOD_BARRAGE = f"/cast [mod:shift,nochanneling] {BARRAGE}"
 MOD_ORB = f"/cast [mod:ctrl,nochanneling] {ORB}"
 MOD_SURGE = f"/cast [mod:alt,nochanneling] {SURGE}"
 
-# Always try first — unused casts fail through; stops Surge/Prismatic overcap
-CAST_SURGE = f"/cast [nochanneling] {SURGE}"
+# Prismatic first — unused casts fail through; stops overcap.
+# Surge is NEVER auto-cast (wastes CD at pack end); only Alt when you want it.
 CAST_PRISMATIC = f"/cast [nochanneling] {PRISMATIC}"
 CAST_TOTM = f"/cast [nochanneling] {TOTM}"
 
 
 def prefix(*extra: str) -> list[str]:
-    """Shared head of every combat press: mods → Surge → Prismatic → TotM."""
-    return [MOD_BARRAGE, MOD_ORB, MOD_SURGE, CAST_SURGE, CAST_PRISMATIC, CAST_TOTM, *extra]
+    """Shared head of every combat press: mods → Prismatic → TotM."""
+    return [MOD_BARRAGE, MOD_ORB, MOD_SURGE, CAST_PRISMATIC, CAST_TOTM, *extra]
 
 
 def panel_st() -> dict:
-    """ST: Surge/Prismatic first; then Blast / Missiles / Orb."""
+    """ST: Prismatic first; Surge only via Alt; then Blast / Missiles / Orb."""
     evoc = block(
         "Repeat",
         macro(f"/cast [nochanneling] {EVOCATION}"),
         interval=3,
     )
-    # Dedicated CD poke every press cycle (Surge+Prismatic again for safety)
+    # Dedicated CD poke: Prismatic + TotM (no auto Surge)
     cds = block(
         "Action",
         macro(*prefix()),
@@ -117,7 +117,7 @@ def panel_st() -> dict:
 
 
 def panel_aoe() -> dict:
-    """AoE: Orb before Missiles; Surge/Prismatic still first on every press."""
+    """AoE: Orb before Missiles; Prismatic first; Surge only via Alt."""
     evoc = block(
         "Repeat",
         macro(f"/cast [nochanneling] {EVOCATION}"),
@@ -216,7 +216,10 @@ def main() -> None:
                 text = node[b"macro"].decode()
                 if node.get(b"Type") != b"Repeat":
                     assert str(PRISMATIC) in text, "Prismatic missing from combat macro"
-                    assert str(SURGE) in text, "Surge missing from combat macro"
+                    # Auto Surge must stay out (pack-end waste); Alt-only is OK
+                    assert f"[nochanneling] {SURGE}" not in text.replace(
+                        f"[mod:alt,nochanneling] {SURGE}", ""
+                    ), "auto Surge must not be in combat macro"
             if node.get(b"Type") == b"Loop":
                 kids = [k for k in node if isinstance(k, int)]
                 assert kids == [1, 2, 3]
@@ -224,7 +227,7 @@ def main() -> None:
                     assert len(node[k][b"macro"]) <= 255
                     text = node[k][b"macro"].decode()
                     assert str(PRISMATIC) in text
-                    assert str(SURGE) in text
+                    assert f"/cast [nochanneling] {SURGE}" not in text
     print("Wrote", OUT, "len", len(export))
     print("panels:", [v[b"Label"].decode() for v in seq[b"Versions"]])
     # show one sample macro for sanity
