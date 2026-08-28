@@ -1,15 +1,17 @@
 #!/usr/bin/env python3
-"""FLIPCYDE BM Hunter GSE → Midnight Season 2 update.
+"""FLIPCYDE BM Hunter GSE → Midnight Season 2 (perfected).
 
-Based on decoded FLIPCYDE_BM_MIDNIGHT_ST_V1 (GSE 3327, single ST panel).
-S2 changes:
-  - COLLECTION export with TWO separate sequences (ST + AoE) for own keybinds
-  - GSE Versions format bumped to 3330
-  - ST priority tuned for Pack Leader / Nature's Ally KC weave
-  - AoE: Wild Thrash → BW → Barbed/KC/Cobra priority
-  - Interval 3 on action blocks (script limit safety)
-  - Alt = Mend Pet (unchanged)
-  - CotW, trinkets, interrupts remain manual
+Sources:
+  - FLIPCYDE_BM_MIDNIGHT_ST_V1
+  - FLIPCYDE_BM_MIDNIGHT_AOE_V1
+
+Fixes vs originals:
+  - COLLECTION with TWO separate keybindable sequences (not Versions)
+  - GSE 3330 / TOC 120100
+  - Nature's Ally: never KC→KC — Barbed/Cobra between every Kill Command
+  - AoE: Wild Thrash on CD + BW only after Thrash (Beast Cleave for Apex pet)
+  - Alt = Mend Pet on both; CotW/trinkets/interrupts remain manual
+  - Interval 3 (script limit safety)
 """
 from __future__ import annotations
 
@@ -32,15 +34,15 @@ TALENT_MPLUS = (
 )
 
 HELP_ST = (
-    "S2 Pack Leader ST | Nature's Ally: Barbed/Cobra between every KC\n"
-    "Alt=Mend Pet | CotW, trinkets, interrupts manual\n"
-    "Keybind this for single-target / bosses"
+    "S2 Pack Leader ST | Nature's Ally weave (Barbed/Cobra between every KC)\n"
+    "Alt=Mend Pet | CotW / trinkets / interrupts manual\n"
+    "Priority: BW → Barbed → KC → filler → KC …"
 )
 
 HELP_AOE = (
-    "S2 Pack Leader AoE | Wild Thrash → BW → cleave priority\n"
-    "Alt=Mend Pet | CotW, trinkets, interrupts manual\n"
-    "Keybind this for trash / cleave"
+    "S2 Pack Leader AoE | Wild Thrash on CD, BW after Thrash (Beast Cleave)\n"
+    "Alt=Mend Pet | CotW / trinkets / interrupts manual\n"
+    "Priority: Thrash → BW → Thrash → Barbed/KC weave → Cobra"
 )
 
 PET_PREFIX = (
@@ -51,7 +53,7 @@ PET_PREFIX = (
     "/stopmacro [channeling]",
 )
 
-# ST: BW first, then strict Barbed/KC/Barbed/KC/Cobra weave (Nature's Ally)
+# Method ST: BW on CD, Barbed charge mgmt, KC only with Nature's Ally weave
 ST_STEPS = [
     "/cast Bestial Wrath",
     "/cast Barbed Shot",
@@ -66,16 +68,19 @@ ST_STEPS = [
     "/cast Cobra Shot",
 ]
 
-# AoE: Wild Thrash for Beast Cleave, then same KC weave (Icy Veins S2 opener)
+# Method AoE opener/priority:
+# Wild Thrash CD → BW (with cleave) → Thrash again for Apex pet → weave
 AOE_STEPS = [
     "/cast Wild Thrash",
     "/cast Bestial Wrath",
+    "/cast Wild Thrash",
     "/cast Barbed Shot",
     "/cast Kill Command",
     "/cast Barbed Shot",
     "/cast Kill Command",
     "/cast Cobra Shot",
     "/cast Kill Command",
+    "/cast [known:Dire Beast] Dire Beast; Cobra Shot",
     "/cast Cobra Shot",
 ]
 
@@ -116,6 +121,7 @@ def build_sequence(
     help_text: str,
     talent_key: str,
     talent_set: str,
+    source: str,
 ) -> dict:
     return {
         b"Versions": [
@@ -144,7 +150,7 @@ def build_sequence(
                 },
             },
             b"CYDERelease": b"MIDNIGHT_SEASON_2",
-            b"CYDESourceName": b"FLIPCYDE_BM_MIDNIGHT_ST_V1",
+            b"CYDESourceName": source.encode(),
         },
     }
 
@@ -156,26 +162,46 @@ def encode_gse3(obj: dict) -> str:
     return "!GSE3!" + base64.b64encode(compressed).decode("ascii")
 
 
-def validate_loop(seq: dict, needle: bytes) -> int:
+def validate_loop(seq: dict, first_cast: bytes) -> list[str]:
     loop = seq[b"Versions"][0][b"Actions"][0]
     assert loop[b"StepFunction"] == b"Priority"
     kids = sorted(k for k in loop if isinstance(k, int))
+    casts: list[str] = []
+    prev_was_kc = False
     for k in kids:
         text = loop[k][b"macro"].decode()
         assert len(text) <= 255, f"step {k} too long: {len(text)}"
         assert "/petassist" in text
+        assert "Mend Pet" in text
         assert loop[k][b"Interval"] == b"3"
-    assert needle in loop[1][b"macro"]
-    return len(kids)
+        last = text.strip().split("\n")[-1]
+        casts.append(last)
+        is_kc = last == "/cast Kill Command"
+        assert not (prev_was_kc and is_kc), f"KC back-to-back at step {k}"
+        prev_was_kc = is_kc
+    assert first_cast in loop[1][b"macro"]
+    return casts
 
 
 def main() -> None:
     sequences = {
         SEQ_ST.encode(): build_sequence(
-            SEQ_ST, "Pack Leader ST", ST_STEPS, HELP_ST, "Pack Leader ST", TALENT_ST
+            SEQ_ST,
+            "Pack Leader ST",
+            ST_STEPS,
+            HELP_ST,
+            "Pack Leader ST",
+            TALENT_ST,
+            "FLIPCYDE_BM_MIDNIGHT_ST_V1",
         ),
         SEQ_AOE.encode(): build_sequence(
-            SEQ_AOE, "Pack Leader AoE", AOE_STEPS, HELP_AOE, "Pack Leader M+", TALENT_MPLUS
+            SEQ_AOE,
+            "Pack Leader AoE",
+            AOE_STEPS,
+            HELP_AOE,
+            "Pack Leader M+",
+            TALENT_MPLUS,
+            "FLIPCYDE_BM_MIDNIGHT_AOE_V1",
         ),
     }
     collection = {
@@ -193,14 +219,16 @@ def main() -> None:
     obj = cbor2.loads(zlib.decompress(base64.b64decode(export[6:]), -15))
     payload = obj[b"payload"]
     assert payload[b"ElementCount"] == 2
-    assert len(payload[b"Sequences"]) == 2
 
-    st_steps = validate_loop(payload[b"Sequences"][SEQ_ST.encode()], b"Bestial Wrath")
-    aoe_steps = validate_loop(payload[b"Sequences"][SEQ_AOE.encode()], b"Wild Thrash")
+    st = validate_loop(payload[b"Sequences"][SEQ_ST.encode()], b"Bestial Wrath")
+    aoe = validate_loop(payload[b"Sequences"][SEQ_AOE.encode()], b"Wild Thrash")
+    assert aoe[0] == "/cast Wild Thrash"
+    assert aoe[1] == "/cast Bestial Wrath"
+    assert aoe[2] == "/cast Wild Thrash"
 
     print("Wrote", OUT, "len", len(export))
-    print("sequences:", [k.decode() for k in payload[b"Sequences"]])
-    print("ST steps:", st_steps, "| AoE steps:", aoe_steps)
+    print("ST:", st)
+    print("AoE:", aoe)
     print(export)
 
 
