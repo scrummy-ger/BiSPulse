@@ -1,8 +1,17 @@
 #!/usr/bin/env python3
-"""Patch Flipcyde BM originals in-place for Midnight S2.
+"""Patch Flipcyde BM originals for Midnight S2 — import-safe for GSE 3.3.30+.
 
-Keeps the exact Flipcyde GSE payload shape (metadata, key order, GSE 3327)
-so import matches what already works — only the priority casts change.
+Why previous exports failed to import:
+  GSE 3.3.x verifies MetaData.Checksum on import when GSEVersion >= 3307.
+  Flipcyde stamps a Checksum; after we change casts it no longer matches, so
+  GSE shows an integrity dialog (and an "older version" dialog for 3327).
+  Under some UIs that second dialog never appears → looks like import failed.
+
+Fix:
+  - Keep Flipcyde [name, sequence] payload shape (proven decodeable)
+  - Set GSEVersion to 3306 (< ChecksumMinVersion 3307) so checksum is skipped
+  - Remove Checksum field
+  - User may see one "older version" Proceed dialog — that is normal
 """
 from __future__ import annotations
 
@@ -50,8 +59,10 @@ ORIG_AOE = (
     "GF3v2ll2fmM7u53/AA=="
 )
 
-# ST prefix from original (includes Alt Mend Pet)
-ST_PREFIX = (
+# Below GSE ChecksumMinVersion (3307) so integrity check is skipped after Proceed
+GSE_VERSION_IMPORTSAFE = 3306
+
+PET_PREFIX = (
     "/petassist\n"
     "/petattack [@target,harm,nodead]\n"
     "/cast [mod:alt,@pet,nodead] Mend Pet\n"
@@ -59,10 +70,6 @@ ST_PREFIX = (
     "/stopmacro [channeling]\n"
 )
 
-# AoE gets same Mend Pet treatment as ST for consistency
-AOE_PREFIX = ST_PREFIX
-
-# ST: keep Flipcyde 10-step length; ensure Nature's Ally weave (already mostly correct)
 ST_CASTS = [
     "/cast Bestial Wrath",
     "/cast Barbed Shot",
@@ -76,7 +83,6 @@ ST_CASTS = [
     "/cast [known:Dire Beast] Dire Beast; Cobra Shot",
 ]
 
-# AoE: 10 steps like original; Thrash before BW; weave between KC
 AOE_CASTS = [
     "/cast Wild Thrash",
     "/cast Bestial Wrath",
@@ -101,47 +107,42 @@ def encode(obj) -> str:
     return "!GSE3!" + base64.b64encode(c.compress(raw) + c.flush()).decode("ascii")
 
 
-def make_action(prefix: str, cast: str) -> dict:
-    text = prefix + cast
+def make_action(cast: str) -> dict:
+    text = PET_PREFIX + cast
     assert len(text) <= 255, len(text)
-    return {
-        b"macro": text.encode("utf-8"),
-        b"Type": b"Action",
-        b"type": b"macro",
-    }
+    return {b"macro": text.encode("utf-8"), b"Type": b"Action", b"type": b"macro"}
 
 
-def patch(orig: str, new_name: str, label: str, prefix: str, casts: list[str], help_txt: str) -> str:
-    name, seq = decode(orig)
-    assert isinstance(name, bytes)
+def patch(orig: str, new_name: str, label: str, casts: list[str], help_txt: str) -> str:
+    _old_name, seq = decode(orig)
+    md = seq[b"MetaData"]
+    md[b"Name"] = new_name.encode("ascii")
+    md[b"HelpTxt"] = help_txt.encode("ascii")
+    md[b"Author"] = b"Flipcyde / PROJECT CYDE / BiSPulse S2"
+    md[b"GSEVersion"] = GSE_VERSION_IMPORTSAFE
+    md[b"CYDERelease"] = b"MIDNIGHT_SEASON_2"
+    md[b"CYDEValidation"] = b"STATIC_ONLY_12_1"
+    # Drop Flipcyde checksum — invalid after cast edits; version < 3307 skips verify
+    md.pop(b"Checksum", None)
+    md.pop(b"EnforceCompatability", None)
 
-    # Rename
-    seq[b"MetaData"][b"Name"] = new_name.encode("ascii")
-    seq[b"MetaData"][b"HelpTxt"] = help_txt.encode("ascii")
-    seq[b"MetaData"][b"Author"] = b"Flipcyde / PROJECT CYDE / BiSPulse S2"
-    seq[b"MetaData"][b"CYDERelease"] = b"MIDNIGHT_SEASON_2"
-    seq[b"MetaData"][b"CYDEValidation"] = b"STATIC_ONLY_12_1"
-    # Keep GSEVersion from original (3327) — proven importable
     seq[b"LastUpdated"] = b"20260828000000"
-
     ver = seq[b"Versions"][0]
     ver[b"Label"] = label.encode("ascii")
     loop = ver[b"Actions"][0]
-    assert loop[b"Type"] == b"Loop"
-
-    # Remove old int steps, write new ones (same count as casts)
     for k in list(loop.keys()):
         if isinstance(k, int):
             del loop[k]
     for i, cast in enumerate(casts, start=1):
-        loop[i] = make_action(prefix, cast)
+        loop[i] = make_action(cast)
 
-    payload = [new_name.encode("ascii"), seq]
-    export = encode(payload)
+    export = encode([new_name.encode("ascii"), seq])
 
-    # Validate round-trip
+    # Validate
     n2, s2 = decode(export)
-    assert n2 == new_name.encode("ascii")
+    assert n2.decode() == new_name
+    assert s2[b"MetaData"][b"GSEVersion"] == GSE_VERSION_IMPORTSAFE
+    assert b"Checksum" not in s2[b"MetaData"]
     loop2 = s2[b"Versions"][0][b"Actions"][0]
     kids = sorted(k for k in loop2 if isinstance(k, int))
     assert kids == list(range(1, len(casts) + 1))
@@ -152,7 +153,6 @@ def patch(orig: str, new_name: str, label: str, prefix: str, casts: list[str], h
         is_kc = last == "/cast Kill Command"
         assert not (prev_kc and is_kc)
         prev_kc = is_kc
-        assert len(loop2[k][b"macro"]) <= 255
     return export
 
 
@@ -161,29 +161,33 @@ def main() -> None:
         ORIG_ST,
         "FLIPCYDE_BM_MIDNIGHT_S2_ST",
         "Midnight Season 2 | Single Target",
-        ST_PREFIX,
         ST_CASTS,
-        "S2 Pack Leader ST. Nature Ally: Barbed/Cobra between every KC. "
-        "Alt=Mend Pet. CotW/trinkets/interrupts manual.",
+        "S2 Pack Leader ST. Nature Ally weave. Alt=Mend Pet. CotW/trinkets manual. "
+        "If GSE asks about older version: click Proceed.",
     )
     aoe = patch(
         ORIG_AOE,
         "FLIPCYDE_BM_MIDNIGHT_S2_AOE",
         "Midnight Season 2 | AoE 2+ Targets",
-        AOE_PREFIX,
         AOE_CASTS,
-        "S2 Pack Leader AoE. Wild Thrash, then BW, then Thrash, then Barbed/KC weave. "
-        "Alt=Mend Pet. CotW/trinkets/interrupts manual.",
+        "S2 Pack Leader AoE. Thrash then BW then Thrash, then Barbed/KC weave. "
+        "Alt=Mend Pet. If GSE asks about older version: click Proceed.",
     )
-
     OUT_ST.write_text(st + "\n", encoding="ascii")
     OUT_AOE.write_text(aoe + "\n", encoding="ascii")
-    OUT.write_text(st + "\n\n" + aoe + "\n", encoding="ascii")
-
-    print("ST len", len(st))
+    OUT.write_text(
+        "# Import ST and AoE SEPARATELY (one string at a time).\n"
+        "# If GSE shows 'older version' dialog -> click Proceed.\n\n"
+        + st
+        + "\n\n"
+        + aoe
+        + "\n",
+        encoding="ascii",
+    )
+    print("ST", len(st))
     print(st)
     print()
-    print("AOE len", len(aoe))
+    print("AOE", len(aoe))
     print(aoe)
 
 
