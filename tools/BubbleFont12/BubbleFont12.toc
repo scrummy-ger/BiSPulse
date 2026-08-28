@@ -1,0 +1,5 @@
+## Interface: 120100
+## Title: BubbleFont12
+## Notes: Sprechblasen-Schriftgröße fest auf 12 (unabhängig von ElvUI)
+## Author: BiSPulse
+BubbleFont12.lua
