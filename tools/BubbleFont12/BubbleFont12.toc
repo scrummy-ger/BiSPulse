@@ -1,0 +1,6 @@
+## Interface: 120100
+## Title: BubbleFont12
+## Notes: Sprechblasen-Schriftgröße (Standard: 12). /bubblefont
+## Author: BiSPulse
+## SavedVariables: BubbleFont12DB
+BubbleFont12.lua
