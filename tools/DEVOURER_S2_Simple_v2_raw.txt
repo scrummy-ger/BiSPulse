@@ -1,0 +1,17 @@
+# Devourer DH — GRIP raw macrotext import (fallback)
+# Ingame: /gems import → paste everything below the line into the import box.
+
+/cast [nochanneling] Collapsing Star
+/cast [nochanneling] Void Ray
+/cast [nochanneling] Devour
+/cast [nochanneling] Reap
+/cast [nochanneling] Voidblade
+/cast [nochanneling] Consume
+
+# KeyPress (paste into GRIP KeyPress field after import, or add as step 0 mods):
+# /cast [mod:alt,nochanneling,@player] Void Metamorphosis
+# /use [mod:alt] 13
+# /use [mod:alt] 14
+# /cast [mod:shift,nochanneling] Soul Immolation
+# /cast [mod:ctrl,nochanneling] Void Nova
+# /targetenemy [noharm][dead]
