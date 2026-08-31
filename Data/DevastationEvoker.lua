@@ -237,7 +237,7 @@ BiSPulseData:Register("EVOKER", 1, {
   specName = "Devastation",
   patch = "12.1",
   season = "Midnight Season 2",
-  updated = "2026-08-25",
+  updated = "2026-08-31",
   primarySource = "Wowhead",
   guides = {
     wowhead = "https://www.wowhead.com/guide/classes/evoker/devastation/bis-gear",

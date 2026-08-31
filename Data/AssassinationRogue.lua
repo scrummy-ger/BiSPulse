@@ -102,7 +102,7 @@ local items = {
   }),
   [268265] = entry({
     name = "Aqirbane Reliquary",
-    slot = "Head",
+    slot = "Offhand",
     drop = "Ula'tek",
     source = "Wowhead",
     wowhead = "overall",
@@ -177,7 +177,7 @@ BiSPulseData:Register("ROGUE", 1, {
   specName = "Assassination",
   patch = "12.1",
   season = "Midnight Season 2",
-  updated = "2026-08-25",
+  updated = "2026-08-31",
   primarySource = "Wowhead",
   guides = {
     wowhead = "https://www.wowhead.com/guide/classes/rogue/assassination/bis-gear",

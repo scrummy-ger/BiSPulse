@@ -63,7 +63,7 @@ local items = {
   [268246] = entry({
     name = "Frothing Venom Spaulders",
     slot = "Neck",
-    drop = "The Lost Explorers",
+    drop = "Vashnik the Malignant",
     source = "Wowhead",
     wowhead = "overall",
     rank = RANK.BIS,
@@ -127,7 +127,7 @@ BiSPulseData:Register("DRUID", 1, {
   specName = "Balance",
   patch = "12.1",
   season = "Midnight Season 2",
-  updated = "2026-08-25",
+  updated = "2026-08-31",
   primarySource = "Wowhead",
   guides = {
     wowhead = "https://www.wowhead.com/guide/classes/druid/balance/bis-gear",

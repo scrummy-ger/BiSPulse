@@ -55,10 +55,10 @@ local items = {
     slot = "Trinket",
     drop = "Zaen Bladesorrow",
     source = "Wowhead",
-    wowhead = "overall",
-    rank = RANK.BIS,
+    wowhead = "mythic",
+    rank = RANK.STRONG,
     note = nil,
-    priority = true,
+    priority = nil,
   }),
   [268197] = entry({
     name = "Spine Of The Hissing Abyss",
@@ -140,6 +140,16 @@ local items = {
     note = nil,
     priority = nil,
   }),
+  [273796] = entry({
+    name = "Vile Vial Of Volatile Venom",
+    slot = "Trinket",
+    drop = "Rav'i",
+    source = "Wowhead",
+    wowhead = "overall",
+    rank = RANK.BIS,
+    note = nil,
+    priority = true,
+  }),
 }
 
 BiSPulseData:Register("WARLOCK", 2, {
@@ -147,7 +157,7 @@ BiSPulseData:Register("WARLOCK", 2, {
   specName = "Demonology",
   patch = "12.1",
   season = "Midnight Season 2",
-  updated = "2026-08-25",
+  updated = "2026-08-31",
   primarySource = "Wowhead",
   guides = {
     wowhead = "https://www.wowhead.com/guide/classes/warlock/demonology/bis-gear",

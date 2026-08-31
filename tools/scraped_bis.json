@@ -24,7 +24,7 @@
     "file": "UnholyDeathKnight.lua"
   },
   "HavocDemonHunter": {
-    "count": 14,
+    "count": 13,
     "wowhead_overall": 13,
     "sources": [
       "Wowhead"
@@ -264,7 +264,7 @@
     "file": "EnhancementShaman.lua"
   },
   "RestorationShaman": {
-    "count": 18,
+    "count": 19,
     "wowhead_overall": 12,
     "sources": [
       "Wowhead"
@@ -280,7 +280,7 @@
     "file": "AfflictionWarlock.lua"
   },
   "DemonologyWarlock": {
-    "count": 12,
+    "count": 13,
     "wowhead_overall": 11,
     "sources": [
       "Wowhead"

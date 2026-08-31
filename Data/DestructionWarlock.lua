@@ -197,7 +197,7 @@ BiSPulseData:Register("WARLOCK", 3, {
   specName = "Destruction",
   patch = "12.1",
   season = "Midnight Season 2",
-  updated = "2026-08-25",
+  updated = "2026-08-31",
   primarySource = "Wowhead",
   guides = {
     wowhead = "https://www.wowhead.com/guide/classes/warlock/destruction/bis-gear",
