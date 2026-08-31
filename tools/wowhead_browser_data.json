@@ -1,8 +1,8 @@
 {
-  "scrapedAt": "2026-08-25",
+  "scrapedAt": "2026-08-31",
   "ok": 40,
-  "freshOk": 34,
-  "totalItems": 595,
+  "freshOk": 33,
+  "totalItems": 641,
   "placeholders": 0,
   "errors": {
     "DevastationEvoker": "no BiS items parsed",
@@ -10,7 +10,8 @@
     "MarksmanshipHunter": "no BiS items parsed",
     "BrewmasterMonk": "only 7 items",
     "RetributionPaladin": "only 4 items",
-    "ShadowPriest": "only 7 items"
+    "ShadowPriest": "only 7 items",
+    "EnhancementShaman": "no BiS items parsed"
   },
   "out": {
     "BloodDeathKnight": {
@@ -468,12 +469,12 @@
       "url": "https://www.wowhead.com/guide/classes/death-knight/unholy/bis-gear"
     },
     "HavocDemonHunter": {
-      "count": 14,
+      "count": 13,
       "withDrop": 13,
       "placeholders": 0,
       "byRank": {
         "bis": 13,
-        "strong": 1,
+        "strong": 0,
         "alt": 0,
         "ok": 0
       },
@@ -543,12 +544,12 @@
           "drop": "Temple of Sethraliss"
         },
         {
-          "id": 268249,
-          "name": "Vile Alchemist's Band",
+          "id": 251136,
+          "name": "Signet Of Snarling Servitude",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Ring",
-          "drop": "Vashnik the Malignant"
+          "drop": "Murder Row"
         },
         {
           "id": 158366,
@@ -567,8 +568,8 @@
           "drop": "The Coiled Altar"
         },
         {
-          "id": 270175,
-          "name": "Voracious Heart Of Ula'tek",
+          "id": 270168,
+          "name": "Font Of Venomous Rage",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Trinket",
@@ -581,12 +582,6 @@
           "rank": "bis",
           "drop": "The Coiled Altar",
           "slot": "Weapon"
-        },
-        {
-          "id": 250259,
-          "name": "Sapling of the Dawnroot",
-          "wowhead": "mythic",
-          "rank": "strong"
         }
       ],
       "url": "https://www.wowhead.com/guide/classes/demon-hunter/havoc/bis-gear"
@@ -885,7 +880,7 @@
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Neck",
-          "drop": "The Lost Explorers"
+          "drop": "Vashnik the Malignant"
         },
         {
           "id": 251159,
@@ -3801,7 +3796,7 @@
           "wowhead": "overall",
           "rank": "bis",
           "drop": "Ula'tek",
-          "slot": "Head"
+          "slot": "Offhand"
         },
         {
           "id": 250259,
@@ -4378,15 +4373,16 @@
           "drop": "The Coiled Altar"
         }
       ],
-      "url": "https://www.wowhead.com/guide/classes/shaman/enhancement/bis-gear"
+      "url": "https://www.wowhead.com/guide/classes/shaman/enhancement/bis-gear",
+      "reused": true
     },
     "RestorationShaman": {
-      "count": 18,
+      "count": 19,
       "withDrop": 12,
       "placeholders": 0,
       "byRank": {
         "bis": 12,
-        "strong": 6,
+        "strong": 7,
         "alt": 0,
         "ok": 0
       },
@@ -4408,12 +4404,12 @@
           "drop": "Sszorak (Raid)"
         },
         {
-          "id": 159459,
-          "name": "Ritual Binder's Ring",
+          "id": 251148,
+          "name": "Pilfered Precious Band",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Ring",
-          "drop": "Kings Rest"
+          "drop": "Den of Nalorakk"
         },
         {
           "id": 270162,
@@ -4424,12 +4420,12 @@
           "drop": "Nek'zali the Soulcoiler (Raid)"
         },
         {
-          "id": 270164,
-          "name": "Gebbo's Bottomless Bag",
+          "id": 270167,
+          "name": "Wavecaller's Seastone",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Trinket",
-          "drop": "The Lost Explorers (Raid)"
+          "drop": "Nymrissa Wavebinder (Raid)"
         },
         {
           "id": 271092,
@@ -4448,20 +4444,20 @@
           "drop": "Raid / Vault"
         },
         {
-          "id": 268253,
-          "name": "Silken Voodoo Drape",
+          "id": 268248,
+          "name": "Amani Summoning Shawl",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Shoulders",
-          "drop": "The Coiled Altar (Raid)"
+          "drop": "Nek'zali the Soulcoiler (Raid)"
         },
         {
-          "id": 251200,
-          "name": "Saptorbane Guards",
+          "id": 159380,
+          "name": "Arc Glass Bindings",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Chest",
-          "drop": "The Blinding Vale"
+          "drop": "Temple of Sethraliss"
         },
         {
           "id": 268216,
@@ -4505,8 +4501,14 @@
           "rank": "strong"
         },
         {
-          "id": 251148,
-          "name": "Pilfered Precious Band",
+          "id": 270164,
+          "name": "Gebbo's Bottomless Bag",
+          "wowhead": "mythic",
+          "rank": "strong"
+        },
+        {
+          "id": 270169,
+          "name": "Hex Lord's Dooming Idol",
           "wowhead": "mythic",
           "rank": "strong"
         },
@@ -4674,12 +4676,12 @@
       "url": "https://www.wowhead.com/guide/classes/warlock/affliction/bis-gear"
     },
     "DemonologyWarlock": {
-      "count": 12,
+      "count": 13,
       "withDrop": 11,
       "placeholders": 0,
       "byRank": {
         "bis": 11,
-        "strong": 1,
+        "strong": 2,
         "alt": 0,
         "ok": 0
       },
@@ -4757,12 +4759,12 @@
           "drop": "The Lost Explorers"
         },
         {
-          "id": 250215,
-          "name": "Freightrunner's Flask",
+          "id": 273796,
+          "name": "Vile Vial Of Volatile Venom",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Trinket",
-          "drop": "Zaen Bladesorrow"
+          "drop": "Rav'i"
         },
         {
           "id": 271092,
@@ -4771,6 +4773,12 @@
           "rank": "bis",
           "drop": "Ula'tek",
           "slot": "Weapon"
+        },
+        {
+          "id": 250215,
+          "name": "Freightrunner's Flask",
+          "wowhead": "mythic",
+          "rank": "strong"
         },
         {
           "id": 273779,
