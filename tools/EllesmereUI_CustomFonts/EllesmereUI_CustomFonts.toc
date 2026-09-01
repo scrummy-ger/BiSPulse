@@ -1,0 +1,9 @@
+## Interface: 110005, 110105, 110205
+## Title: EllesmereUI Custom Fonts
+## Notes: Registers ContrailOne + Manrope in Ellesmere UI font picker (NOT ElvUI)
+## Author: BiSPulse
+## Version: 1.1.0
+## LoadAfter: EllesmereUI
+## OptionalDeps: LibSharedMedia-3.0
+
+CustomFonts.lua
