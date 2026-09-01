@@ -1,0 +1,9 @@
+## Interface: 110005, 110105, 110205
+## Title: EllesmereUI Custom Fonts
+## Notes: Registers custom fonts dropped into EllesmereUI\media\fonts\ (survives EUI updates)
+## Author: BiSPulse
+## Version: 1.0.0
+## Dependencies: EllesmereUI
+## OptionalDeps: LibSharedMedia-3.0
+
+CustomFonts.lua
