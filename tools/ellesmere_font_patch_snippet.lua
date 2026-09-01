@@ -4,11 +4,12 @@
 --
 -- 1) Add inside FONT_FILES (filename must match media\fonts\ on disk):
 --
---   ["Contrail One"] = "Contrail One.ttf",
+--   ["Contrail One"] = "ContrailOne.ttf",
+--   ["Manrope"] = "Manrope.ttf",
 --
 -- 2) Add inside FONT_ORDER (before Blizzard fonts):
 --
---   "Contrail One",
+--   "Contrail One", "Manrope",
 --
 -- Example FONT_FILES block after patch:
 --[[

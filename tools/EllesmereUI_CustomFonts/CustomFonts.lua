@@ -15,9 +15,8 @@ local MEDIA = "Interface\\AddOns\\EllesmereUI\\media\\fonts\\"
 
 -- Display name -> filename (must match the file in EllesmereUI\media\fonts\)
 local CUSTOM_FONTS = {
-  ["Contrail One"] = "Contrail One.ttf",
-  -- Add more fonts you copied into media\fonts\:
-  -- ["My Font"] = "MyFont-FileName.ttf",
+  ["Contrail One"] = "ContrailOne.ttf",
+  ["Manrope"] = "Manrope.ttf",
 }
 
 local function sortedNames()
