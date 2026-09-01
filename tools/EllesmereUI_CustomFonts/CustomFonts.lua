@@ -1,43 +1,30 @@
 --[[
-  EllesmereUI only lists fonts that are registered in EllesmereUI.lua:
-    EllesmereUI.FONT_FILES  (display name -> filename in media\fonts\)
-    EllesmereUI.FONT_ORDER  (dropdown order)
-
-  Dropping .ttf files into EllesmereUI\media\fonts\ alone does NOT add them to the picker.
-  This companion addon injects your custom fonts at load time so EllesmereUI updates
-  do not wipe the registration.
-
-  Edit CUSTOM_FONTS below: key = name in dropdown, value = exact filename on disk.
+  Ellesmere UI (EUI) — NOT ElvUI.
+  Fonts in EllesmereUI\media\fonts\ only appear after registration in FONT_FILES + FONT_ORDER.
 ]]
 
 local ADDON = "EllesmereUI_CustomFonts"
 local MEDIA = "Interface\\AddOns\\EllesmereUI\\media\\fonts\\"
 
--- Display name -> filename (must match the file in EllesmereUI\media\fonts\)
 local CUSTOM_FONTS = {
   ["Contrail One"] = "ContrailOne.ttf",
   ["Manrope"] = "Manrope.ttf",
 }
 
-local function sortedNames()
-  local names = {}
-  for name in pairs(CUSTOM_FONTS) do
-    names[#names + 1] = name
-  end
-  table.sort(names)
-  return names
-end
+local injected = false
 
-local function alreadyInOrder(order, name)
-  for _, entry in ipairs(order) do
-    if entry == name then
-      return true
-    end
-  end
-  return false
+local function msg(text, r, g, b)
+  DEFAULT_CHAT_FRAME:AddMessage(
+    "|cff05d29e" .. ADDON .. "|r: " .. text,
+    r or 1, g or 1, b or 1
+  )
 end
 
 local function inject()
+  if injected then
+    return true
+  end
+
   local EUI = _G.EllesmereUI
   if not EUI or not EUI.FONT_FILES or not EUI.FONT_ORDER then
     return false
@@ -48,16 +35,30 @@ local function inject()
   end
 
   local order = EUI.FONT_ORDER
-  local names = sortedNames()
-  local needSection = false
+  local names = {}
+  for name in pairs(CUSTOM_FONTS) do
+    names[#names + 1] = name
+  end
+  table.sort(names)
+
+  local function inOrder(n)
+    for _, entry in ipairs(order) do
+      if entry == n then
+        return true
+      end
+    end
+    return false
+  end
+
+  local needAny = false
   for _, name in ipairs(names) do
-    if not alreadyInOrder(order, name) then
-      needSection = true
+    if not inOrder(name) then
+      needAny = true
       break
     end
   end
 
-  if needSection then
+  if needAny then
     local insertAt = #order + 1
     for i, entry in ipairs(order) do
       if entry == "Friz Quadrata" then
@@ -65,25 +66,20 @@ local function inject()
         break
       end
     end
-
     if order[insertAt - 1] ~= "---" then
       table.insert(order, insertAt, "---")
       insertAt = insertAt + 1
     end
-
     for i = #names, 1, -1 do
-      local name = names[i]
-      if not alreadyInOrder(order, name) then
-        table.insert(order, insertAt, name)
+      if not inOrder(names[i]) then
+        table.insert(order, insertAt, names[i])
       end
     end
   end
 
   local LSM = LibStub and LibStub("LibSharedMedia-3.0", true)
   if LSM then
-    if not EUI._smFontPaths then
-      EUI._smFontPaths = {}
-    end
+    EUI._smFontPaths = EUI._smFontPaths or {}
     for name, file in pairs(CUSTOM_FONTS) do
       local path = MEDIA .. file
       LSM:Register(LSM.MediaType.FONT, name, path)
@@ -95,18 +91,47 @@ local function inject()
     EUI.InvalidateFontCache()
   end
 
+  injected = true
   return true
+end
+
+local function tryInject(reason)
+  if inject() then
+    msg("Contrail One + Manrope registriert (" .. reason .. "). /eui -> Fonts -> Global Font waehlen, dann /reload")
+    return true
+  end
+  return false
 end
 
 local frame = CreateFrame("Frame")
 frame:RegisterEvent("ADDON_LOADED")
-frame:SetScript("OnEvent", function(_, _, addonName)
-  if addonName == "EllesmereUI" then
-    inject()
+frame:RegisterEvent("PLAYER_LOGIN")
+frame:SetScript("OnEvent", function(_, event, arg1)
+  if event == "ADDON_LOADED" and arg1 == "EllesmereUI" then
+    tryInject("ADDON_LOADED")
+  elseif event == "PLAYER_LOGIN" then
+    if not injected then
+      tryInject("PLAYER_LOGIN")
+    end
   end
 end)
 
--- EllesmereUI already loaded when we start (Dependencies load order)
-if inject() then
-  print("|cff05d29e" .. ADDON .. "|r: custom fonts registered.")
+SLASH_EUIFONTS1 = "/euifonts"
+SlashCmdList.EUIFONTS = function()
+  if not tryInject("slash") then
+    msg("EllesmereUI noch nicht bereit — bitte /reload", 1, 0.3, 0.3)
+    return
+  end
+  local EUI = EllesmereUI
+  for name, file in pairs(CUSTOM_FONTS) do
+    local registered = EUI.FONT_FILES[name] == file
+    msg(name .. " -> " .. file .. (registered and " |cff00ff00OK|r" or " |cffff0000FEHLT|r"))
+  end
+  local global = EUI.GetFontsDB and EUI.GetFontsDB().global or "?"
+  msg("Aktuell gewaehlte Global Font: |cffFFFF00" .. tostring(global) .. "|r")
 end
+
+-- Late load (LoadAfter EllesmereUI)
+C_Timer.After(0, function()
+  tryInject("init")
+end)
