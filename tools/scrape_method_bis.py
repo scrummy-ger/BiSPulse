@@ -762,6 +762,14 @@ def merge_archon_into_wowhead(
             entry = dict(a)
             entry["source"] = "Archon"
             out[iid] = entry
+        # Always prefer Archon popularity when present (tooltip / checklist %).
+        if a.get("popularity") is not None:
+            out[iid]["popularity"] = a["popularity"]
+            if not out[iid].get("note") and isinstance(a.get("popularity"), (int, float)):
+                out[iid]["note"] = f"Archon {a['popularity']:.1f}%"
+        # If Wowhead left drop empty but Archon later gets one, keep any non-empty.
+        if not (out[iid].get("drop") or "").strip() and (a.get("drop") or "").strip():
+            out[iid]["drop"] = a["drop"]
     return out
 
 

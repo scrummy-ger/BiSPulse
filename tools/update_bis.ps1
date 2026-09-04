@@ -29,5 +29,7 @@ if ($archonOk -or (Test-Path "archon_browser_data.json")) {
   python scrape_method_bis.py --wowhead-json wowhead_browser_data.json
 }
 python enrich_drops.py
+python fill_missing_drops.py
+python fix_dungeon_drops.py
 python check_data_quality.py
 Write-Host "Done. Copy Data/*.lua into the WoW AddOns folder and /reload."

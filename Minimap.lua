@@ -1177,8 +1177,10 @@ function addon:RefreshChecklist()
     if entry.info.slot and entry.info.slot ~= "" then
       dropParts[#dropParts + 1] = entry.info.slot
     end
-    if entry.info.drop and entry.info.drop ~= "" then
-      dropParts[#dropParts + 1] = entry.info.drop
+    local dropSrc = entry.info.drop or ""
+    if dropSrc ~= "" then
+      dropSrc = (BiSPulse.FormatDropSource and BiSPulse.FormatDropSource(dropSrc)) or dropSrc
+      dropParts[#dropParts + 1] = dropSrc
     end
     local pop = ParsePopularity(entry.info)
     if pop then
@@ -1192,7 +1194,7 @@ function addon:RefreshChecklist()
       dropParts[#dropParts + 1] = (L["CHECKLIST_BANK"] or "bank")
     end
     local dropText = table.concat(dropParts, " · ")
-    row.dropText = entry.info.drop or ""
+    row.dropText = dropSrc
     row.drop:SetText(dropText)
     row:Show()
     y = y + 42

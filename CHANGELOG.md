@@ -1,5 +1,37 @@
 # Changelog
 
+## 1.5.10
+
+### DE
+- Checkliste: Drop-Zeile einheitlich als Boss (Instanz), z. B. `Zaen Bladesorrow (Murder Row)`
+- Fehlende Bosse nachgezogen (u. a. Speakeasy Shroud, Vile Vial → Rav'i, Aln'hara Sprigshot → Engineering)
+- Primal-Sentry-Tier mit Boss-Quellen (Voidspire / Dreamrift)
+- Instanz-Mapping für Strong/Alt/Niche (Murder Row, Voidscar, Altar of Fangs, Sporefall, …)
+- Guide-Links: kopierbares Popup (Copy / Strg+C) statt Chat-Spam
+
+### EN
+- Checklist: drop line consistently `Boss (Instance)`, e.g. `Zaen Bladesorrow (Murder Row)`
+- Filled missing bosses (incl. Speakeasy Shroud, Vile Vial → Rav'i, Aln'hara Sprigshot → Engineering)
+- Primal Sentry tier pieces get boss sources (Voidspire / Dreamrift)
+- Instance mapping for Strong/Alt/Niche (Murder Row, Voidscar, Altar of Fangs, Sporefall, …)
+- Guide links: copyable popup (Copy / Ctrl+C) instead of chat spam
+
+## 1.5.9
+
+### DE
+- Drop-Quellen für Tier-Teile nachgezogen (z. B. Skulking Viper → Boss/Zone statt nur %)
+- Farstrider-Bracers korrekt als Wrist statt Chest
+- Guide-Drop-Cache + Fill-Skript, damit Archon-Items Wowhead-Quellen übernehmen
+- Guide-Links: kopierbares Fenster statt Chat-Spam (Copy-Button / Strg+C)
+- Checkliste: Boss-Drops mit Raid/Instanz in Klammern — für BiS/Strong/Alt/Niche
+
+### EN
+- Filled missing drop sources for tier pieces (e.g. Skulking Viper → boss/zone, not just %)
+- Farstrider bracers correctly tagged as Wrist instead of Chest
+- Guide drop cache + fill script so Archon-only items inherit Wowhead sources
+- Guide links: copyable popup instead of chat spam (Copy button / Ctrl+C)
+- Checklist: boss drops annotated with raid/dungeon in parentheses for all ranks (BiS/Strong/Alt/Niche)
+
 ## 1.5.8
 
 ### DE

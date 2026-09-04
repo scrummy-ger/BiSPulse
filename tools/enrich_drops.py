@@ -51,6 +51,14 @@ def drops_from_wowhead_json() -> dict[int, str]:
     return out
 
 
+def drops_from_guide_cache() -> dict[int, str]:
+    cache = ROOT / "tools" / "drop_guide_cache.json"
+    if not cache.is_file():
+        return {}
+    raw = json.loads(cache.read_text(encoding="utf-8"))
+    return {int(k): str(v) for k, v in (raw or {}).items() if v}
+
+
 def lua_escape(s: str) -> str:
     return s.replace("\\", "\\\\").replace('"', '\\"')
 
@@ -62,8 +70,12 @@ def main() -> int:
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
 
+    # After Wowhead scrape + Lua write:
+    #   python enrich_drops.py
+    #   python fill_missing_drops.py
     cache = drops_from_wowhead_json()
-    print(f"Seed drops from Wowhead JSON: {len(cache)}")
+    cache.update(drops_from_guide_cache())
+    print(f"Seed drops from Wowhead JSON + guide cache: {len(cache)}")
 
     missing_ids: list[int] = []
     for path in sorted(DATA_DIR.glob("*.lua")):

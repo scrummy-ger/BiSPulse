@@ -4,7 +4,7 @@
 ## Notes: Wowhead + Archon BiS rankings for all Retail specs.
 ## Notes-deDE: BiS-Rankings von Wowhead + Archon — alle Retail-Specs.
 ## Author: D
-## Version: 1.5.8
+## Version: 1.5.10
 ## SavedVariables: BiSPulseDB
 ## IconTexture: Interface\AddOns\BiSPulse\Media\BiSPulseIcon
 ## Category: Combat

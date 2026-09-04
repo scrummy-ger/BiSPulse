@@ -535,25 +535,249 @@ function addon:MeetsContentFilter(info)
   return true
 end
 
+local guideLinksFrame
+
+local function CopyText(text)
+  if not text or text == "" then
+    return false
+  end
+  if CopyToClipboard then
+    CopyToClipboard(text)
+    return true
+  end
+  return false
+end
+
+local function EnsureGuideLinksFrame()
+  if guideLinksFrame then
+    return guideLinksFrame
+  end
+
+  local f = CreateFrame("Frame", "BiSPulseGuideLinks", UIParent, "BackdropTemplate")
+  f:SetSize(520, 220)
+  f:SetPoint("CENTER", UIParent, "CENTER", 0, 40)
+  f:SetFrameStrata("FULLSCREEN_DIALOG")
+  f:SetFrameLevel(1200)
+  f:SetToplevel(true)
+  f:EnableMouse(true)
+  f:SetMovable(true)
+  f:RegisterForDrag("LeftButton")
+  f:SetScript("OnDragStart", f.StartMoving)
+  f:SetScript("OnDragStop", f.StopMovingOrSizing)
+  f:SetBackdrop({
+    bgFile = "Interface\\Buttons\\WHITE8X8",
+    edgeFile = "Interface\\Buttons\\WHITE8X8",
+    edgeSize = 1,
+    insets = { left = 1, right = 1, top = 1, bottom = 1 },
+  })
+  f:SetBackdropColor(0.05, 0.05, 0.06, 0.98)
+  f:SetBackdropBorderColor(0.15, 0.85, 0.35, 1)
+  f:Hide()
+
+  if UISpecialFrames then
+    tinsert(UISpecialFrames, "BiSPulseGuideLinks")
+  end
+
+  local title = f:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge")
+  title:SetPoint("TOPLEFT", 16, -14)
+  title:SetTextColor(0.95, 0.97, 1.0, 1)
+  f.title = title
+
+  local hint = f:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+  hint:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -6)
+  hint:SetPoint("RIGHT", f, "RIGHT", -48, 0)
+  hint:SetJustifyH("LEFT")
+  hint:SetTextColor(0.55, 0.58, 0.62, 1)
+  hint:SetText(L["GUIDE_COPY_HINT"] or "Click Copy, or select a URL and press Ctrl+C.")
+  f.hint = hint
+
+  local close = CreateFrame("Button", nil, f, "BackdropTemplate")
+  close:SetSize(24, 24)
+  close:SetPoint("TOPRIGHT", -10, -10)
+  close:SetBackdrop({
+    bgFile = "Interface\\Buttons\\WHITE8X8",
+    edgeFile = "Interface\\Buttons\\WHITE8X8",
+    edgeSize = 1,
+  })
+  close:SetBackdropColor(0.09, 0.09, 0.10, 1)
+  close:SetBackdropBorderColor(0.28, 0.28, 0.30, 1)
+  local closeFs = close:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge")
+  closeFs:SetPoint("CENTER")
+  closeFs:SetText("X")
+  closeFs:SetTextColor(0.92, 0.94, 0.96, 1)
+  close:SetScript("OnClick", function()
+    f:Hide()
+  end)
+  close:SetScript("OnEnter", function(self)
+    self:SetBackdropBorderColor(0.15, 0.85, 0.35, 1)
+  end)
+  close:SetScript("OnLeave", function(self)
+    self:SetBackdropBorderColor(0.28, 0.28, 0.30, 1)
+  end)
+
+  f.rows = {}
+  for i = 1, 4 do
+    local row = CreateFrame("Frame", nil, f)
+    row:SetHeight(36)
+    row:SetPoint("LEFT", 16, 0)
+    row:SetPoint("RIGHT", -16, 0)
+    if i == 1 then
+      row:SetPoint("TOP", hint, "BOTTOM", 0, -14)
+    else
+      row:SetPoint("TOP", f.rows[i - 1], "BOTTOM", 0, -8)
+    end
+
+    local label = row:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
+    label:SetPoint("TOPLEFT", 0, 0)
+    label:SetTextColor(0.15, 0.85, 0.35, 1)
+    row.label = label
+
+    local eb = CreateFrame("EditBox", nil, row, "BackdropTemplate")
+    eb:SetHeight(24)
+    eb:SetPoint("TOPLEFT", 0, -14)
+    eb:SetPoint("RIGHT", -78, -14)
+    eb:SetAutoFocus(false)
+    eb:SetFontObject(GameFontHighlightSmall)
+    eb:SetTextInsets(8, 8, 0, 0)
+    eb:SetTextColor(0.92, 0.94, 0.96, 1)
+    eb:SetBackdrop({
+      bgFile = "Interface\\Buttons\\WHITE8X8",
+      edgeFile = "Interface\\Buttons\\WHITE8X8",
+      edgeSize = 1,
+    })
+    eb:SetBackdropColor(0.09, 0.09, 0.10, 1)
+    eb:SetBackdropBorderColor(0.28, 0.28, 0.30, 1)
+    eb:SetScript("OnEditFocusGained", function(self)
+      self:HighlightText()
+      self:SetBackdropBorderColor(0.15, 0.85, 0.35, 1)
+    end)
+    eb:SetScript("OnEditFocusLost", function(self)
+      self:SetBackdropBorderColor(0.28, 0.28, 0.30, 1)
+    end)
+    eb:SetScript("OnEscapePressed", function(self)
+      self:ClearFocus()
+      f:Hide()
+    end)
+    eb:SetScript("OnEnterPressed", function(self)
+      self:ClearFocus()
+    end)
+    eb:SetScript("OnTextChanged", function(self, userInput)
+      if userInput and self._url and self:GetText() ~= self._url then
+        local pos = self:GetCursorPosition()
+        self:SetText(self._url)
+        self:SetCursorPosition(math.min(pos or 0, #self._url))
+        self:HighlightText()
+      end
+    end)
+    row.edit = eb
+
+    local copy = CreateFrame("Button", nil, row, "BackdropTemplate")
+    copy:SetSize(70, 24)
+    copy:SetPoint("RIGHT", 0, -14)
+    copy:SetBackdrop({
+      bgFile = "Interface\\Buttons\\WHITE8X8",
+      edgeFile = "Interface\\Buttons\\WHITE8X8",
+      edgeSize = 1,
+    })
+    copy:SetBackdropColor(0.09, 0.09, 0.10, 1)
+    copy:SetBackdropBorderColor(0.28, 0.28, 0.30, 1)
+    local copyFs = copy:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
+    copyFs:SetPoint("CENTER")
+    copyFs:SetText(L["GUIDE_COPY"] or "Copy")
+    copyFs:SetTextColor(0.92, 0.94, 0.96, 1)
+    copy.text = copyFs
+    copy:SetScript("OnEnter", function(self)
+      self:SetBackdropBorderColor(0.15, 0.85, 0.35, 1)
+    end)
+    copy:SetScript("OnLeave", function(self)
+      self:SetBackdropBorderColor(0.28, 0.28, 0.30, 1)
+    end)
+    copy:SetScript("OnClick", function(self)
+      local url = row.edit._url or row.edit:GetText() or ""
+      if CopyText(url) then
+        self.text:SetText(L["GUIDE_COPIED_SHORT"] or "Copied!")
+        self.text:SetTextColor(0.15, 0.85, 0.35, 1)
+        C_Timer.After(1.2, function()
+          if self.text then
+            self.text:SetText(L["GUIDE_COPY"] or "Copy")
+            self.text:SetTextColor(0.92, 0.94, 0.96, 1)
+          end
+        end)
+      else
+        row.edit:SetFocus()
+        row.edit:HighlightText()
+      end
+    end)
+    row.copy = copy
+    f.rows[i] = row
+  end
+
+  guideLinksFrame = f
+  return f
+end
+
 function addon:PrintGuideLinks(pack)
-  pack = pack or (addon.GetPlayerPack and addon:GetPlayerPack())
+  pack = pack or (addon.GetChecklistPack and addon:GetChecklistPack()) or (addon.GetPlayerPack and addon:GetPlayerPack())
   if not pack or not pack.guides then
     addon:Print(L["NO_SPEC_DATA"] or "No guide links for this spec.")
     return
   end
+
   local g = pack.guides
+  local links = {}
   if g.wowhead then
-    addon:Print((L["SOURCE_WOWHEAD"] or "Wowhead") .. ": " .. g.wowhead)
+    links[#links + 1] = { label = L["SOURCE_WOWHEAD"] or "Wowhead", url = g.wowhead }
   end
   if g.archonRaid then
-    addon:Print((L["SOURCE_ARCHON"] or "Archon") .. " Raid: " .. g.archonRaid)
+    links[#links + 1] = {
+      label = (L["SOURCE_ARCHON"] or "Archon") .. " Raid",
+      url = g.archonRaid,
+    }
   end
   if g.archonMythic then
-    addon:Print((L["SOURCE_ARCHON"] or "Archon") .. " Mythic+: " .. g.archonMythic)
+    links[#links + 1] = {
+      label = (L["SOURCE_ARCHON"] or "Archon") .. " Mythic+",
+      url = g.archonMythic,
+    }
   end
-  if CopyToClipboard and g.wowhead then
-    CopyToClipboard(g.wowhead)
-    addon:Print(L["GUIDE_COPIED"] or "Wowhead guide URL copied to clipboard.")
+  if #links == 0 then
+    addon:Print(L["NO_SPEC_DATA"] or "No guide links for this spec.")
+    return
+  end
+
+  local f = EnsureGuideLinksFrame()
+  local specName = ""
+  if pack.specName and pack.className then
+    specName = pack.specName .. " " .. pack.className
+  elseif pack.specName then
+    specName = pack.specName
+  end
+  f.title:SetText((L["GUIDE_LINKS_TITLE"] or "Guide links") .. (specName ~= "" and (" — " .. specName) or ""))
+
+  local yPad = 70 + (#links * 44)
+  f:SetHeight(math.max(160, yPad))
+
+  for i, row in ipairs(f.rows) do
+    local link = links[i]
+    if link then
+      row.label:SetText(link.label)
+      row.edit._url = link.url
+      row.edit:SetText(link.url)
+      row.edit:SetCursorPosition(0)
+      row.copy.text:SetText(L["GUIDE_COPY"] or "Copy")
+      row.copy.text:SetTextColor(0.92, 0.94, 0.96, 1)
+      row:Show()
+    else
+      row:Hide()
+    end
+  end
+
+  f:Show()
+  f:Raise()
+  -- Focus first URL so Ctrl+C works immediately.
+  if f.rows[1] and f.rows[1]:IsShown() then
+    f.rows[1].edit:SetFocus()
+    f.rows[1].edit:HighlightText()
   end
 end
 
