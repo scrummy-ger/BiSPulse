@@ -145,7 +145,23 @@ local function PlayerOwnsItem(itemID)
   return addon:PlayerOwnsItem(itemID)
 end
 
-local function BuildSortedEntries(pack)
+local function ParsePopularity(info)
+  if not info then
+    return nil
+  end
+  if type(info.popularity) == "number" then
+    return info.popularity
+  end
+  if info.note then
+    local pct = info.note:match("^Archon%s+([%d%.]+)%%")
+    if pct then
+      return tonumber(pct)
+    end
+  end
+  return nil
+end
+
+local function BuildSortedEntries(pack, sortMode)
   local list = {}
   if not pack or not pack.items then
     return list
@@ -153,16 +169,37 @@ local function BuildSortedEntries(pack)
   for itemID, info in pairs(pack.items) do
     if info and not (info.slot == "Embellishment" or (info.note and info.note:find("Embellishment", 1, true))) then
       if addon:MeetsContentFilter(info) then
-        -- Checklist shows BiS + Strong (and lower only if content extras).
         list[#list + 1] = { id = itemID, info = info }
       end
     end
   end
+  sortMode = sortMode or "rank"
   table.sort(list, function(a, b)
-    local sa = DATA.RANK_ORDER[a.info.rank] or 0
-    local sb = DATA.RANK_ORDER[b.info.rank] or 0
-    if sa ~= sb then
-      return sa > sb
+    if sortMode == "name" then
+      local na, nb = a.info.name or "", b.info.name or ""
+      if na ~= nb then
+        return na < nb
+      end
+    elseif sortMode == "slot" then
+      local sa, sb = a.info.slot or "", b.info.slot or ""
+      if sa ~= sb then
+        return sa < sb
+      end
+    elseif sortMode == "missing" then
+      local oa = PlayerOwnsItem(a.id) and 1 or 0
+      local ob = PlayerOwnsItem(b.id) and 1 or 0
+      if oa ~= ob then
+        return oa < ob -- missing first
+      end
+    end
+    local ra = DATA.RANK_ORDER[a.info.rank] or 0
+    local rb = DATA.RANK_ORDER[b.info.rank] or 0
+    if ra ~= rb then
+      return ra > rb
+    end
+    local pa, pb = ParsePopularity(a.info) or -1, ParsePopularity(b.info) or -1
+    if pa ~= pb then
+      return pa > pb
     end
     return (a.info.name or "") < (b.info.name or "")
   end)
@@ -184,6 +221,11 @@ local function EntryPassesChecklistFilters(entry, db)
       return false
     end
   end
+  if db and db.checklistMissingOnly then
+    if PlayerOwnsItem(entry.id) then
+      return false
+    end
+  end
   local q = (db and db.checklistSearch) or ""
   q = tostring(q):lower():gsub("^%s+", ""):gsub("%s+$", "")
   if q ~= "" then
@@ -196,24 +238,354 @@ local function EntryPassesChecklistFilters(entry, db)
   return true
 end
 
-local function CollectSlotsFromPack(pack)
+local function CollectSlotsFromPack(pack, rankFilter)
   local seen = {}
   local slots = {}
   if not pack or not pack.items then
     return slots
   end
+  rankFilter = rankFilter or "all"
   for _, info in pairs(pack.items) do
-    local slot = info and info.slot
-    if slot and slot ~= "" and slot ~= "Embellishment" and not seen[slot] then
-      seen[slot] = true
-      slots[#slots + 1] = slot
+    if info and addon:MeetsContentFilter(info) then
+      if rankFilter == "all" or info.rank == rankFilter then
+        local slot = info.slot
+        if slot and slot ~= "" and slot ~= "Embellishment" and not seen[slot] then
+          seen[slot] = true
+          slots[#slots + 1] = slot
+        end
+      end
     end
   end
   table.sort(slots)
   return slots
 end
 
-local CHECKLIST_LAYOUT_REV = 4
+local function ShortRankLabel(rank)
+  if rank == "all" then
+    return L["CHECKLIST_FILTER_ALL"] or "All"
+  elseif rank == "bis" then
+    return L["CHECKLIST_RANK_BIS"] or "BiS"
+  elseif rank == "strong" then
+    return L["CHECKLIST_RANK_STRONG"] or "Strong"
+  elseif rank == "alt" then
+    return L["CHECKLIST_RANK_ALT"] or "Alt"
+  elseif rank == "ok" then
+    return L["CHECKLIST_RANK_OK"] or "Niche"
+  end
+  return addon:RankLabel(rank)
+end
+
+-- Flat dark / green accent skin (inspired by modern addon UIs like GRIP-EMS).
+local SKIN = {
+  bg = { 0.05, 0.05, 0.06, 0.98 },
+  panel = { 0.09, 0.09, 0.10, 1 },
+  border = { 0.28, 0.28, 0.30, 1 },
+  accent = { 0.15, 0.85, 0.35, 1 },
+  text = { 0.92, 0.94, 0.96, 1 },
+  muted = { 0.55, 0.58, 0.62, 1 },
+  title = { 0.95, 0.97, 1.0, 1 },
+}
+
+local function SkinBackdrop(frame, bg, border, edgeSize)
+  frame:SetBackdrop({
+    bgFile = "Interface\\Buttons\\WHITE8X8",
+    edgeFile = "Interface\\Buttons\\WHITE8X8",
+    edgeSize = edgeSize or 1,
+    insets = { left = 1, right = 1, top = 1, bottom = 1 },
+  })
+  local c = bg or SKIN.bg
+  frame:SetBackdropColor(c[1], c[2], c[3], c[4] or 1)
+  local b = border or SKIN.border
+  frame:SetBackdropBorderColor(b[1], b[2], b[3], b[4] or 1)
+end
+
+-- Small down-caret drawn with textures (WoW fonts often lack ▾ and show □).
+local function AttachDropCaret(parent)
+  local caret = CreateFrame("Frame", nil, parent)
+  caret:SetSize(10, 6)
+  caret:SetPoint("RIGHT", parent, "RIGHT", -8, 0)
+  local function arm(rot, ox)
+    local t = caret:CreateTexture(nil, "ARTWORK")
+    t:SetColorTexture(1, 1, 1, 1)
+    t:SetSize(7, 1.25)
+    t:SetPoint("CENTER", caret, "CENTER", ox, 0.5)
+    if t.SetRotation then
+      t:SetRotation(math.rad(rot))
+    end
+    return t
+  end
+  caret.left = arm(38, -1.6)
+  caret.right = arm(-38, 1.6)
+  function caret:SetMuted(muted)
+    local c = muted and SKIN.muted or SKIN.accent
+    if self.left then
+      self.left:SetColorTexture(c[1], c[2], c[3], 1)
+    end
+    if self.right then
+      self.right:SetColorTexture(c[1], c[2], c[3], 1)
+    end
+  end
+  caret:SetMuted(true)
+  parent.caret = caret
+  return caret
+end
+
+local function CreateFlatDrop(parent, width, height, initialText)
+  local b = CreateFrame("Button", nil, parent, "BackdropTemplate")
+  b:SetSize(width, height)
+  SkinBackdrop(b, SKIN.panel, SKIN.border, 1)
+  local fs = b:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
+  fs:SetPoint("LEFT", 10, 0)
+  fs:SetPoint("RIGHT", -22, 0)
+  fs:SetJustifyH("LEFT")
+  fs:SetWordWrap(false)
+  fs:SetText(initialText or "")
+  fs:SetTextColor(SKIN.text[1], SKIN.text[2], SKIN.text[3], 1)
+  b.text = fs
+  AttachDropCaret(b)
+  b:SetScript("OnEnter", function(self)
+    self:SetBackdropBorderColor(SKIN.accent[1], SKIN.accent[2], SKIN.accent[3], 1)
+    if self.caret then
+      self.caret:SetMuted(false)
+    end
+  end)
+  b:SetScript("OnLeave", function(self)
+    self:SetBackdropBorderColor(SKIN.border[1], SKIN.border[2], SKIN.border[3], 1)
+    if self.caret then
+      self.caret:SetMuted(true)
+    end
+  end)
+  function b:SetLabel(text)
+    if self.text then
+      self.text:SetText(text or "")
+    end
+  end
+  return b
+end
+
+local flatMenu
+
+local function IsUnderFrame(frame, node)
+  local cur = node
+  while cur do
+    if cur == frame then
+      return true
+    end
+    cur = cur.GetParent and cur:GetParent() or nil
+  end
+  return false
+end
+
+local function MouseOverFlatMenuOrAnchor()
+  if not flatMenu then
+    return false
+  end
+  local foci = (GetMouseFoci and GetMouseFoci()) or nil
+  if foci and #foci > 0 then
+    for _, focus in ipairs(foci) do
+      if IsUnderFrame(flatMenu, focus) then
+        return true
+      end
+      if flatMenu.anchor and IsUnderFrame(flatMenu.anchor, focus) then
+        return true
+      end
+    end
+    return false
+  end
+  local focus = GetMouseFocus and GetMouseFocus() or nil
+  if focus then
+    return IsUnderFrame(flatMenu, focus) or (flatMenu.anchor and IsUnderFrame(flatMenu.anchor, focus))
+  end
+  return (flatMenu:IsMouseOver() and true or false)
+    or (flatMenu.anchor and flatMenu.anchor:IsMouseOver() and true or false)
+end
+
+local function HideFlatMenu()
+  if not flatMenu then
+    return
+  end
+  flatMenu:UnregisterEvent("GLOBAL_MOUSE_DOWN")
+  flatMenu:Hide()
+end
+
+local function DiscardFlatMenu()
+  HideFlatMenu()
+  if flatMenu then
+    flatMenu:SetParent(nil)
+    flatMenu = nil
+  end
+end
+
+local function ShowFlatMenu(anchor, entries)
+  if not flatMenu then
+    -- Anonymous + TOOLTIP strata: stays above checklist SetToplevel raises.
+    flatMenu = CreateFrame("Frame", nil, UIParent, "BackdropTemplate")
+    flatMenu:SetFrameStrata("TOOLTIP")
+    flatMenu:SetFrameLevel(100)
+    flatMenu:SetClampedToScreen(true)
+    flatMenu:EnableMouse(true)
+    SkinBackdrop(flatMenu, SKIN.bg, SKIN.accent, 1)
+    flatMenu.buttons = {}
+    flatMenu:SetScript("OnHide", function(self)
+      self:UnregisterEvent("GLOBAL_MOUSE_DOWN")
+      for _, btn in ipairs(self.buttons) do
+        btn:Hide()
+      end
+    end)
+    flatMenu:SetScript("OnEvent", function(self, event)
+      if event ~= "GLOBAL_MOUSE_DOWN" or not self:IsShown() then
+        return
+      end
+      -- Defer so button MouseDown/OnClick can run before we dismiss.
+      C_Timer.After(0, function()
+        if not flatMenu or not flatMenu:IsShown() then
+          return
+        end
+        if not MouseOverFlatMenuOrAnchor() then
+          HideFlatMenu()
+        end
+      end)
+    end)
+  end
+
+  flatMenu.anchor = anchor
+  flatMenu:UnregisterEvent("GLOBAL_MOUSE_DOWN")
+  local width = math.max(anchor:GetWidth() or 120, 120)
+  local y = -6
+  local i = 0
+  for _, entry in ipairs(entries or {}) do
+    i = i + 1
+    local btn = flatMenu.buttons[i]
+    if not btn then
+      btn = CreateFrame("Button", nil, flatMenu, "BackdropTemplate")
+      btn:SetHeight(26)
+      btn:EnableMouse(true)
+      btn:RegisterForClicks("LeftButtonDown")
+      SkinBackdrop(btn, SKIN.panel, { 0.09, 0.09, 0.10, 0 }, 1)
+      local accent = btn:CreateTexture(nil, "ARTWORK")
+      accent:SetWidth(2)
+      accent:SetPoint("TOPLEFT", 0, 0)
+      accent:SetPoint("BOTTOMLEFT", 0, 0)
+      accent:SetColorTexture(SKIN.accent[1], SKIN.accent[2], SKIN.accent[3], 1)
+      accent:Hide()
+      btn.accent = accent
+      local fs = btn:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
+      fs:SetPoint("LEFT", 12, 0)
+      fs:SetPoint("RIGHT", -10, 0)
+      fs:SetJustifyH("LEFT")
+      btn.text = fs
+      btn:SetScript("OnEnter", function(self)
+        self:SetBackdropColor(0.08, 0.16, 0.10, 1)
+        self:SetBackdropBorderColor(SKIN.accent[1], SKIN.accent[2], SKIN.accent[3], 0.5)
+      end)
+      btn:SetScript("OnLeave", function(self)
+        if self._checked then
+          self:SetBackdropColor(0.07, 0.12, 0.09, 1)
+        else
+          self:SetBackdropColor(SKIN.panel[1], SKIN.panel[2], SKIN.panel[3], 1)
+        end
+        self:SetBackdropBorderColor(0.09, 0.09, 0.10, 0)
+      end)
+      -- LeftButtonDown: select before deferred outside-click dismiss runs.
+      btn:SetScript("OnClick", function(self)
+        local func = self._menuFunc
+        HideFlatMenu()
+        if func then
+          func()
+        end
+      end)
+      flatMenu.buttons[i] = btn
+    end
+    btn:ClearAllPoints()
+    btn:SetPoint("TOPLEFT", 6, y)
+    btn:SetPoint("TOPRIGHT", -6, y)
+    btn:SetFrameLevel((flatMenu:GetFrameLevel() or 1) + 5)
+    btn.text:SetText(entry.text or "")
+    btn._checked = entry.checked and true or false
+    if btn.accent then
+      if entry.checked then
+        btn.accent:Show()
+        btn:SetBackdropColor(0.07, 0.12, 0.09, 1)
+        btn.text:SetTextColor(SKIN.accent[1], SKIN.accent[2], SKIN.accent[3], 1)
+      else
+        btn.accent:Hide()
+        btn:SetBackdropColor(SKIN.panel[1], SKIN.panel[2], SKIN.panel[3], 1)
+        btn.text:SetTextColor(SKIN.text[1], SKIN.text[2], SKIN.text[3], 1)
+      end
+    end
+    btn._menuFunc = entry.func
+    btn:Show()
+    y = y - 28
+  end
+  for j = i + 1, #flatMenu.buttons do
+    flatMenu.buttons[j]:Hide()
+  end
+
+  flatMenu:SetSize(width + 4, math.abs(y) + 8)
+  flatMenu:ClearAllPoints()
+  flatMenu:SetPoint("TOPLEFT", anchor, "BOTTOMLEFT", 0, -2)
+  flatMenu:SetFrameStrata("TOOLTIP")
+  flatMenu:SetFrameLevel(100)
+  flatMenu:Show()
+  -- Ignore the opening click; listen for the next outside click.
+  C_Timer.After(0, function()
+    if flatMenu and flatMenu:IsShown() then
+      flatMenu:RegisterEvent("GLOBAL_MOUSE_DOWN")
+    end
+  end)
+end
+
+local CHECKLIST_LAYOUT_REV = 15
+
+local function NextChecklistFrameName()
+  addon._checklistFrameSeq = (addon._checklistFrameSeq or 0) + 1
+  return "BiSPulseChecklist_" .. tostring(addon._checklistFrameSeq)
+end
+
+local function CreateFlatButton(parent, width, height, label)
+  local b = CreateFrame("Button", nil, parent, "BackdropTemplate")
+  b:SetSize(width, height)
+  SkinBackdrop(b, SKIN.panel, SKIN.border, 1)
+  local fs = b:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
+  fs:SetPoint("CENTER")
+  fs:SetText(label or "")
+  fs:SetTextColor(SKIN.text[1], SKIN.text[2], SKIN.text[3], 1)
+  b.text = fs
+  b:SetScript("OnEnter", function(self)
+    if not self:IsEnabled() then
+      return
+    end
+    self:SetBackdropBorderColor(SKIN.accent[1], SKIN.accent[2], SKIN.accent[3], 1)
+  end)
+  b:SetScript("OnLeave", function(self)
+    if self._active then
+      self:SetBackdropBorderColor(SKIN.accent[1], SKIN.accent[2], SKIN.accent[3], 1)
+    else
+      self:SetBackdropBorderColor(SKIN.border[1], SKIN.border[2], SKIN.border[3], 1)
+    end
+  end)
+  b:SetScript("OnDisable", function(self)
+    if self.text then
+      self.text:SetTextColor(SKIN.muted[1], SKIN.muted[2], SKIN.muted[3], 1)
+    end
+  end)
+  b:SetScript("OnEnable", function(self)
+    if self.text then
+      self.text:SetTextColor(SKIN.text[1], SKIN.text[2], SKIN.text[3], 1)
+    end
+  end)
+  function b:SetActive(active)
+    self._active = active and true or false
+    if active then
+      self:SetBackdropBorderColor(SKIN.accent[1], SKIN.accent[2], SKIN.accent[3], 1)
+      self:SetBackdropColor(0.08, 0.16, 0.10, 1)
+    else
+      self:SetBackdropBorderColor(SKIN.border[1], SKIN.border[2], SKIN.border[3], 1)
+      self:SetBackdropColor(SKIN.panel[1], SKIN.panel[2], SKIN.panel[3], 1)
+    end
+  end
+  return b
+end
 
 local function EnsureChecklist()
   if checklist then
@@ -223,11 +595,14 @@ local function EnsureChecklist()
     checklist:Hide()
     checklist:SetParent(nil)
     checklist = nil
+    DiscardFlatMenu()
   end
 
-  local f = CreateFrame("Frame", "BiSPulseChecklist", UIParent, "BackdropTemplate")
+  -- Unique frame name avoids CreateFrame collisions when the layout is rebuilt mid-session.
+  local frameName = NextChecklistFrameName()
+  local f = CreateFrame("Frame", frameName, UIParent, "BackdropTemplate")
   f.layoutRev = CHECKLIST_LAYOUT_REV
-  f:SetSize(460, 540)
+  f:SetSize(480, 580)
   f:SetPoint("CENTER", UIParent, "CENTER", 180, 0)
   f:SetFrameStrata("FULLSCREEN_DIALOG")
   f:SetFrameLevel(1000)
@@ -237,40 +612,29 @@ local function EnsureChecklist()
   f:RegisterForDrag("LeftButton")
   f:SetScript("OnDragStart", f.StartMoving)
   f:SetScript("OnDragStop", f.StopMovingOrSizing)
-  f:SetBackdrop({
-    bgFile = "Interface\\ChatFrame\\ChatFrameBackground",
-    edgeFile = "Interface\\DialogFrame\\UI-DialogBox-Border",
-    tile = true,
-    tileSize = 32,
-    edgeSize = 24,
-    insets = { left = 6, right = 6, top = 6, bottom = 6 },
-  })
-  f:SetBackdropColor(0.06, 0.07, 0.09, 0.97)
+  SkinBackdrop(f, SKIN.bg, SKIN.accent, 1)
   f:Hide()
+  f:HookScript("OnHide", function()
+    HideFlatMenu()
+  end)
 
   if UISpecialFrames then
-    tinsert(UISpecialFrames, "BiSPulseChecklist")
+    tinsert(UISpecialFrames, frameName)
   end
 
-  local close = CreateFrame("Button", nil, f, "UIPanelCloseButton")
-  close:SetPoint("TOPRIGHT", -2, -2)
+  local close = CreateFlatButton(f, 24, 24, "X")
+  close:SetPoint("TOPRIGHT", -10, -10)
   close:SetFrameLevel((f:GetFrameLevel() or 1) + 20)
-  close:EnableMouse(true)
-  close:RegisterForClicks("AnyUp")
+  if close.text then
+    close.text:SetFontObject(GameFontNormalLarge)
+  end
   close:SetScript("OnClick", function()
     f:Hide()
   end)
-  if not close:GetNormalTexture() then
-    close:SetNormalTexture("Interface\\Buttons\\UI-Panel-MinimizeButton-Up")
-    close:SetPushedTexture("Interface\\Buttons\\UI-Panel-MinimizeButton-Down")
-    close:SetHighlightTexture("Interface\\Buttons\\UI-Panel-MinimizeButton-Highlight")
-  end
   f.closeButton = close
 
-  local mainBtn = CreateFrame("Button", nil, f, "UIPanelButtonTemplate")
-  mainBtn:SetSize(72, 20)
-  mainBtn:SetPoint("TOPRIGHT", f, "TOPRIGHT", -36, -16)
-  mainBtn:SetText(L["CHECKLIST_MAIN"] or "Main")
+  local mainBtn = CreateFlatButton(f, 64, 24, L["CHECKLIST_MAIN"] or "Main")
+  mainBtn:SetPoint("TOPRIGHT", close, "TOPLEFT", -8, 0)
   mainBtn:SetScript("OnClick", function()
     local db = addon:GetDB()
     if db then
@@ -280,10 +644,8 @@ local function EnsureChecklist()
   end)
   f.mainBtn = mainBtn
 
-  local offBtn = CreateFrame("Button", nil, f, "UIPanelButtonTemplate")
-  offBtn:SetSize(72, 20)
+  local offBtn = CreateFlatButton(f, 72, 24, L["CHECKLIST_OFFSPEC"] or "Offspec")
   offBtn:SetPoint("RIGHT", mainBtn, "LEFT", -6, 0)
-  offBtn:SetText(L["CHECKLIST_OFFSPEC"] or "Offspec")
   offBtn:SetScript("OnClick", function()
     local db = addon:GetDB()
     if not db then
@@ -303,104 +665,224 @@ local function EnsureChecklist()
   f.offBtn = offBtn
 
   local title = f:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge")
-  title:SetPoint("TOPLEFT", 18, -16)
+  title:SetPoint("TOPLEFT", 16, -14)
   title:SetPoint("RIGHT", offBtn, "LEFT", -10, 0)
   title:SetJustifyH("LEFT")
   title:SetText(L["CHECKLIST_TITLE"] or "BiS Checklist")
+  title:SetTextColor(SKIN.title[1], SKIN.title[2], SKIN.title[3], 1)
   f.title = title
 
   local subtitle = f:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-  subtitle:SetPoint("TOPLEFT", 18, -42)
+  subtitle:SetPoint("TOPLEFT", 16, -40)
   subtitle:SetPoint("RIGHT", f, "RIGHT", -16, 0)
   subtitle:SetJustifyH("LEFT")
   subtitle:SetWordWrap(true)
+  subtitle:SetTextColor(SKIN.muted[1], SKIN.muted[2], SKIN.muted[3], 1)
   f.subtitle = subtitle
 
   local progress = f:CreateFontString(nil, "OVERLAY", "GameFontNormal")
   progress:SetPoint("TOPLEFT", subtitle, "BOTTOMLEFT", 0, -6)
+  progress:SetTextColor(SKIN.accent[1], SKIN.accent[2], SKIN.accent[3], 1)
   f.progress = progress
 
-  -- Filter row: rank + slot + search
-  local rankBtn = CreateFrame("Button", nil, f, "UIPanelButtonTemplate")
-  rankBtn:SetSize(100, 22)
-  rankBtn:SetPoint("TOPLEFT", progress, "BOTTOMLEFT", 0, -8)
-  local function SyncRankBtn()
-    local db = addon:GetDB()
-    local v = (db and db.checklistRankFilter) or "all"
-    if v == "all" then
-      rankBtn:SetText(L["CHECKLIST_FILTER_ALL"] or "All")
-    else
-      rankBtn:SetText(addon:RankLabel(v))
-    end
-  end
-  rankBtn:SetScript("OnClick", function()
-    local order = { "all", "bis", "strong", "alt", "ok" }
-    local db = addon:GetDB()
-    if not db then
+  -- Filter row: flat rank / slot / sort drops
+  local rankDrop
+  local slotDrop
+
+  local function SyncRankDrop()
+    if not rankDrop or not rankDrop.SetLabel then
       return
     end
-    local current = db.checklistRankFilter or "all"
-    local idx = 1
-    for i, v in ipairs(order) do
-      if v == current then
-        idx = i
-        break
-      end
-    end
-    db.checklistRankFilter = order[(idx % #order) + 1]
-    SyncRankBtn()
-    addon:RefreshChecklist()
-  end)
-  f.rankFilterBtn = rankBtn
-  f.SyncRankBtn = SyncRankBtn
+    local db = addon:GetDB()
+    rankDrop:SetLabel(ShortRankLabel((db and db.checklistRankFilter) or "all"))
+  end
 
-  local slotBtn = CreateFrame("Button", nil, f, "UIPanelButtonTemplate")
-  slotBtn:SetSize(100, 22)
-  slotBtn:SetPoint("LEFT", rankBtn, "RIGHT", 6, 0)
-  local function SyncSlotBtn()
+  local function SyncSlotDrop()
+    if not slotDrop or not slotDrop.SetLabel then
+      return
+    end
     local db = addon:GetDB()
     local v = (db and db.checklistSlotFilter) or "all"
     if v == "all" then
-      slotBtn:SetText(L["CHECKLIST_FILTER_ALL"] or "All")
+      slotDrop:SetLabel(L["CHECKLIST_FILTER_ALL"] or "All")
     else
-      slotBtn:SetText(v)
+      slotDrop:SetLabel(v)
     end
   end
-  slotBtn:SetScript("OnClick", function()
-    local db = addon:GetDB()
-    if not db then
+
+  local function SortLabel(mode)
+    if mode == "name" then
+      return L["CHECKLIST_SORT_NAME"] or "Name"
+    elseif mode == "slot" then
+      return L["CHECKLIST_SORT_SLOT"] or "Slot"
+    elseif mode == "missing" then
+      return L["CHECKLIST_SORT_MISSING"] or "Missing first"
+    end
+    return L["CHECKLIST_SORT_RANK"] or "Rank"
+  end
+
+  local function SyncSortDrop()
+    if not f.sortDrop or not f.sortDrop.SetLabel then
       return
     end
-    local pack = addon:GetChecklistPack()
-    local slots = CollectSlotsFromPack(pack)
-    local order = { "all" }
-    for _, s in ipairs(slots) do
-      order[#order + 1] = s
-    end
-    local current = db.checklistSlotFilter or "all"
-    local idx = 1
-    for i, v in ipairs(order) do
-      if v == current then
-        idx = i
-        break
-      end
-    end
-    db.checklistSlotFilter = order[(idx % #order) + 1]
-    SyncSlotBtn()
-    addon:RefreshChecklist()
-  end)
-  f.slotFilterBtn = slotBtn
-  f.SyncSlotBtn = SyncSlotBtn
+    local db = addon:GetDB()
+    f.sortDrop:SetLabel(SortLabel((db and db.checklistSort) or "rank"))
+  end
 
-  local search = CreateFrame("EditBox", "BiSPulseChecklistSearch", f, "InputBoxTemplate")
-  search:SetSize(200, 20)
-  search:SetPoint("LEFT", slotBtn, "RIGHT", 10, 0)
+  rankDrop = CreateFlatDrop(f, 100, 28, ShortRankLabel("all"))
+  rankDrop:SetPoint("TOPLEFT", progress, "BOTTOMLEFT", 0, -8)
+  rankDrop:SetScript("OnClick", function(self)
+    if flatMenu and flatMenu:IsShown() and flatMenu.anchor == self then
+      HideFlatMenu()
+      return
+    end
+    local current = (addon:GetDB() and addon:GetDB().checklistRankFilter) or "all"
+    local order = {
+      { value = "all", text = L["CHECKLIST_FILTER_ALL"] or "All" },
+      { value = "bis", text = ShortRankLabel("bis") },
+      { value = "strong", text = ShortRankLabel("strong") },
+      { value = "alt", text = ShortRankLabel("alt") },
+      { value = "ok", text = ShortRankLabel("ok") },
+    }
+    local entries = {}
+    for _, row in ipairs(order) do
+      entries[#entries + 1] = {
+        text = row.text,
+        checked = current == row.value,
+        func = function()
+          local db = addon:GetDB()
+          if not db then
+            return
+          end
+          db.checklistRankFilter = row.value
+          db.checklistSlotFilter = "all"
+          SyncRankDrop()
+          SyncSlotDrop()
+          addon:RefreshChecklist()
+        end,
+      }
+    end
+    ShowFlatMenu(self, entries)
+  end)
+  f.rankFilterDrop = rankDrop
+  f.SyncRankBtn = SyncRankDrop
+  SyncRankDrop()
+
+  slotDrop = CreateFlatDrop(f, 110, 28, L["CHECKLIST_FILTER_ALL"] or "All")
+  slotDrop:SetPoint("LEFT", rankDrop, "RIGHT", 8, 0)
+  slotDrop:SetScript("OnClick", function(self)
+    if flatMenu and flatMenu:IsShown() and flatMenu.anchor == self then
+      HideFlatMenu()
+      return
+    end
+    local db = addon:GetDB()
+    local pack = addon:GetChecklistPack()
+    local slots = CollectSlotsFromPack(pack, (db and db.checklistRankFilter) or "all")
+    local current = (db and db.checklistSlotFilter) or "all"
+    local entries = {
+      {
+        text = L["CHECKLIST_FILTER_ALL"] or "All",
+        checked = current == "all",
+        func = function()
+          local d = addon:GetDB()
+          if d then
+            d.checklistSlotFilter = "all"
+          end
+          SyncSlotDrop()
+          addon:RefreshChecklist()
+        end,
+      },
+    }
+    for _, s in ipairs(slots) do
+      local slotValue = s
+      entries[#entries + 1] = {
+        text = slotValue,
+        checked = current == slotValue,
+        func = function()
+          local d = addon:GetDB()
+          if d then
+            d.checklistSlotFilter = slotValue
+          end
+          SyncSlotDrop()
+          addon:RefreshChecklist()
+        end,
+      }
+    end
+    ShowFlatMenu(self, entries)
+  end)
+  f.slotFilterDrop = slotDrop
+  f.SyncSlotBtn = SyncSlotDrop
+  SyncSlotDrop()
+
+  local sortDrop = CreateFlatDrop(f, 120, 28, SortLabel("rank"))
+  sortDrop:SetPoint("LEFT", slotDrop, "RIGHT", 8, 0)
+  sortDrop:SetScript("OnClick", function(self)
+    if flatMenu and flatMenu:IsShown() and flatMenu.anchor == self then
+      HideFlatMenu()
+      return
+    end
+    local current = (addon:GetDB() and addon:GetDB().checklistSort) or "rank"
+    local order = {
+      { value = "rank", text = SortLabel("rank") },
+      { value = "name", text = SortLabel("name") },
+      { value = "slot", text = SortLabel("slot") },
+      { value = "missing", text = SortLabel("missing") },
+    }
+    local entries = {}
+    for _, row in ipairs(order) do
+      entries[#entries + 1] = {
+        text = row.text,
+        checked = current == row.value,
+        func = function()
+          local db = addon:GetDB()
+          if db then
+            db.checklistSort = row.value
+          end
+          SyncSortDrop()
+          addon:RefreshChecklist()
+        end,
+      }
+    end
+    ShowFlatMenu(self, entries)
+  end)
+  f.sortDrop = sortDrop
+  f.SyncSortDrop = SyncSortDrop
+  SyncSortDrop()
+
+  -- Full-width search row (fixes overflow against the right edge)
+  local search = CreateFrame("EditBox", nil, f, "BackdropTemplate")
+  search:SetHeight(28)
+  search:SetPoint("TOPLEFT", 16, -118)
+  search:SetPoint("TOPRIGHT", -16, -118)
   search:SetAutoFocus(false)
   search:SetMaxLetters(40)
+  search:SetFontObject(GameFontHighlight)
+  search:SetTextInsets(10, 10, 0, 0)
+  search:SetTextColor(SKIN.text[1], SKIN.text[2], SKIN.text[3], 1)
+  SkinBackdrop(search, SKIN.panel, SKIN.border, 1)
   search:SetScript("OnEnterPressed", function(self)
     self:ClearFocus()
   end)
+  search:SetScript("OnEditFocusGained", function(self)
+    self:SetBackdropBorderColor(SKIN.accent[1], SKIN.accent[2], SKIN.accent[3], 1)
+    if f.searchHint then
+      f.searchHint:Hide()
+    end
+  end)
+  search:SetScript("OnEditFocusLost", function(self)
+    self:SetBackdropBorderColor(SKIN.border[1], SKIN.border[2], SKIN.border[3], 1)
+    if f.searchHint and (self:GetText() or "") == "" then
+      f.searchHint:Show()
+    end
+  end)
   search:SetScript("OnTextChanged", function(self, userInput)
+    if f.searchHint then
+      if (self:GetText() or "") == "" and not self:HasFocus() then
+        f.searchHint:Show()
+      else
+        f.searchHint:Hide()
+      end
+    end
     if not userInput then
       return
     end
@@ -415,63 +897,69 @@ local function EnsureChecklist()
       addon:RefreshChecklist()
     end)
   end)
-  search:SetScript("OnEditFocusGained", function(self)
-    if self:GetText() == "" then
-      -- placeholder via fontstring below
-    end
-  end)
   f.searchBox = search
 
-  local searchHint = f:CreateFontString(nil, "OVERLAY", "GameFontDisableSmall")
-  searchHint:SetPoint("LEFT", search, "LEFT", 6, 0)
-  searchHint:SetText(L["CHECKLIST_SEARCH"] or "Search…")
+  local searchHint = f:CreateFontString(nil, "OVERLAY", "GameFontDisable")
+  searchHint:SetPoint("LEFT", search, "LEFT", 10, 0)
+  searchHint:SetText(L["CHECKLIST_SEARCH"] or "Search...")
+  searchHint:SetTextColor(SKIN.muted[1], SKIN.muted[2], SKIN.muted[3], 1)
   f.searchHint = searchHint
-  search:HookScript("OnTextChanged", function(self)
-    if f.searchHint then
-      if (self:GetText() or "") == "" and not self:HasFocus() then
-        f.searchHint:Show()
-      else
-        f.searchHint:Hide()
-      end
-    end
-  end)
-  search:HookScript("OnEditFocusGained", function()
-    if f.searchHint then
-      f.searchHint:Hide()
-    end
-  end)
-  search:HookScript("OnEditFocusLost", function(self)
-    if f.searchHint and (self:GetText() or "") == "" then
-      f.searchHint:Show()
-    end
-  end)
 
-  local scroll = CreateFrame("ScrollFrame", "BiSPulseChecklistScroll", f, "UIPanelScrollFrameTemplate")
-  scroll:SetPoint("TOPLEFT", 14, -128)
-  scroll:SetPoint("BOTTOMRIGHT", -34, 48)
+  local missingCb = CreateFrame("CheckButton", nil, f, "UICheckButtonTemplate")
+  missingCb:SetPoint("TOPLEFT", search, "BOTTOMLEFT", -4, -6)
+  missingCb:SetSize(24, 24)
+  missingCb:SetScript("OnClick", function(self)
+    local db = addon:GetDB()
+    if db then
+      db.checklistMissingOnly = self:GetChecked() and true or false
+    end
+    addon:RefreshChecklist()
+  end)
+  f.missingOnlyCheck = missingCb
+  local missingLabel = f:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+  missingLabel:SetPoint("LEFT", missingCb, "RIGHT", 2, 0)
+  missingLabel:SetText(L["CHECKLIST_MISSING_ONLY"] or "Only missing")
+  missingLabel:SetTextColor(SKIN.text[1], SKIN.text[2], SKIN.text[3], 1)
+  f.missingOnlyLabel = missingLabel
+
+  local empty = f:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
+  empty:SetPoint("TOP", f, "TOP", 0, -250)
+  empty:SetWidth(400)
+  empty:SetJustifyH("CENTER")
+  empty:SetTextColor(SKIN.muted[1], SKIN.muted[2], SKIN.muted[3], 1)
+  empty:Hide()
+  f.emptyLabel = empty
+
+  local scroll = CreateFrame("ScrollFrame", nil, f, "UIPanelScrollFrameTemplate")
+  scroll:SetPoint("TOPLEFT", 14, -178)
+  scroll:SetPoint("BOTTOMRIGHT", -34, 52)
   f.scroll = scroll
 
   local content = CreateFrame("Frame", nil, scroll)
-  content:SetSize(380, 1)
+  content:SetSize(420, 1)
   content.rows = {}
   scroll:SetScrollChild(content)
   f.content = content
   f.rows = content.rows
 
-  local refreshBtn = CreateFrame("Button", nil, f, "UIPanelButtonTemplate")
-  refreshBtn:SetSize(110, 22)
+  local refreshBtn = CreateFlatButton(f, 110, 28, L["CHECKLIST_REFRESH"] or "Refresh")
   refreshBtn:SetPoint("BOTTOMLEFT", 16, 14)
-  refreshBtn:SetText(L["CHECKLIST_REFRESH"] or "Refresh")
   refreshBtn:SetScript("OnClick", function()
     addon:RefreshChecklist()
   end)
 
-  local optsBtn = CreateFrame("Button", nil, f, "UIPanelButtonTemplate")
-  optsBtn:SetSize(110, 22)
+  local optsBtn = CreateFlatButton(f, 110, 28, L["CHECKLIST_OPTIONS"] or "Options")
   optsBtn:SetPoint("LEFT", refreshBtn, "RIGHT", 8, 0)
-  optsBtn:SetText("Options")
   optsBtn:SetScript("OnClick", function()
     addon:OpenOptions()
+  end)
+
+  local guidesBtn = CreateFlatButton(f, 110, 28, L["CHECKLIST_GUIDES"] or "Guides")
+  guidesBtn:SetPoint("LEFT", optsBtn, "RIGHT", 8, 0)
+  guidesBtn:SetScript("OnClick", function()
+    if addon.PrintGuideLinks then
+      addon:PrintGuideLinks()
+    end
   end)
 
   checklist = f
@@ -487,34 +975,40 @@ local function GetOrCreateRow(parent, index)
     return row
   end
 
-  row = CreateFrame("Button", nil, parent)
-  row:SetSize(370, 40)
-  row:SetHighlightTexture("Interface\\Buttons\\UI-Listbox-Highlight", "ADD")
+  row = CreateFrame("Button", nil, parent, "BackdropTemplate")
+  row:SetSize(420, 42)
+  SkinBackdrop(row, { 0.07, 0.07, 0.08, 0.0 }, { 0.07, 0.07, 0.08, 0.0 }, 1)
+  row:SetHighlightTexture("Interface\\Buttons\\WHITE8X8")
+  local ht = row:GetHighlightTexture()
+  if ht then
+    ht:SetVertexColor(0.15, 0.85, 0.35)
+    ht:SetAlpha(0.12)
+  end
 
   local check = row:CreateTexture(nil, "ARTWORK")
   check:SetSize(16, 16)
-  check:SetPoint("LEFT", 4, 0)
+  check:SetPoint("LEFT", 6, 0)
   row.check = check
 
   local icon = row:CreateTexture(nil, "ARTWORK")
   icon:SetSize(28, 28)
-  icon:SetPoint("LEFT", check, "RIGHT", 6, 0)
+  icon:SetPoint("LEFT", check, "RIGHT", 8, 0)
   icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
   row.icon = icon
 
   local name = row:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
-  name:SetPoint("TOPLEFT", icon, "TOPRIGHT", 8, 2)
-  name:SetPoint("RIGHT", row, "RIGHT", -8, 0)
+  name:SetPoint("TOPLEFT", icon, "TOPRIGHT", 10, 2)
+  name:SetPoint("RIGHT", row, "RIGHT", -10, 0)
   name:SetJustifyH("LEFT")
   name:SetWordWrap(false)
   row.name = name
 
   local drop = row:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
   drop:SetPoint("TOPLEFT", name, "BOTTOMLEFT", 0, -2)
-  drop:SetPoint("RIGHT", row, "RIGHT", -8, 0)
+  drop:SetPoint("RIGHT", row, "RIGHT", -10, 0)
   drop:SetJustifyH("LEFT")
   drop:SetWordWrap(false)
-  drop:SetTextColor(0.65, 0.72, 0.82)
+  drop:SetTextColor(0.55, 0.58, 0.62)
   row.drop = drop
 
   row:SetScript("OnEnter", function(self)
@@ -580,16 +1074,32 @@ function addon:RefreshChecklist()
   local db = self:GetDB()
   if f.mainBtn and f.offBtn then
     local onOff = db and db.checklistView == "off" and db.trackOffspec and self:GetOffspecPack()
-    if onOff then
-      f.offBtn:Disable()
+    if f.mainBtn.Enable then
       f.mainBtn:Enable()
-    else
-      f.mainBtn:Disable()
       f.offBtn:Enable()
+    end
+    if f.mainBtn.SetActive then
+      f.mainBtn:SetActive(not onOff)
+      f.offBtn:SetActive(onOff and true or false)
     end
   end
 
-  local entries = BuildSortedEntries(pack)
+  local entries = BuildSortedEntries(pack, (db and db.checklistSort) or "rank")
+  -- Drop slot filter if it has no matches for the current rank (avoids "empty" screens).
+  if db and db.checklistSlotFilter and db.checklistSlotFilter ~= "all" then
+    local slots = CollectSlotsFromPack(pack, db.checklistRankFilter or "all")
+    local okSlot = false
+    for _, s in ipairs(slots) do
+      if s == db.checklistSlotFilter then
+        okSlot = true
+        break
+      end
+    end
+    if not okSlot then
+      db.checklistSlotFilter = "all"
+    end
+  end
+
   local filtered = {}
   for _, entry in ipairs(entries) do
     if EntryPassesChecklistFilters(entry, db) then
@@ -598,6 +1108,12 @@ function addon:RefreshChecklist()
   end
   entries = filtered
 
+  if f.missingOnlyCheck and db then
+    f.missingOnlyCheck:SetChecked(db.checklistMissingOnly and true or false)
+  end
+  if f.SyncSortDrop then
+    f.SyncSortDrop()
+  end
   if f.SyncRankBtn then
     f.SyncRankBtn()
   end
@@ -615,6 +1131,15 @@ function addon:RefreshChecklist()
       else
         f.searchHint:Hide()
       end
+    end
+  end
+
+  if f.emptyLabel then
+    if #entries == 0 then
+      f.emptyLabel:SetText(L["CHECKLIST_EMPTY"] or "No items match these filters.")
+      f.emptyLabel:Show()
+    else
+      f.emptyLabel:Hide()
     end
   end
 
@@ -655,6 +1180,10 @@ function addon:RefreshChecklist()
     if entry.info.drop and entry.info.drop ~= "" then
       dropParts[#dropParts + 1] = entry.info.drop
     end
+    local pop = ParsePopularity(entry.info)
+    if pop then
+      dropParts[#dropParts + 1] = string.format("%.0f%%", pop)
+    end
     if owned and where == "equipped" then
       dropParts[#dropParts + 1] = (L["CHECKLIST_EQUIPPED"] or "equipped")
     elseif owned and where == "bags" then
@@ -679,20 +1208,18 @@ function addon:RefreshChecklist()
 end
 
 function addon:ToggleChecklist()
-  -- Drop broken cached frame from older builds
-  if checklist and (not checklist.content or not checklist.content.rows) then
-    checklist:Hide()
-    checklist = nil
-  end
-  -- Migrate frames without drop line (pre-1.5.1)
-  if checklist and checklist.content and checklist.content.rows and checklist.content.rows[1] and not checklist.content.rows[1].drop then
-    checklist:Hide()
-    checklist = nil
-  end
-  -- Migrate old frames that had a non-working close button
-  if checklist and checklist.closeButton and not checklist.closeButton._bisAlertFixed then
-    checklist:Hide()
-    checklist = nil
+  -- Drop broken / outdated cached frames
+  if checklist then
+    local stale = (not checklist.content)
+      or (not checklist.content.rows)
+      or (checklist.layoutRev or 0) < CHECKLIST_LAYOUT_REV
+      or (checklist.content.rows[1] and not checklist.content.rows[1].drop)
+    if stale then
+      checklist:Hide()
+      checklist:SetParent(nil)
+      checklist = nil
+      DiscardFlatMenu()
+    end
   end
   local ok, err = pcall(function()
     local f = EnsureChecklist()

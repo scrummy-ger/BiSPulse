@@ -21,6 +21,8 @@ local defaults = {
   checklistRankFilter = "all", -- all | bis | strong | alt | ok
   checklistSlotFilter = "all",
   checklistSearch = "",
+  checklistMissingOnly = false,
+  checklistSort = "rank", -- rank | name | slot | missing
   minRank = "strong", -- bis | strong | alt | ok
   customToast = true,
   raidWarning = false,
@@ -531,6 +533,28 @@ function addon:MeetsContentFilter(info)
     return wh == "overall" or wh == "trinket" or wh == "mythic"
   end
   return true
+end
+
+function addon:PrintGuideLinks(pack)
+  pack = pack or (addon.GetPlayerPack and addon:GetPlayerPack())
+  if not pack or not pack.guides then
+    addon:Print(L["NO_SPEC_DATA"] or "No guide links for this spec.")
+    return
+  end
+  local g = pack.guides
+  if g.wowhead then
+    addon:Print((L["SOURCE_WOWHEAD"] or "Wowhead") .. ": " .. g.wowhead)
+  end
+  if g.archonRaid then
+    addon:Print((L["SOURCE_ARCHON"] or "Archon") .. " Raid: " .. g.archonRaid)
+  end
+  if g.archonMythic then
+    addon:Print((L["SOURCE_ARCHON"] or "Archon") .. " Mythic+: " .. g.archonMythic)
+  end
+  if CopyToClipboard and g.wowhead then
+    CopyToClipboard(g.wowhead)
+    addon:Print(L["GUIDE_COPIED"] or "Wowhead guide URL copied to clipboard.")
+  end
 end
 
 local frame = CreateFrame("Frame")

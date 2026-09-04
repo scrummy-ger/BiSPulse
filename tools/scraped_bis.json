@@ -1,321 +1,426 @@
 {
   "BloodDeathKnight": {
-    "count": 18,
+    "count": 100,
     "wowhead_overall": 13,
+    "archon": 94,
     "sources": [
-      "Wowhead"
+      "Archon",
+      "Wowhead",
+      "Wowhead + Archon"
     ],
     "file": "BloodDeathKnight.lua"
   },
   "FrostDeathKnight": {
-    "count": 18,
-    "wowhead_overall": 14,
+    "count": 88,
+    "wowhead_overall": 15,
+    "archon": 88,
     "sources": [
-      "Wowhead"
+      "Archon",
+      "Wowhead + Archon"
     ],
     "file": "FrostDeathKnight.lua"
   },
   "UnholyDeathKnight": {
-    "count": 19,
+    "count": 78,
     "wowhead_overall": 15,
+    "archon": 78,
     "sources": [
-      "Wowhead"
+      "Archon",
+      "Wowhead + Archon"
     ],
     "file": "UnholyDeathKnight.lua"
   },
   "HavocDemonHunter": {
-    "count": 14,
+    "count": 98,
     "wowhead_overall": 13,
+    "archon": 96,
     "sources": [
-      "Wowhead"
+      "Archon",
+      "Wowhead",
+      "Wowhead + Archon"
     ],
     "file": "HavocDemonHunter.lua"
   },
   "VengeanceDemonHunter": {
-    "count": 15,
+    "count": 102,
     "wowhead_overall": 13,
+    "archon": 99,
     "sources": [
-      "Wowhead"
+      "Archon",
+      "Wowhead",
+      "Wowhead + Archon"
     ],
     "file": "VengeanceDemonHunter.lua"
   },
   "DevourerDemonHunter": {
-    "count": 18,
+    "count": 91,
     "wowhead_overall": 15,
+    "archon": 88,
     "sources": [
-      "Wowhead"
+      "Archon",
+      "Wowhead",
+      "Wowhead + Archon"
     ],
     "file": "DevourerDemonHunter.lua"
   },
   "BalanceDruid": {
-    "count": 10,
+    "count": 88,
     "wowhead_overall": 7,
+    "archon": 88,
     "sources": [
-      "Wowhead"
+      "Archon",
+      "Wowhead + Archon"
     ],
     "file": "BalanceDruid.lua"
   },
   "FeralDruid": {
-    "count": 19,
+    "count": 90,
     "wowhead_overall": 15,
+    "archon": 89,
     "sources": [
-      "Wowhead"
+      "Archon",
+      "Wowhead",
+      "Wowhead + Archon"
     ],
     "file": "FeralDruid.lua"
   },
   "GuardianDruid": {
-    "count": 19,
+    "count": 102,
     "wowhead_overall": 15,
+    "archon": 98,
     "sources": [
-      "Wowhead"
+      "Archon",
+      "Wowhead",
+      "Wowhead + Archon"
     ],
     "file": "GuardianDruid.lua"
   },
   "RestorationDruid": {
-    "count": 16,
+    "count": 95,
     "wowhead_overall": 13,
+    "archon": 94,
     "sources": [
-      "Wowhead"
+      "Archon",
+      "Wowhead",
+      "Wowhead + Archon"
     ],
     "file": "RestorationDruid.lua"
   },
   "DevastationEvoker": {
-    "count": 21,
-    "wowhead_overall": 21,
+    "count": 91,
+    "wowhead_overall": 9,
+    "archon": 90,
     "sources": [
-      "Wowhead"
+      "Archon",
+      "Wowhead",
+      "Wowhead + Archon"
     ],
     "file": "DevastationEvoker.lua"
   },
   "PreservationEvoker": {
-    "count": 14,
+    "count": 97,
     "wowhead_overall": 12,
+    "archon": 93,
     "sources": [
-      "Wowhead"
+      "Archon",
+      "Wowhead",
+      "Wowhead + Archon"
     ],
     "file": "PreservationEvoker.lua"
   },
   "AugmentationEvoker": {
-    "count": 11,
+    "count": 95,
     "wowhead_overall": 9,
+    "archon": 93,
     "sources": [
-      "Wowhead"
+      "Archon",
+      "Wowhead",
+      "Wowhead + Archon"
     ],
     "file": "AugmentationEvoker.lua"
   },
   "BeastMasteryHunter": {
-    "count": 10,
+    "count": 84,
     "wowhead_overall": 10,
+    "archon": 84,
     "sources": [
-      "Wowhead"
+      "Archon",
+      "Wowhead + Archon"
     ],
     "file": "BeastMasteryHunter.lua"
   },
   "MarksmanshipHunter": {
-    "count": 20,
+    "count": 88,
     "wowhead_overall": 20,
+    "archon": 85,
     "sources": [
-      "Wowhead"
+      "Archon",
+      "Wowhead",
+      "Wowhead + Archon"
     ],
     "file": "MarksmanshipHunter.lua"
   },
   "SurvivalHunter": {
-    "count": 15,
+    "count": 98,
     "wowhead_overall": 14,
+    "archon": 94,
     "sources": [
-      "Wowhead"
+      "Archon",
+      "Wowhead",
+      "Wowhead + Archon"
     ],
     "file": "SurvivalHunter.lua"
   },
   "ArcaneMage": {
-    "count": 13,
+    "count": 92,
     "wowhead_overall": 11,
+    "archon": 92,
     "sources": [
-      "Wowhead"
+      "Archon",
+      "Wowhead + Archon"
     ],
     "file": "ArcaneMage.lua"
   },
   "FireMage": {
-    "count": 13,
+    "count": 85,
     "wowhead_overall": 11,
+    "archon": 82,
     "sources": [
-      "Wowhead"
+      "Archon",
+      "Wowhead",
+      "Wowhead + Archon"
     ],
     "file": "FireMage.lua"
   },
   "FrostMage": {
-    "count": 12,
+    "count": 92,
     "wowhead_overall": 9,
+    "archon": 91,
     "sources": [
-      "Wowhead"
+      "Archon",
+      "Wowhead",
+      "Wowhead + Archon"
     ],
     "file": "FrostMage.lua"
   },
   "BrewmasterMonk": {
-    "count": 24,
+    "count": 100,
     "wowhead_overall": 24,
+    "archon": 92,
     "sources": [
-      "Wowhead"
+      "Archon",
+      "Wowhead",
+      "Wowhead + Archon"
     ],
     "file": "BrewmasterMonk.lua"
   },
   "MistweaverMonk": {
-    "count": 11,
+    "count": 88,
     "wowhead_overall": 11,
+    "archon": 84,
     "sources": [
-      "Wowhead"
+      "Archon",
+      "Wowhead",
+      "Wowhead + Archon"
     ],
     "file": "MistweaverMonk.lua"
   },
   "WindwalkerMonk": {
-    "count": 15,
+    "count": 94,
     "wowhead_overall": 15,
+    "archon": 93,
     "sources": [
-      "Wowhead"
+      "Archon",
+      "Wowhead",
+      "Wowhead + Archon"
     ],
     "file": "WindwalkerMonk.lua"
   },
   "HolyPaladin": {
-    "count": 15,
+    "count": 98,
     "wowhead_overall": 12,
+    "archon": 98,
     "sources": [
-      "Wowhead"
+      "Archon",
+      "Wowhead + Archon"
     ],
     "file": "HolyPaladin.lua"
   },
   "ProtectionPaladin": {
-    "count": 20,
+    "count": 106,
     "wowhead_overall": 16,
+    "archon": 105,
     "sources": [
-      "Wowhead"
+      "Archon",
+      "Wowhead",
+      "Wowhead + Archon"
     ],
     "file": "ProtectionPaladin.lua"
   },
   "RetributionPaladin": {
-    "count": 20,
+    "count": 90,
     "wowhead_overall": 20,
+    "archon": 88,
     "sources": [
-      "Wowhead"
+      "Archon",
+      "Wowhead",
+      "Wowhead + Archon"
     ],
     "file": "RetributionPaladin.lua"
   },
   "DisciplinePriest": {
-    "count": 15,
+    "count": 96,
     "wowhead_overall": 13,
+    "archon": 95,
     "sources": [
-      "Wowhead"
+      "Archon",
+      "Wowhead",
+      "Wowhead + Archon"
     ],
     "file": "DisciplinePriest.lua"
   },
   "HolyPriest": {
-    "count": 16,
+    "count": 96,
     "wowhead_overall": 14,
+    "archon": 96,
     "sources": [
-      "Wowhead"
+      "Archon",
+      "Wowhead + Archon"
     ],
     "file": "HolyPriest.lua"
   },
   "ShadowPriest": {
-    "count": 19,
+    "count": 89,
     "wowhead_overall": 19,
+    "archon": 89,
     "sources": [
-      "Wowhead"
+      "Archon",
+      "Wowhead + Archon"
     ],
     "file": "ShadowPriest.lua"
   },
   "AssassinationRogue": {
-    "count": 15,
+    "count": 95,
     "wowhead_overall": 10,
+    "archon": 95,
     "sources": [
-      "Wowhead"
+      "Archon",
+      "Wowhead + Archon"
     ],
     "file": "AssassinationRogue.lua"
   },
   "OutlawRogue": {
-    "count": 15,
+    "count": 93,
     "wowhead_overall": 13,
+    "archon": 93,
     "sources": [
-      "Wowhead"
+      "Archon",
+      "Wowhead + Archon"
     ],
     "file": "OutlawRogue.lua"
   },
   "SubtletyRogue": {
-    "count": 17,
+    "count": 92,
     "wowhead_overall": 11,
+    "archon": 90,
     "sources": [
-      "Wowhead"
+      "Archon",
+      "Wowhead",
+      "Wowhead + Archon"
     ],
     "file": "SubtletyRogue.lua"
   },
   "ElementalShaman": {
-    "count": 18,
+    "count": 98,
     "wowhead_overall": 16,
+    "archon": 98,
     "sources": [
-      "Wowhead"
+      "Archon",
+      "Wowhead + Archon"
     ],
     "file": "ElementalShaman.lua"
   },
   "EnhancementShaman": {
-    "count": 16,
+    "count": 96,
     "wowhead_overall": 16,
+    "archon": 95,
     "sources": [
-      "Wowhead"
+      "Archon",
+      "Wowhead",
+      "Wowhead + Archon"
     ],
     "file": "EnhancementShaman.lua"
   },
   "RestorationShaman": {
-    "count": 18,
+    "count": 109,
     "wowhead_overall": 12,
+    "archon": 98,
     "sources": [
-      "Wowhead"
+      "Archon",
+      "Wowhead",
+      "Wowhead + Archon"
     ],
     "file": "RestorationShaman.lua"
   },
   "AfflictionWarlock": {
-    "count": 17,
+    "count": 94,
     "wowhead_overall": 16,
+    "archon": 94,
     "sources": [
-      "Wowhead"
+      "Archon",
+      "Wowhead + Archon"
     ],
     "file": "AfflictionWarlock.lua"
   },
   "DemonologyWarlock": {
-    "count": 12,
+    "count": 85,
     "wowhead_overall": 11,
+    "archon": 84,
     "sources": [
-      "Wowhead"
+      "Archon",
+      "Wowhead",
+      "Wowhead + Archon"
     ],
     "file": "DemonologyWarlock.lua"
   },
   "DestructionWarlock": {
-    "count": 17,
+    "count": 94,
     "wowhead_overall": 16,
+    "archon": 94,
     "sources": [
-      "Wowhead"
+      "Archon",
+      "Wowhead + Archon"
     ],
     "file": "DestructionWarlock.lua"
   },
   "ArmsWarrior": {
-    "count": 13,
+    "count": 93,
     "wowhead_overall": 10,
+    "archon": 93,
     "sources": [
-      "Wowhead"
+      "Archon",
+      "Wowhead + Archon"
     ],
     "file": "ArmsWarrior.lua"
   },
   "FuryWarrior": {
-    "count": 12,
+    "count": 92,
     "wowhead_overall": 9,
+    "archon": 92,
     "sources": [
-      "Wowhead"
+      "Archon",
+      "Wowhead + Archon"
     ],
     "file": "FuryWarrior.lua"
   },
   "ProtectionWarrior": {
-    "count": 20,
+    "count": 105,
     "wowhead_overall": 16,
+    "archon": 104,
     "sources": [
-      "Wowhead"
+      "Archon",
+      "Wowhead",
+      "Wowhead + Archon"
     ],
     "file": "ProtectionWarrior.lua"
   }

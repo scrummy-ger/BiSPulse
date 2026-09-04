@@ -93,10 +93,15 @@ for (const [stem, cls, spec] of TARGETS) {
     await page.waitForTimeout(1500 * attempt);
   }
   if (best && best.count > 0) {
-    prev.out[stem] = best;
-    console.log(
-      `${best.count} items drop=${best.withDrop} ph=${best.placeholders}`
-    );
+    const prevCount = (prev.out[stem]?.items || []).length;
+    if (best.count >= prevCount || prevCount === 0) {
+      prev.out[stem] = best;
+      console.log(
+        `${best.count} items drop=${best.withDrop} ph=${best.placeholders}`
+      );
+    } else {
+      console.log(`KEEP previous (${prevCount} > ${best.count})`);
+    }
   } else {
     console.log("KEEP previous");
   }

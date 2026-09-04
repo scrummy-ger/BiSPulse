@@ -32,7 +32,19 @@ local function AddEvalLines(tooltip, eval)
     tooltip:AddLine(info.source, 0.55, 0.55, 0.55)
   end
 
-  if info.note then
+  local pop = info.popularity
+  if type(pop) ~= "number" and info.note then
+    local pct = info.note:match("^Archon%s+([%d%.]+)%%")
+    if pct then
+      pop = tonumber(pct)
+    end
+  end
+  if type(pop) == "number" then
+    local popLabel = L["ARCHON_POPULARITY"] or "Archon popularity"
+    tooltip:AddDoubleLine(popLabel, string.format("%.1f%%", pop), 0.7, 0.7, 0.7, 0.9, 0.75, 0.4)
+  elseif info.note and not (info.note:match("^Archon%s+[%d%.]+%%")) then
+    tooltip:AddLine(info.note, 0.9, 0.75, 0.4, true)
+  elseif info.note and type(pop) ~= "number" then
     tooltip:AddLine(info.note, 0.9, 0.75, 0.4, true)
   end
 

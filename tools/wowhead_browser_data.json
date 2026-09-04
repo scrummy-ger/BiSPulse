@@ -1,16 +1,17 @@
 {
-  "scrapedAt": "2026-08-25",
+  "scrapedAt": "2026-09-04",
   "ok": 40,
-  "freshOk": 34,
-  "totalItems": 595,
+  "freshOk": 33,
+  "totalItems": 562,
   "placeholders": 0,
   "errors": {
-    "DevastationEvoker": "no BiS items parsed",
-    "BeastMasteryHunter": "only 4 items",
+    "BalanceDruid": "only 7 items",
+    "BeastMasteryHunter": "no BiS items parsed",
     "MarksmanshipHunter": "no BiS items parsed",
-    "BrewmasterMonk": "only 7 items",
-    "RetributionPaladin": "only 4 items",
-    "ShadowPriest": "only 7 items"
+    "BrewmasterMonk": "only 5 items",
+    "RetributionPaladin": "no BiS items parsed",
+    "ShadowPriest": "only 3 items",
+    "EnhancementShaman": "no BiS items parsed"
   },
   "out": {
     "BloodDeathKnight": {
@@ -160,12 +161,12 @@
       "url": "https://www.wowhead.com/guide/classes/death-knight/blood/bis-gear"
     },
     "FrostDeathKnight": {
-      "count": 18,
-      "withDrop": 14,
+      "count": 15,
+      "withDrop": 15,
       "placeholders": 0,
       "byRank": {
-        "bis": 14,
-        "strong": 4,
+        "bis": 15,
+        "strong": 0,
         "alt": 0,
         "ok": 0
       },
@@ -184,7 +185,7 @@
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Head",
-          "drop": "The Coiled Altar"
+          "drop": "Tier Set"
         },
         {
           "id": 268265,
@@ -208,6 +209,14 @@
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Cloak",
+          "drop": "The Coiled Altar"
+        },
+        {
+          "id": 271477,
+          "name": "Baleful Grave-Knight's Breastplate",
+          "wowhead": "overall",
+          "rank": "bis",
+          "slot": "Chest",
           "drop": "The Coiled Altar"
         },
         {
@@ -281,41 +290,17 @@
           "rank": "bis",
           "drop": "Ula'tek",
           "slot": "Weapon"
-        },
-        {
-          "id": 273797,
-          "name": "Tattered Amani War Banner",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 252258,
-          "name": "Sickening Signet of Atroxus",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 251136,
-          "name": "Signet of Snarling Servitude",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 251218,
-          "name": "Taz'Rah's Cosmic Edge",
-          "wowhead": "mythic",
-          "rank": "strong"
         }
       ],
       "url": "https://www.wowhead.com/guide/classes/death-knight/frost/bis-gear"
     },
     "UnholyDeathKnight": {
-      "count": 19,
+      "count": 15,
       "withDrop": 15,
       "placeholders": 0,
       "byRank": {
         "bis": 15,
-        "strong": 4,
+        "strong": 0,
         "alt": 0,
         "ok": 0
       },
@@ -439,41 +424,17 @@
           "rank": "bis",
           "drop": "The Coiled Altar",
           "slot": "Weapon"
-        },
-        {
-          "id": 251126,
-          "name": "Greathelm of Temptation",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 251138,
-          "name": "Cinderfury Shoulderguards",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 273797,
-          "name": "Tattered Amani War Banner",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 251134,
-          "name": "Xathuux's Cleave",
-          "wowhead": "mythic",
-          "rank": "strong"
         }
       ],
       "url": "https://www.wowhead.com/guide/classes/death-knight/unholy/bis-gear"
     },
     "HavocDemonHunter": {
-      "count": 14,
+      "count": 13,
       "withDrop": 13,
       "placeholders": 0,
       "byRank": {
         "bis": 13,
-        "strong": 1,
+        "strong": 0,
         "alt": 0,
         "ok": 0
       },
@@ -543,12 +504,12 @@
           "drop": "Temple of Sethraliss"
         },
         {
-          "id": 268249,
-          "name": "Vile Alchemist's Band",
+          "id": 251136,
+          "name": "Signet Of Snarling Servitude",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Ring",
-          "drop": "Vashnik the Malignant"
+          "drop": "Murder Row"
         },
         {
           "id": 158366,
@@ -567,8 +528,8 @@
           "drop": "The Coiled Altar"
         },
         {
-          "id": 270175,
-          "name": "Voracious Heart Of Ula'tek",
+          "id": 270168,
+          "name": "Font Of Venomous Rage",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Trinket",
@@ -581,23 +542,17 @@
           "rank": "bis",
           "drop": "The Coiled Altar",
           "slot": "Weapon"
-        },
-        {
-          "id": 250259,
-          "name": "Sapling of the Dawnroot",
-          "wowhead": "mythic",
-          "rank": "strong"
         }
       ],
       "url": "https://www.wowhead.com/guide/classes/demon-hunter/havoc/bis-gear"
     },
     "VengeanceDemonHunter": {
-      "count": 15,
+      "count": 13,
       "withDrop": 13,
       "placeholders": 0,
       "byRank": {
         "bis": 13,
-        "strong": 2,
+        "strong": 0,
         "alt": 0,
         "ok": 0
       },
@@ -704,29 +659,17 @@
           "wowhead": "overall",
           "rank": "bis",
           "drop": "The Coiled Altar"
-        },
-        {
-          "id": 251223,
-          "name": "Somber Spaulders",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 251124,
-          "name": "Gauntlets of Fevered Defense",
-          "wowhead": "mythic",
-          "rank": "strong"
         }
       ],
       "url": "https://www.wowhead.com/guide/classes/demon-hunter/vengeance/bis-gear"
     },
     "DevourerDemonHunter": {
-      "count": 18,
+      "count": 15,
       "withDrop": 14,
       "placeholders": 0,
       "byRank": {
         "bis": 15,
-        "strong": 3,
+        "strong": 0,
         "alt": 0,
         "ok": 0
       },
@@ -846,24 +789,6 @@
           "name": "Flask Of The Blood Knights",
           "wowhead": "overall",
           "rank": "bis"
-        },
-        {
-          "id": 251223,
-          "name": "Somber Spaulders",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 251159,
-          "name": "War Trial Vestments",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 250224,
-          "name": "Mindpiercer's Sigil",
-          "wowhead": "mythic",
-          "rank": "strong"
         }
       ],
       "url": "https://www.wowhead.com/guide/classes/demon-hunter/devourer/bis-gear"
@@ -951,15 +876,16 @@
           "rank": "strong"
         }
       ],
-      "url": "https://www.wowhead.com/guide/classes/druid/balance/bis-gear"
+      "url": "https://www.wowhead.com/guide/classes/druid/balance/bis-gear",
+      "reused": true
     },
     "FeralDruid": {
-      "count": 19,
+      "count": 15,
       "withDrop": 15,
       "placeholders": 0,
       "byRank": {
         "bis": 15,
-        "strong": 4,
+        "strong": 0,
         "alt": 0,
         "ok": 0
       },
@@ -1083,41 +1009,17 @@
           "rank": "bis",
           "drop": "Ula'tek",
           "slot": "Weapon"
-        },
-        {
-          "id": 273783,
-          "name": "Toxin-Coated Warstaff",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 159642,
-          "name": "Royal Purifier's Spade",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 159617,
-          "name": "Lustrous Golden Plumage",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 273796,
-          "name": "Vile Vial of Volatile Venom",
-          "wowhead": "mythic",
-          "rank": "strong"
         }
       ],
       "url": "https://www.wowhead.com/guide/classes/druid/feral/bis-gear"
     },
     "GuardianDruid": {
-      "count": 19,
+      "count": 15,
       "withDrop": 15,
       "placeholders": 0,
       "byRank": {
         "bis": 15,
-        "strong": 4,
+        "strong": 0,
         "alt": 0,
         "ok": 0
       },
@@ -1239,41 +1141,17 @@
           "wowhead": "overall",
           "rank": "bis",
           "drop": "Vashnik the Malignant"
-        },
-        {
-          "id": 251223,
-          "name": "Somber Spaulders",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 251124,
-          "name": "Gauntlets of Fevered Defense",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 159313,
-          "name": "Breeches of the Sacred Hall",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 158370,
-          "name": "Twin-Strike Polearm",
-          "wowhead": "mythic",
-          "rank": "strong"
         }
       ],
       "url": "https://www.wowhead.com/guide/classes/druid/guardian/bis-gear"
     },
     "RestorationDruid": {
-      "count": 16,
-      "withDrop": 15,
+      "count": 13,
+      "withDrop": 13,
       "placeholders": 0,
       "byRank": {
         "bis": 13,
-        "strong": 3,
+        "strong": 0,
         "alt": 0,
         "ok": 0
       },
@@ -1380,87 +1258,26 @@
           "rank": "bis",
           "slot": "Legs",
           "drop": "Leatherworking"
-        },
-        {
-          "id": 250214,
-          "name": "Lightspire Core",
-          "wowhead": "mythic",
-          "rank": "strong",
-          "slot": "Trinket",
-          "drop": "The Blinding Vale"
-        },
-        {
-          "id": 251156,
-          "name": "Fallen Speaker's Staff",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 159636,
-          "name": "Staff Of The Lightning Serpent",
-          "wowhead": "mythic",
-          "rank": "strong",
-          "slot": "Weapon",
-          "drop": "Temple of Sethraliss"
         }
       ],
       "url": "https://www.wowhead.com/guide/classes/druid/restoration/bis-gear"
     },
     "DevastationEvoker": {
-      "count": 21,
-      "withDrop": 11,
+      "count": 9,
+      "withDrop": 9,
+      "placeholders": 0,
       "items": [
         {
-          "id": 271092,
-          "name": "Jan'thrazet, the Soul Fang",
-          "wowhead": "overall",
-          "rank": "bis",
-          "slot": "Weapon",
-          "drop": "Ula'tek"
-        },
-        {
-          "id": 245769,
-          "name": "Aln'hara Lantern",
-          "wowhead": "overall",
-          "rank": "bis",
-          "slot": "Offhand",
-          "drop": "Crafting"
-        },
-        {
-          "id": 268265,
-          "name": "Aqirbane Reliquary",
-          "wowhead": "overall",
-          "rank": "bis",
-          "slot": "Head",
-          "drop": "Ula'tek"
-        },
-        {
           "id": 268253,
-          "name": "Silken Voodoo Drape",
+          "name": "Calamitous Echo's Sundered Peaks",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Shoulders",
           "drop": "The Coiled Altar"
         },
         {
-          "id": 244584,
-          "name": "Farstrider's Plated Bracers",
-          "wowhead": "overall",
-          "rank": "bis",
-          "slot": "Chest",
-          "drop": "Crafting"
-        },
-        {
-          "id": 268254,
-          "name": "Serpentine Mixing Belt",
-          "wowhead": "overall",
-          "rank": "bis",
-          "slot": "Gloves",
-          "drop": "Vashnik the Malignant"
-        },
-        {
           "id": 268233,
-          "name": "Ferocious Scaleboots",
+          "name": "Earthen Pillars of Calamity",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Legs",
@@ -1499,69 +1316,31 @@
           "drop": "Nymrissa Wavecaller"
         },
         {
-          "id": 268230,
-          "name": "Crown of the Eternal Fang",
+          "id": 271092,
+          "name": "Janthrazet The Soul Fang",
           "wowhead": "overall",
-          "rank": "bis"
+          "rank": "bis",
+          "drop": "Ula'tek",
+          "slot": "Weapon"
         },
         {
-          "id": 271501,
-          "name": "Calamitous Echo's Magmashapers",
+          "id": 268265,
+          "name": "Aqirbane Reliquary",
           "wowhead": "overall",
-          "rank": "bis"
+          "rank": "bis",
+          "drop": "Ula'tek",
+          "slot": "Head"
         },
         {
-          "id": 268231,
-          "name": "Soulslither Spaulders",
+          "id": 268254,
+          "name": "Serpentine Mixing Belt",
           "wowhead": "overall",
-          "rank": "bis"
-        },
-        {
-          "id": 271499,
-          "name": "Calamitous Echo's Sundered Peaks",
-          "wowhead": "overall",
-          "rank": "bis"
-        },
-        {
-          "id": 271876,
-          "name": "Awoken Dreadfang Cuirass",
-          "wowhead": "overall",
-          "rank": "bis"
-        },
-        {
-          "id": 271504,
-          "name": "Searing Caldera of Calamity",
-          "wowhead": "overall",
-          "rank": "bis"
-        },
-        {
-          "id": 193752,
-          "name": "Galerattle Gauntlets",
-          "wowhead": "overall",
-          "rank": "bis"
-        },
-        {
-          "id": 271502,
-          "name": "Calamitous Echo's Ebon Greathorns",
-          "wowhead": "overall",
-          "rank": "bis"
-        },
-        {
-          "id": 268237,
-          "name": "Cuisses of the Uncoiled Union",
-          "wowhead": "overall",
-          "rank": "bis"
-        },
-        {
-          "id": 271500,
-          "name": "Earthen Pillars of Calamity",
-          "wowhead": "overall",
-          "rank": "bis"
+          "rank": "bis",
+          "slot": "Gloves",
+          "drop": "Vashnik the Malignant"
         }
       ],
-      "url": "https://www.wowhead.com/guide/classes/evoker/devastation/bis-gear",
-      "reused": true,
-      "placeholders": 0
+      "url": "https://www.wowhead.com/guide/classes/evoker/devastation/bis-gear"
     },
     "PreservationEvoker": {
       "count": 14,
@@ -1684,16 +1463,32 @@
       "url": "https://www.wowhead.com/guide/classes/evoker/preservation/bis-gear"
     },
     "AugmentationEvoker": {
-      "count": 11,
+      "count": 9,
       "withDrop": 9,
       "placeholders": 0,
       "byRank": {
         "bis": 9,
-        "strong": 2,
+        "strong": 0,
         "alt": 0,
         "ok": 0
       },
       "items": [
+        {
+          "id": 268197,
+          "name": "Spine Of The Hissing Abyss",
+          "wowhead": "overall",
+          "rank": "bis",
+          "slot": "Offhand",
+          "drop": "Entombed Sentinels"
+        },
+        {
+          "id": 268265,
+          "name": "Calamitous Echo's Magmashapers",
+          "wowhead": "overall",
+          "rank": "bis",
+          "slot": "Head",
+          "drop": "Ula'tek"
+        },
         {
           "id": 268253,
           "name": "Calamitous Echo's Sundered Peaks",
@@ -1701,14 +1496,6 @@
           "rank": "bis",
           "slot": "Shoulders",
           "drop": "The Coiled Altar"
-        },
-        {
-          "id": 268233,
-          "name": "Earthen Pillars of Calamity",
-          "wowhead": "overall",
-          "rank": "bis",
-          "slot": "Legs",
-          "drop": "Sszorak"
         },
         {
           "id": 268249,
@@ -1727,20 +1514,20 @@
           "drop": "Temple of Sethraliss"
         },
         {
+          "id": 270168,
+          "name": "Font Of Venomous Rage",
+          "wowhead": "overall",
+          "rank": "bis",
+          "slot": "Trinket",
+          "drop": "Ula'tek"
+        },
+        {
           "id": 250224,
           "name": "Mindpiercer's Sigil",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Trinket",
           "drop": "Voidscar Arena"
-        },
-        {
-          "id": 270164,
-          "name": "Gebbo's Bottomless Bag",
-          "wowhead": "overall",
-          "rank": "bis",
-          "slot": "Trinket",
-          "drop": "The Lost Explorers"
         },
         {
           "id": 271092,
@@ -1751,32 +1538,12 @@
           "slot": "Weapon"
         },
         {
-          "id": 268265,
-          "name": "Aqirbane Reliquary",
+          "id": 268233,
+          "name": "Ferocious Scaleboots",
           "wowhead": "overall",
           "rank": "bis",
-          "drop": "Ula'tek",
-          "slot": "Head"
-        },
-        {
-          "id": 268254,
-          "name": "Serpentine Mixing Belt",
-          "wowhead": "overall",
-          "rank": "bis",
-          "slot": "Gloves",
-          "drop": "Vashnik the Malignant"
-        },
-        {
-          "id": 193752,
-          "name": "Galerattle Gauntlets",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 239035,
-          "name": "Sethraliss' Fanged Helm",
-          "wowhead": "mythic",
-          "rank": "strong"
+          "drop": "Sszorak",
+          "slot": "Legs"
         }
       ],
       "url": "https://www.wowhead.com/guide/classes/evoker/augmentation/bis-gear"
@@ -2000,12 +1767,12 @@
       "placeholders": 0
     },
     "SurvivalHunter": {
-      "count": 15,
+      "count": 14,
       "withDrop": 13,
       "placeholders": 0,
       "byRank": {
         "bis": 14,
-        "strong": 1,
+        "strong": 0,
         "alt": 0,
         "ok": 0
       },
@@ -2119,23 +1886,17 @@
           "rank": "bis",
           "slot": "Legs",
           "drop": "Tier Set / The Coiled Altar"
-        },
-        {
-          "id": 251149,
-          "name": "Victor's Flashfrozen Blade",
-          "wowhead": "mythic",
-          "rank": "strong"
         }
       ],
       "url": "https://www.wowhead.com/guide/classes/hunter/survival/bis-gear"
     },
     "ArcaneMage": {
-      "count": 13,
+      "count": 11,
       "withDrop": 11,
       "placeholders": 0,
       "byRank": {
         "bis": 11,
-        "strong": 2,
+        "strong": 0,
         "alt": 0,
         "ok": 0
       },
@@ -2227,29 +1988,17 @@
           "rank": "bis",
           "drop": "Ula'tek",
           "slot": "Weapon"
-        },
-        {
-          "id": 273785,
-          "name": "Primordial Robe of Rites",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 273778,
-          "name": "Polished Lightwood Channeler",
-          "wowhead": "mythic",
-          "rank": "strong"
         }
       ],
       "url": "https://www.wowhead.com/guide/classes/mage/arcane/bis-gear"
     },
     "FireMage": {
-      "count": 13,
+      "count": 11,
       "withDrop": 11,
       "placeholders": 0,
       "byRank": {
         "bis": 11,
-        "strong": 2,
+        "strong": 0,
         "alt": 0,
         "ok": 0
       },
@@ -2341,29 +2090,17 @@
           "rank": "bis",
           "drop": "Ula'tek",
           "slot": "Weapon"
-        },
-        {
-          "id": 273778,
-          "name": "Polished Lightwood Channeler",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 251142,
-          "name": "Pendant of Malefic Fury",
-          "wowhead": "mythic",
-          "rank": "strong"
         }
       ],
       "url": "https://www.wowhead.com/guide/classes/mage/fire/bis-gear"
     },
     "FrostMage": {
-      "count": 12,
+      "count": 9,
       "withDrop": 9,
       "placeholders": 0,
       "byRank": {
         "bis": 9,
-        "strong": 3,
+        "strong": 0,
         "alt": 0,
         "ok": 0
       },
@@ -2439,24 +2176,6 @@
           "rank": "bis",
           "drop": "The Coiled Altar",
           "slot": "Legs"
-        },
-        {
-          "id": 273796,
-          "name": "Vile Vial of Volatile Venom",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 273649,
-          "name": "Stormbound Emblem of Dazar",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 273785,
-          "name": "Primordial Robe of Rites",
-          "wowhead": "mythic",
-          "rank": "strong"
         }
       ],
       "url": "https://www.wowhead.com/guide/classes/mage/frost/bis-gear"
@@ -2863,12 +2582,12 @@
       "url": "https://www.wowhead.com/guide/classes/monk/windwalker/bis-gear"
     },
     "HolyPaladin": {
-      "count": 15,
+      "count": 12,
       "withDrop": 12,
       "placeholders": 0,
       "byRank": {
         "bis": 12,
-        "strong": 3,
+        "strong": 0,
         "alt": 0,
         "ok": 0
       },
@@ -2967,35 +2686,17 @@
           "wowhead": "overall",
           "rank": "bis",
           "drop": "Nymrissa Wavecaller"
-        },
-        {
-          "id": 273780,
-          "name": "Venom-Etched Crescent",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 251150,
-          "name": "Tempest's Shelter",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 273792,
-          "name": "Band of the Amani Warlord",
-          "wowhead": "mythic",
-          "rank": "strong"
         }
       ],
       "url": "https://www.wowhead.com/guide/classes/paladin/holy/bis-gear"
     },
     "ProtectionPaladin": {
-      "count": 20,
+      "count": 16,
       "withDrop": 16,
       "placeholders": 0,
       "byRank": {
         "bis": 16,
-        "strong": 4,
+        "strong": 0,
         "alt": 0,
         "ok": 0
       },
@@ -3124,30 +2825,6 @@
           "wowhead": "overall",
           "rank": "bis",
           "drop": "Vashnik the Malignant"
-        },
-        {
-          "id": 273797,
-          "name": "Tattered Amani War Banner",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 251195,
-          "name": "Thorned Reply",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 251196,
-          "name": "Teldrassil's Sacrifice",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 251193,
-          "name": "Taproot Ribs",
-          "wowhead": "mythic",
-          "rank": "strong"
         }
       ],
       "url": "https://www.wowhead.com/guide/classes/paladin/protection/bis-gear"
@@ -3302,12 +2979,12 @@
       "placeholders": 0
     },
     "DisciplinePriest": {
-      "count": 15,
+      "count": 13,
       "withDrop": 13,
       "placeholders": 0,
       "byRank": {
         "bis": 13,
-        "strong": 2,
+        "strong": 0,
         "alt": 0,
         "ok": 0
       },
@@ -3415,29 +3092,17 @@
           "rank": "bis",
           "drop": "Ula'tek",
           "slot": "Weapon"
-        },
-        {
-          "id": 251139,
-          "name": "Summoner's Searing Shirt",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 273792,
-          "name": "Band of the Amani Warlord",
-          "wowhead": "mythic",
-          "rank": "strong"
         }
       ],
       "url": "https://www.wowhead.com/guide/classes/priest/discipline/bis-gear"
     },
     "HolyPriest": {
-      "count": 16,
+      "count": 14,
       "withDrop": 14,
       "placeholders": 0,
       "byRank": {
         "bis": 14,
-        "strong": 2,
+        "strong": 0,
         "alt": 0,
         "ok": 0
       },
@@ -3553,18 +3218,6 @@
           "rank": "bis",
           "drop": "Ula'tek",
           "slot": "Weapon"
-        },
-        {
-          "id": 159234,
-          "name": "Down-Lined Breeches",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 193766,
-          "name": "Kokia's Burnout Rod",
-          "wowhead": "mythic",
-          "rank": "strong"
         }
       ],
       "url": "https://www.wowhead.com/guide/classes/priest/holy/bis-gear"
@@ -3713,12 +3366,12 @@
       "placeholders": 0
     },
     "AssassinationRogue": {
-      "count": 15,
+      "count": 10,
       "withDrop": 10,
       "placeholders": 0,
       "byRank": {
         "bis": 10,
-        "strong": 5,
+        "strong": 0,
         "alt": 0,
         "ok": 0
       },
@@ -3801,59 +3454,29 @@
           "wowhead": "overall",
           "rank": "bis",
           "drop": "Ula'tek",
-          "slot": "Head"
-        },
-        {
-          "id": 250259,
-          "name": "Sapling of the Dawnroot",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 159617,
-          "name": "Lustrous Golden Plumage",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 251159,
-          "name": "War Trial Vestments",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 251223,
-          "name": "Somber Spaulders",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 275070,
-          "name": "Sharpened Lightwood Slasher",
-          "wowhead": "mythic",
-          "rank": "strong"
+          "slot": "Offhand"
         }
       ],
       "url": "https://www.wowhead.com/guide/classes/rogue/assassination/bis-gear"
     },
     "OutlawRogue": {
-      "count": 15,
+      "count": 13,
       "withDrop": 13,
       "placeholders": 0,
       "byRank": {
         "bis": 13,
-        "strong": 2,
+        "strong": 0,
         "alt": 0,
         "ok": 0
       },
       "items": [
         {
-          "id": 275070,
-          "name": "Sharpened Lightwood Slasher",
+          "id": 271093,
+          "name": "Zatha'tek, Breath of Corruption",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Offhand",
-          "drop": "Altar of Fangs"
+          "drop": "Ula'tek"
         },
         {
           "id": 271875,
@@ -3950,29 +3573,17 @@
           "rank": "bis",
           "drop": "The Coiled Altar",
           "slot": "Weapon"
-        },
-        {
-          "id": 250259,
-          "name": "Sapling of the Dawnroot",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 159617,
-          "name": "Lustrous Golden Plumage",
-          "wowhead": "mythic",
-          "rank": "strong"
         }
       ],
       "url": "https://www.wowhead.com/guide/classes/rogue/outlaw/bis-gear"
     },
     "SubtletyRogue": {
-      "count": 17,
+      "count": 11,
       "withDrop": 11,
       "placeholders": 0,
       "byRank": {
         "bis": 11,
-        "strong": 6,
+        "strong": 0,
         "alt": 0,
         "ok": 0
       },
@@ -4064,53 +3675,17 @@
           "rank": "bis",
           "drop": "Ula'tek",
           "slot": "Weapon"
-        },
-        {
-          "id": 251190,
-          "name": "Bloodthorn Burnous",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 273797,
-          "name": "Tattered Amani War Banner",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 275070,
-          "name": "Sharpened Lightwood Slasher",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 251159,
-          "name": "War Trial Vestments",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 270164,
-          "name": "Gebbo's Bottomless Bag",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 250259,
-          "name": "Sapling of the Dawnroot",
-          "wowhead": "mythic",
-          "rank": "strong"
         }
       ],
       "url": "https://www.wowhead.com/guide/classes/rogue/subtlety/bis-gear"
     },
     "ElementalShaman": {
-      "count": 18,
+      "count": 16,
       "withDrop": 16,
       "placeholders": 0,
       "byRank": {
         "bis": 16,
-        "strong": 2,
+        "strong": 0,
         "alt": 0,
         "ok": 0
       },
@@ -4242,18 +3817,6 @@
           "rank": "bis",
           "drop": "Ula'tek",
           "slot": "Weapon"
-        },
-        {
-          "id": 250215,
-          "name": "Freightrunner's Flask",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 251142,
-          "name": "Pendant of Malefic Fury",
-          "wowhead": "mythic",
-          "rank": "strong"
         }
       ],
       "url": "https://www.wowhead.com/guide/classes/shaman/elemental/bis-gear"
@@ -4378,17 +3941,18 @@
           "drop": "The Coiled Altar"
         }
       ],
-      "url": "https://www.wowhead.com/guide/classes/shaman/enhancement/bis-gear"
+      "url": "https://www.wowhead.com/guide/classes/shaman/enhancement/bis-gear",
+      "reused": true
     },
     "RestorationShaman": {
-      "count": 18,
+      "count": 25,
       "withDrop": 12,
       "placeholders": 0,
       "byRank": {
-        "bis": 12,
-        "strong": 6,
-        "alt": 0,
-        "ok": 0
+        "bis": 14,
+        "strong": 5,
+        "alt": 2,
+        "ok": 4
       },
       "items": [
         {
@@ -4408,12 +3972,12 @@
           "drop": "Sszorak (Raid)"
         },
         {
-          "id": 159459,
-          "name": "Ritual Binder's Ring",
+          "id": 251148,
+          "name": "Pilfered Precious Band",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Ring",
-          "drop": "Kings Rest"
+          "drop": "Den of Nalorakk"
         },
         {
           "id": 270162,
@@ -4421,15 +3985,17 @@
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Trinket",
-          "drop": "Nek'zali the Soulcoiler (Raid)"
+          "drop": "Nek'zali the Soulcoiler (Raid)",
+          "note": "S Tier"
         },
         {
-          "id": 270164,
-          "name": "Gebbo's Bottomless Bag",
+          "id": 270167,
+          "name": "Wavecaller's Seastone",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Trinket",
-          "drop": "The Lost Explorers (Raid)"
+          "drop": "Nymrissa Wavebinder (Raid)",
+          "note": "S Tier"
         },
         {
           "id": 271092,
@@ -4448,20 +4014,20 @@
           "drop": "Raid / Vault"
         },
         {
-          "id": 268253,
-          "name": "Silken Voodoo Drape",
+          "id": 268248,
+          "name": "Amani Summoning Shawl",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Shoulders",
-          "drop": "The Coiled Altar (Raid)"
+          "drop": "Nek'zali the Soulcoiler (Raid)"
         },
         {
-          "id": 251200,
-          "name": "Saptorbane Guards",
+          "id": 159380,
+          "name": "Arc Glass Bindings",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Chest",
-          "drop": "The Blinding Vale"
+          "drop": "Temple of Sethraliss"
         },
         {
           "id": 268216,
@@ -4487,51 +4053,119 @@
           "drop": "The Lost Explorers (Raid)"
         },
         {
+          "id": 270164,
+          "name": "Gebbo's Bottomless Bag",
+          "wowhead": "trinket",
+          "rank": "bis",
+          "slot": "Trinket",
+          "note": "S Tier"
+        },
+        {
+          "id": 270169,
+          "name": "Hex Lord's Dooming Idol",
+          "wowhead": "trinket",
+          "rank": "bis",
+          "slot": "Trinket",
+          "note": "S Tier"
+        },
+        {
           "id": 193757,
           "name": "Ruby Whelp Shell",
-          "wowhead": "mythic",
-          "rank": "strong"
+          "wowhead": "trinket",
+          "rank": "strong",
+          "slot": "Trinket",
+          "note": "A Tier"
         },
         {
           "id": 250215,
           "name": "Freightrunner's Flask",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 273792,
-          "name": "Band of the Amani Warlord",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 251148,
-          "name": "Pilfered Precious Band",
-          "wowhead": "mythic",
-          "rank": "strong"
+          "wowhead": "trinket",
+          "rank": "strong",
+          "slot": "Trinket",
+          "note": "A Tier"
         },
         {
           "id": 248583,
           "name": "Drum of Renewed Bonds",
-          "wowhead": "mythic",
-          "rank": "strong"
+          "wowhead": "trinket",
+          "rank": "strong",
+          "slot": "Trinket",
+          "note": "A Tier"
         },
         {
           "id": 251792,
           "name": "Glorious Crusader's Keepsake",
-          "wowhead": "mythic",
-          "rank": "strong"
+          "wowhead": "trinket",
+          "rank": "strong",
+          "slot": "Trinket",
+          "note": "A Tier"
+        },
+        {
+          "id": 250255,
+          "name": "Unstable Felheart Crystal",
+          "wowhead": "trinket",
+          "rank": "strong",
+          "slot": "Trinket",
+          "note": "A Tier"
+        },
+        {
+          "id": 250214,
+          "name": "Lightspire Core",
+          "wowhead": "trinket",
+          "rank": "alt",
+          "slot": "Trinket",
+          "note": "B Tier"
+        },
+        {
+          "id": 273796,
+          "name": "Vile Vial of Volatile Venom",
+          "wowhead": "trinket",
+          "rank": "alt",
+          "slot": "Trinket",
+          "note": "B Tier"
+        },
+        {
+          "id": 250248,
+          "name": "Mycolic Medicine",
+          "wowhead": "trinket",
+          "rank": "ok",
+          "slot": "Trinket",
+          "note": "C Tier"
+        },
+        {
+          "id": 273649,
+          "name": "Stormbound Emblem of Dazar",
+          "wowhead": "trinket",
+          "rank": "ok",
+          "slot": "Trinket",
+          "note": "D Tier"
+        },
+        {
+          "id": 270171,
+          "name": "Preternatural Antivenom",
+          "wowhead": "trinket",
+          "rank": "ok",
+          "slot": "Trinket",
+          "note": "D Tier"
+        },
+        {
+          "id": 250254,
+          "name": "Seed of Radiant Hope",
+          "wowhead": "trinket",
+          "rank": "ok",
+          "slot": "Trinket",
+          "note": "D Tier"
         }
       ],
       "url": "https://www.wowhead.com/guide/classes/shaman/restoration/bis-gear"
     },
     "AfflictionWarlock": {
-      "count": 17,
+      "count": 16,
       "withDrop": 16,
       "placeholders": 0,
       "byRank": {
         "bis": 16,
-        "strong": 1,
+        "strong": 0,
         "alt": 0,
         "ok": 0
       },
@@ -4663,23 +4297,17 @@
           "rank": "bis",
           "drop": "Ula'tek",
           "slot": "Weapon"
-        },
-        {
-          "id": 273796,
-          "name": "Vile Vial of Volatile Venom",
-          "wowhead": "mythic",
-          "rank": "strong"
         }
       ],
       "url": "https://www.wowhead.com/guide/classes/warlock/affliction/bis-gear"
     },
     "DemonologyWarlock": {
-      "count": 12,
+      "count": 11,
       "withDrop": 11,
       "placeholders": 0,
       "byRank": {
         "bis": 11,
-        "strong": 1,
+        "strong": 0,
         "alt": 0,
         "ok": 0
       },
@@ -4757,12 +4385,12 @@
           "drop": "The Lost Explorers"
         },
         {
-          "id": 250215,
-          "name": "Freightrunner's Flask",
+          "id": 273796,
+          "name": "Vile Vial Of Volatile Venom",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Trinket",
-          "drop": "Zaen Bladesorrow"
+          "drop": "Rav'i"
         },
         {
           "id": 271092,
@@ -4771,23 +4399,17 @@
           "rank": "bis",
           "drop": "Ula'tek",
           "slot": "Weapon"
-        },
-        {
-          "id": 273779,
-          "name": "Nocuous Focal Fang",
-          "wowhead": "mythic",
-          "rank": "strong"
         }
       ],
       "url": "https://www.wowhead.com/guide/classes/warlock/demonology/bis-gear"
     },
     "DestructionWarlock": {
-      "count": 17,
+      "count": 16,
       "withDrop": 16,
       "placeholders": 0,
       "byRank": {
         "bis": 16,
-        "strong": 1,
+        "strong": 0,
         "alt": 0,
         "ok": 0
       },
@@ -4919,23 +4541,17 @@
           "rank": "bis",
           "drop": "Ula'tek",
           "slot": "Weapon"
-        },
-        {
-          "id": 250215,
-          "name": "Freightrunner's Flask",
-          "wowhead": "mythic",
-          "rank": "strong"
         }
       ],
       "url": "https://www.wowhead.com/guide/classes/warlock/destruction/bis-gear"
     },
     "ArmsWarrior": {
-      "count": 13,
+      "count": 10,
       "withDrop": 10,
       "placeholders": 0,
       "byRank": {
         "bis": 10,
-        "strong": 3,
+        "strong": 0,
         "alt": 0,
         "ok": 0
       },
@@ -5018,35 +4634,17 @@
           "rank": "bis",
           "drop": "Voidscar Arena",
           "slot": "Ring"
-        },
-        {
-          "id": 251136,
-          "name": "Signet of Snarling Servitude",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 273782,
-          "name": "Vile Writhefang Glaive",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 273796,
-          "name": "Vile Vial of Volatile Venom",
-          "wowhead": "mythic",
-          "rank": "strong"
         }
       ],
       "url": "https://www.wowhead.com/guide/classes/warrior/arms/bis-gear"
     },
     "FuryWarrior": {
-      "count": 12,
+      "count": 9,
       "withDrop": 9,
       "placeholders": 0,
       "byRank": {
         "bis": 9,
-        "strong": 3,
+        "strong": 0,
         "alt": 0,
         "ok": 0
       },
@@ -5121,35 +4719,17 @@
           "rank": "bis",
           "drop": "The Coiled Altar",
           "slot": "Gloves"
-        },
-        {
-          "id": 251126,
-          "name": "Greathelm of Temptation",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 251138,
-          "name": "Cinderfury Shoulderguards",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 271457,
-          "name": "Jeweled Gauntlets of the Jade Warlord",
-          "wowhead": "mythic",
-          "rank": "strong"
         }
       ],
       "url": "https://www.wowhead.com/guide/classes/warrior/fury/bis-gear"
     },
     "ProtectionWarrior": {
-      "count": 20,
+      "count": 16,
       "withDrop": 16,
       "placeholders": 0,
       "byRank": {
         "bis": 16,
-        "strong": 4,
+        "strong": 0,
         "alt": 0,
         "ok": 0
       },
@@ -5278,30 +4858,6 @@
           "wowhead": "overall",
           "rank": "bis",
           "drop": "Vashnik the Malignant"
-        },
-        {
-          "id": 273797,
-          "name": "Tattered Amani War Banner",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 251195,
-          "name": "Thorned Reply",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 251196,
-          "name": "Teldrassil's Sacrifice",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 251193,
-          "name": "Taproot Ribs",
-          "wowhead": "mythic",
-          "rank": "strong"
         }
       ],
       "url": "https://www.wowhead.com/guide/classes/warrior/protection/bis-gear"

@@ -1,10 +1,10 @@
 ## Interface: 120100
 ## Title: BiSPulse
 ## Title-deDE: BiSPulse
-## Notes: Wowhead BiS rankings for all Retail specs.
-## Notes-deDE: BiS-Rankings von Wowhead — alle Retail-Specs.
+## Notes: Wowhead + Archon BiS rankings for all Retail specs.
+## Notes-deDE: BiS-Rankings von Wowhead + Archon — alle Retail-Specs.
 ## Author: D
-## Version: 1.5.6
+## Version: 1.5.8
 ## SavedVariables: BiSPulseDB
 ## IconTexture: Interface\AddOns\BiSPulse\Media\BiSPulseIcon
 ## Category: Combat

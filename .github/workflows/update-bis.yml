@@ -35,8 +35,20 @@ jobs:
         working-directory: tools
         run: node scrape_wowhead.mjs
 
-      - name: Generate Data/*.lua
-        run: python tools/scrape_method_bis.py --wowhead-json tools/wowhead_browser_data.json
+      - name: Generate Data/*.lua (merge Archon snapshot when present)
+        run: |
+          if [ -f tools/archon_browser_data.json ]; then
+            python tools/scrape_method_bis.py \
+              --wowhead-json tools/wowhead_browser_data.json \
+              --archon-json tools/archon_browser_data.json
+          else
+            python tools/scrape_method_bis.py \
+              --wowhead-json tools/wowhead_browser_data.json
+          fi
+
+      - name: Enrich empty drop text (best effort)
+        run: python tools/enrich_drops.py --max-lookups 400
+        continue-on-error: true
 
       - name: Data quality gates
         run: python tools/check_data_quality.py --max-placeholder-rate 0.40 --min-specs 36 --min-items 500
@@ -48,6 +60,8 @@ jobs:
           title: "Weekly Wowhead BiS refresh"
           body: |
             Automated scrape of Wowhead Overall BiS guides.
+
+            Merges committed `tools/archon_browser_data.json` when present (Archon is not scraped in CI — Cloudflare).
 
             Quality gates: min 36 specs, min 500 items, placeholder names ≤ 40%.
 

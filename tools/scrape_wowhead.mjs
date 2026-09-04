@@ -267,13 +267,39 @@ function tierLetterToRank(letter) {
   return null;
 }
 
+const MIN_GUIDE_OFFSET = 80000;
+
 function sectionChunk(html, startPats, endPats, hardCap = 35000) {
   let start = -1;
+  // Prefer first matching pattern in priority order, but only in guide body (skip TOC/nav).
   for (const p of startPats) {
-    const i = html.search(p);
-    if (i >= 0 && (start < 0 || i < start)) start = i;
+    const slice = html.slice(MIN_GUIDE_OFFSET);
+    const i = slice.search(p);
+    if (i >= 0) {
+      start = MIN_GUIDE_OFFSET + i;
+      break;
+    }
+  }
+  if (start < 0) {
+    // Fallback: last occurrence (TOC often appears before the real heading).
+    for (const p of startPats) {
+      let last = -1;
+      let from = 0;
+      while (from < html.length) {
+        const slice = html.slice(from);
+        const i = slice.search(p);
+        if (i < 0) break;
+        last = from + i;
+        from = last + 1;
+      }
+      if (last >= MIN_GUIDE_OFFSET / 2) {
+        start = last;
+        break;
+      }
+    }
   }
   if (start < 0) return "";
+
   const rest = html.slice(start + 20);
   let end = -1;
   for (const p of endPats) {
@@ -361,12 +387,13 @@ function extractItemIds(html) {
   return ids;
 }
 
-/** Trinket tier lists: S/A/B(/C) headings or Tier | Item tables. */
+/** Trinket tier lists: S/A/B(/C) headings, tables, or Wowhead tier-list widget. */
 function extractTrinketTierRows(html) {
   const chunk = sectionChunk(
     html,
     [
       /Trinket Tier List/i,
+      /Best .* Trinkets in/i,
       /Best .* Trinkets/i,
       /Trinket Tier/i,
       /toc=\\"Trinkets\\"/i,
@@ -379,6 +406,7 @@ function extractTrinketTierRows(html) {
       /Consumable/i,
       /Talent/i,
       /Rotation/i,
+      /Set Bonuses/i,
       /toc=\\"Stat/i,
     ],
     45000
@@ -386,6 +414,23 @@ function extractTrinketTierRows(html) {
   if (!chunk) return [];
 
   const rows = [];
+
+  // New Wowhead widget: <div class="tier-list-tier"><div class="tier-label">S</div>…
+  const tierBlocks = chunk.split(/<div class="tier-list-tier">/i).slice(1);
+  for (const block of tierBlocks) {
+    const labelM = block.match(/class="tier-label[^"]*"[^>]*>\s*([SABCD])\+?\s*<\/div>/i);
+    if (!labelM) continue;
+    const letter = labelM[1].toUpperCase();
+    const rank = tierLetterToRank(letter);
+    if (!rank) continue;
+    const contentM = block.match(/class="tier-content"[^>]*>([\s\S]*)/i);
+    const slice = contentM ? contentM[1] : block;
+    const endM = slice.search(/<div class="tier-list-tier">|<h[234]\b/i);
+    const tierSlice = endM >= 0 ? slice.slice(0, endM) : slice.slice(0, 12000);
+    for (const id of extractItemIds(tierSlice)) {
+      rows.push({ id, rank, note: `${letter} Tier`, slot: "Trinket" });
+    }
+  }
 
   // Heading-based: ### S Tier / [b]A Tier[/b] then items until next tier
   const headingRe =
@@ -489,13 +534,36 @@ function parseGuide(html) {
   const secondarySections = [
     {
       wowhead: "raid",
-      start: [/Raid BiS/i, /Best Gear from Raids/i, /Best Raid Items/i, /Raid Drops/i],
-      end: [/Mythic\+/i, /M\+ BiS/i, /Crafted Gear/i, /Trinket Tier/i, /Dungeon/i],
+      start: [
+        /Best Gear from Raids/i,
+        /Best Raid Items/i,
+        /Raid BiS/i,
+        /Raid Drops/i,
+      ],
+      end: [
+        /Best Gear from Mythic/i,
+        /Best .* Trinkets/i,
+        /Trinket Tier List/i,
+        /Crafted Gear/i,
+        /Set Bonuses/i,
+      ],
     },
     {
       wowhead: "mythic",
-      start: [/Mythic\+ BiS/i, /M\+ BiS/i, /Best Gear from Mythic/i, /Mythic Plus/i],
-      end: [/Crafted Gear/i, /Trinket Tier/i, /Embellish/i, /Stat Priority/i],
+      start: [
+        /Best Gear from Mythic/i,
+        /Mythic\+ BiS/i,
+        /M\+ BiS/i,
+        /Mythic Plus BiS/i,
+        /Mythic\+ Drops/i,
+      ],
+      end: [
+        /Best .* Trinkets/i,
+        /Trinket Tier List/i,
+        /Crafted Gear/i,
+        /Embellish/i,
+        /Stat Priority/i,
+      ],
     },
   ];
   for (const sec of secondarySections) {
@@ -754,4 +822,4 @@ if (isDirectRun) {
   });
 }
 
-export { parseGuide, extractGearRows, bisChunk, cleanDrop, extractTrinketTierRows };
+export { parseGuide, extractGearRows, bisChunk, cleanDrop, extractTrinketTierRows, sectionChunk };

@@ -1,10 +1,10 @@
 # BiSPulse — WoW Retail Addon
 
-Zeigt dir anhand der **Wowhead**-BiS-Guides, wie gut ein Item für deine Spec ist — im Tooltip, als Toast und in der Checkliste.
+Zeigt dir anhand der **Wowhead**-BiS-Guides und **Archon**-Popularitätsdaten, wie gut ein Item für deine Spec ist — im Tooltip, als Toast und in der Checkliste.
 
 **Alle Retail-Specs** (40) für Midnight Patch **12.1** / Season 2.
 
-Daten: Wowhead Overall-BiS, generiert mit `tools/scrape_method_bis.py` aus `tools/wowhead_browser_data.json`.
+Daten: Wowhead Overall-BiS + Archon Raid/M+ Popularität, generiert mit `tools/update_bis.ps1`.
 
 ## Specs
 
@@ -24,7 +24,7 @@ Death Knight · Demon Hunter (inkl. Devourer) · Druid · Evoker · Hunter · Ma
 - **Custom Toast** — Icon + Rank + Score + ilvl-Vergleich
 - **Loot-Badges** — Badge + Glow im Loot-Fenster
 - **Offspec-Tracking** — Alerts/Checkliste für eine zweite Spec
-- **Minimap-Button** + **BiS-Checkliste**
+- **Minimap-Button** + **BiS-Checkliste** (Flat-UI, Filter, Sortierung, Archon-%)
 - Deutsch + Englisch
 
 ## Befehle
@@ -41,7 +41,7 @@ Death Knight · Demon Hunter (inkl. Devourer) · Druid · Evoker · Hunter · Ma
 
 WoW-Addons dürfen **nicht** selbst Wowhead aufrufen. Frische Listen kommen nur über ein Addon-Update (CurseForge/Wago Auto-Update).
 
-Lokal / CI (Playwright holt die Guides, Python schreibt `Data/*.lua`):
+Lokal (Wowhead per Playwright; Archon-Snapshot manuell — siehe `tools/ARCHON_REFRESH.md`):
 
 ```powershell
 cd tools
@@ -55,4 +55,4 @@ Im Spiel warnt BiSPulse, wenn die Wowhead-Listen älter als 14 Tage sind.
 
 ## Hinweis
 
-Für Feintuning weiterhin simmen (Raidbots). BiSPulse mappt Wowhead-Overall-Listen, es ersetzt keine Sims.
+Für Feintuning weiterhin simmen (Raidbots). BiSPulse mappt Wowhead-Overall-Listen und ergänzt populäre Alternativen von Archon — es ersetzt keine Sims.
