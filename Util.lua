@@ -93,8 +93,30 @@ local DROP_INSTANCE = {
   { "emberdawn", BLINDING },
   -- Returning dungeons
   { "avatar of sethraliss", SETHRALISS },
+  { "adderis and aspix", SETHRALISS },
+  { "adderis & aspix", SETHRALISS },
+  { "merektha", SETHRALISS },
+  { "galvazzt", SETHRALISS },
+  { "the golden serpent", KINGS_REST },
+  { "golden serpent", KINGS_REST },
+  { "mchimba the embalmer", KINGS_REST },
+  { "mchimba", KINGS_REST },
+  { "the council of tribes", KINGS_REST },
+  { "council of tribes", KINGS_REST },
   { "king dazar", KINGS_REST },
+  { "dazar, the first king", KINGS_REST },
+  { "dazar the first king", KINGS_REST },
   { "mor'zahi", KINGS_REST },
+  { "alleria windrunner", VOIDSPIRE },
+  -- Ruby Life Pools
+  { "kyrakka and erkhart stormvein", RUBY },
+  { "kyrakka & erkhart stormvein", RUBY },
+  { "kyrakka", RUBY },
+  { "erkhart stormvein", RUBY },
+  { "kokia blazehoof", RUBY },
+  { "melidrussa chillworn", RUBY },
+  -- Coiled Altar encounter name used on trinkets
+  { "hex lord malacrass", VENOMOUS },
 }
 
 -- Crafts / bare instance names: no extra parentheses (already the location).
@@ -120,11 +142,26 @@ local BARE_INSTANCES = {
   ["jewelcrafting"] = true,
   ["inscription"] = true,
   ["alchemy"] = true,
+  ["enchanting"] = true,
   ["crafting"] = true,
   ["crafting/misc"] = true,
   ["crafting/ misc"] = true,
   ["catalyst"] = true,
   ["tier set"] = true,
+  ["vendor"] = true,
+  ["pvp"] = true,
+  ["world drop"] = true,
+  ["world quest"] = true,
+  ["world quest / prey"] = true,
+  ["prey"] = true,
+  ["delves"] = true,
+}
+
+local CRAFT_ALIASES = {
+  ["crafting/misc"] = "Crafting",
+  ["crafting/ misc"] = "Crafting",
+  ["crafting / misc"] = "Crafting",
+  ["crafted"] = "Crafting",
 }
 
 --- Append "(Raid/Dungeon)" after boss names when known (all ranks).
@@ -137,7 +174,13 @@ function BiSPulse.FormatDropSource(drop)
   cleaned = cleaned:match("^%s*(.-)%s*$") or cleaned
 
   local key = cleaned:lower():gsub("%s+", " ")
+  if CRAFT_ALIASES[key] then
+    return CRAFT_ALIASES[key]
+  end
   if BARE_INSTANCES[key] then
+    if key:find("crafting", 1, true) then
+      return "Crafting"
+    end
     return cleaned
   end
   if cleaned:find("%(", 1, true) then
@@ -151,4 +194,17 @@ function BiSPulse.FormatDropSource(drop)
     end
   end
   return cleaned
+end
+
+--- Instance / craft location for checklist filters (from raw or formatted drop).
+function BiSPulse.ExtractDropInstance(drop)
+  if type(drop) ~= "string" or drop == "" then
+    return ""
+  end
+  local formatted = BiSPulse.FormatDropSource(drop) or drop
+  local inst = formatted:match("%(([^%)]+)%)%s*$")
+  if inst and inst ~= "" then
+    return inst
+  end
+  return formatted
 end

@@ -3,18 +3,28 @@
 ## 1.5.10
 
 ### DE
+- Datenquelle nur noch Wowhead Overall-BiS (Archon-/Popularitäts-% entfernt)
+- Wowhead Raid- und Mythic+-Listen wieder als Strong (Parser-Fixes: abgeschnittene Abschnitte + PTR-`/ptr/item=`-Links)
+- Overall-BiS nur noch aus Slot-Tabellen (keine Prosa-Itemlinks — z. B. kein Dragonflight-Galerattle als BiS)
+- Checkliste/Optionen: Alt/Niche entfernt — Filter nur noch Alle · BiS · Strong; Progress `BiS x/y · Strong a/b`
 - Checkliste: Drop-Zeile einheitlich als Boss (Instanz), z. B. `Zaen Bladesorrow (Murder Row)`
-- Fehlende Bosse nachgezogen (u. a. Speakeasy Shroud, Vile Vial → Rav'i, Aln'hara Sprigshot → Engineering)
-- Primal-Sentry-Tier mit Boss-Quellen (Voidspire / Dreamrift)
-- Instanz-Mapping für Strong/Alt/Niche (Murder Row, Voidscar, Altar of Fangs, Sporefall, …)
+- Checkliste: Filter nach Instanz / Craft / „Ohne Quelle“; Datenstand in der Subzeile; Rechtsklick → Guide-Links
 - Guide-Links: kopierbares Popup (Copy / Strg+C) statt Chat-Spam
+- Drop-Quellen nachgezogen (fehlende Bosse, Tier-Tokens Venomous Abyss, Twin-Strike, Backdraft Cleaver, Drum / Keepsake / Hex Lord Idol, …)
+- Instanz-Mapping erweitert (Murder Row, Voidscar, Altar of Fangs, King's Rest, Ruby Life Pools, Hex Lord Malacrass, Delves / World Quest·Prey, …)
+- Slot-Korrekturen (u. a. Aqirbane Reliquary → Neck; Boots/Legs-Heuristik); Craft-Labels vereinheitlicht
 
 ### EN
+- Data source is Wowhead Overall BiS only (Archon / popularity % removed)
+- Wowhead Raid and Mythic+ lists restored as Strong (parser fixes: truncated sections + PTR `/ptr/item=` links)
+- Overall BiS from slot tables only (no prose item links — e.g. no Dragonflight Galerattle as BiS)
+- Checklist/options: Alt/Niche removed — filter is All · BiS · Strong only; progress `BiS x/y · Strong a/b`
 - Checklist: drop line consistently `Boss (Instance)`, e.g. `Zaen Bladesorrow (Murder Row)`
-- Filled missing bosses (incl. Speakeasy Shroud, Vile Vial → Rav'i, Aln'hara Sprigshot → Engineering)
-- Primal Sentry tier pieces get boss sources (Voidspire / Dreamrift)
-- Instance mapping for Strong/Alt/Niche (Murder Row, Voidscar, Altar of Fangs, Sporefall, …)
+- Checklist: filter by instance / craft / “No source”; data date in subtitle; right-click → guide links
 - Guide links: copyable popup (Copy / Ctrl+C) instead of chat spam
+- Drop sources filled (missing bosses, Venomous Abyss tier tokens, Twin-Strike, Backdraft Cleaver, Drum / Keepsake / Hex Lord Idol, …)
+- Instance mapping expanded (Murder Row, Voidscar, Altar of Fangs, King's Rest, Ruby Life Pools, Hex Lord Malacrass, Delves / World Quest·Prey, …)
+- Slot fixes (incl. Aqirbane Reliquary → Neck; Boots/Legs heuristics); craft labels normalized
 
 ## 1.5.9
 

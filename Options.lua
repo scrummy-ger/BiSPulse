@@ -293,8 +293,6 @@ function addon:BuildOptions()
   local ranks = {
     { value = "bis", text = LabelOr("RANK_BIS", "Best in Slot") },
     { value = "strong", text = LabelOr("RANK_STRONG", "Strong Upgrade") },
-    { value = "alt", text = LabelOr("RANK_ALT", "Solid Alternative") },
-    { value = "ok", text = LabelOr("RANK_OK", "Situational / Niche") },
   }
 
   local dropdown
@@ -331,7 +329,7 @@ function addon:BuildOptions()
       end
     end
     cycle:SetScript("OnClick", function()
-      local order = { "bis", "strong", "alt", "ok" }
+      local order = { "bis", "strong" }
       local current = addon:GetDB().minRank or "strong"
       local idx = 1
       for i, v in ipairs(order) do
@@ -461,17 +459,12 @@ function addon:BuildOptions()
     if L["DATA_UPDATED"] then
       footer = footer .. "\n" .. L["DATA_UPDATED"]:format(stamp)
     end
-    if pack and pack.guides then
-      local bits = {}
-      if pack.guides.wowhead then
-        bits[#bits + 1] = (L["SOURCE_WOWHEAD"] or "Wowhead")
-      end
-      if pack.guides.archonRaid or pack.guides.archonMythic then
-        bits[#bits + 1] = (L["SOURCE_ARCHON"] or "Archon")
-      end
-      if #bits > 0 then
-        footer = footer .. "\n" .. (L["OPTS_GUIDES_HINT"] or "Guide links:") .. " " .. table.concat(bits, " · ")
-      end
+    if pack and pack.guides and pack.guides.wowhead then
+      footer = footer
+        .. "\n"
+        .. (L["OPTS_GUIDES_HINT"] or "Guide links:")
+        .. " "
+        .. (L["SOURCE_WOWHEAD"] or "Wowhead")
     end
     if panel.help then
       panel.help:SetText(footer)

@@ -59,16 +59,29 @@ const SPECS = [
 ];
 
 const EMBELLISHMENTS = new Set([240167, 273060, 245790]);
+// Known false positives still present in some Wowhead icon grids (DF leftovers).
+const BLOCKED_ITEMS = new Set([
+  193752, // Galerattle Gauntlets
+]);
 
 const SLOT_RE =
   /^(Weapon|Weapons|Offhand|Off[- ]?Hand|Main[- ]?Hand|One[- ]?Hand|Two[- ]?Hand|[12]H(?:\s*Weapon)?|MH|OH|Head|Helm|Neck|Shoulders?|Back|Cloak|Chest|Wrist|Wrists|Hands|Gloves|Waist|Belt|Legs|Feet|Boots|Finger|Ring|Trinkets?)$/i;
 
-/** Relative or absolute Wowhead item href (source only — clone per use). */
+/** Relative or absolute Wowhead item href (source only — clone per use).
+ *  Guides often link /ptr/item=… while Retail guides use /item=…. */
 const ITEM_HREF_SRC =
-  'href="(?:https?:\\/\\/(?:www|de|fr|es|pt|ru|ko|cn)\\.wowhead\\.com)?\\/item=(\\d+)\\/([^"#?]+)"';
+  'href="(?:https?:\\/\\/(?:www|de|fr|es|pt|ru|ko|cn)\\.wowhead\\.com)?(?:\\/(?:ptr|beta))?\\/item=(\\d+)\\/([^"#?]+)"';
 
 function itemHrefMatches(html) {
   return html.matchAll(new RegExp(ITEM_HREF_SRC, "gi"));
+}
+
+/** Match item id in an href that may include /ptr/ or /beta/. */
+const ITEM_HREF_ID_SRC =
+  'href="(?:https?:\\/\\/(?:www|de|fr|es|pt|ru|ko|cn)\\.wowhead\\.com)?(?:\\/(?:ptr|beta))?\\/item=(\\d+)';
+
+function itemHrefIdMatches(html) {
+  return html.matchAll(new RegExp(ITEM_HREF_ID_SRC, "gi"));
 }
 
 function sleep(ms) {
@@ -100,8 +113,8 @@ function normalizeSlot(raw) {
 
 function stripMarkup(s) {
   return String(s || "")
-    .replace(/\[url=[^\]]+\]([\s\S]*?)\[\/url\]/gi, "$1")
-    .replace(/\[\/?\w+[^\]]*\]/g, "")
+    .replace(/\[url[^\]]*\]([\s\S]*?)\[\\?\/url\]/gi, "$1")
+    .replace(/\[\\?\/?\w+[^\]]*\]/g, "")
     .replace(/<[^>]+>/g, " ")
     .replace(/&nbsp;/g, " ")
     .replace(/&amp;/g, "&")
@@ -142,14 +155,23 @@ function isPlaceholderName(name) {
 
 function buildNameIndex(html) {
   const names = {};
-  // Rendered item links (relative or absolute)
+  // Rendered item links (relative or absolute; Retail or PTR path)
+  for (const m of itemHrefMatches(html)) {
+    const id = Number(m[1]);
+    // Re-scan the same href occurrence for link inner HTML is awkward; use slug + nearby text.
+    if (!names[id]) names[id] = slugToName(m[2]);
+  }
   for (const m of html.matchAll(
-    /href="(?:https?:\/\/(?:www|de|fr|es|pt|ru|ko|cn)\.wowhead\.com)?\/item=(\d+)\/([^"#?]+)"[^>]*>([\s\S]*?)<\/a>/gi
+    new RegExp(
+      ITEM_HREF_SRC + String.raw`[^>]*>([\s\S]*?)<\/a>`,
+      "gi"
+    )
   )) {
     const id = Number(m[1]);
     const inner = m[3] || "";
     const text =
       (inner.match(/class="tinyicontxt"[^>]*>([^<]+)/i) || [])[1] ||
+      (inner.match(/class="icon-badge-content-text[^"]*"[^>]*>([^<]+)/i) || [])[1] ||
       (inner.match(/alt="([^"]+)"/i) || [])[1] ||
       stripMarkup(inner);
     if (text && !isPlaceholderName(text)) names[id] = text.trim();
@@ -170,32 +192,90 @@ function buildNameIndex(html) {
   return names;
 }
 
-function bisChunk(html) {
-  const startPats = [
-    /Overall BiS/i,
-    /Best-in-Slot Gear for/i,
-    /Best in Slot Gear for/i,
-    /Best[- ]in[- ]Slot/i,
-    /toc=\\"BiS Gear\\"/i,
-    /toc="BiS Gear"/i,
-  ];
-  let start = -1;
+/** End markers must not match prose like "best items…" / "crafted gear". */
+const TRINKET_SECTION_END = [
+  /<h[1-4]\b[^>]*>[\s\S]{0,120}?Trinkets/i,
+  /Best [\w'+ -]{2,50} Trinkets in\b/i,
+  /Trinket Tier List/i,
+];
+
+const CRAFTED_SECTION_END = [
+  /Best Crafted Gear/i,
+  /<h[1-4]\b[^>]*>[\s\S]{0,120}?Crafted Gear/i,
+  /Recommended Crafting Order/i,
+];
+
+function countItemRefs(html) {
+  return (html.match(/\[item=\d+|\/item=\d+/gi) || []).length;
+}
+
+function collectStarts(html, startPats, minOffset = 0) {
+  const starts = [];
   for (const p of startPats) {
-    let from = 0;
+    let from = minOffset;
     while (from < html.length) {
       const slice = html.slice(from);
       const i = slice.search(p);
       if (i < 0) break;
-      const abs = from + i;
-      // Prefer body content (skip early nav/chrome), but accept earlier for short pages
-      if (abs >= 15000 || from > 0) {
-        start = abs;
-        break;
-      }
-      from = abs + 1;
+      starts.push(from + i);
+      from = from + i + 1;
     }
-    if (start >= 0) break;
   }
+  return [...new Set(starts)].sort((a, b) => a - b);
+}
+
+function sliceUntilEnd(html, start, endPats, hardCap) {
+  const rest = html.slice(start + 20);
+  let end = -1;
+  for (const p of endPats) {
+    const i = rest.search(p);
+    if (i >= 0 && (end < 0 || i < end)) end = i;
+  }
+  if (end < 0 || end > hardCap) end = hardCap;
+  return html.slice(start, start + 20 + end);
+}
+
+function pickStartWithItems(html, startPats, endPats, { minOffset = 0, hardCap = 50000 } = {}) {
+  const starts = collectStarts(html, startPats, minOffset);
+  let best = -1;
+  let bestScore = -1;
+  for (const s of starts) {
+    const chunk = sliceUntilEnd(html, s, endPats, hardCap);
+    // Prefer real Slot|Item|Source tables over prose / tooltip junk with many links.
+    const rows = extractGearRows(chunk).filter((r) => r.id && r.slot).length;
+    const badges = (chunk.match(/icon-badge/gi) || []).length;
+    const refs = countItemRefs(chunk);
+    // Icon-badge grids (Raid/M+ highlights) beat bare link noise in TOC/sidebars.
+    const score = rows * 1000 + badges * 50 + Math.min(refs, 40);
+    if (score > bestScore) {
+      bestScore = score;
+      best = s;
+    }
+  }
+  if (best >= 0 && bestScore > 0) return best;
+  return starts.length ? starts[starts.length - 1] : -1;
+}
+
+function bisChunk(html) {
+  // Prefer real guide headings — never bare "Overall BiS" (matches tabs + tooltip copy).
+  const startPats = [
+    /<h[23]\b[^>]*>[\s\S]{0,80}?Best in Slot Gear for/i,
+    /Best in Slot Gear for/i,
+    /Best-in-Slot Gear for/i,
+    /\[h3[^\]]*\][^\[]{0,80}Best in Slot Gear/i,
+  ];
+  const endPats = [
+    /Best Gear from Raids/i,
+    /Best Raid Items/i,
+    /Best Gear to Catalyze/i,
+    /Learn About Popular Gear/i,
+    ...CRAFTED_SECTION_END,
+    ...TRINKET_SECTION_END,
+  ];
+  let start = pickStartWithItems(html, startPats, endPats, {
+    minOffset: 15000,
+    hardCap: 50000,
+  });
   if (start < 0) {
     const slice = html.slice(20000);
     let i = slice.search(/\[item=\d+/i);
@@ -204,25 +284,7 @@ function bisChunk(html) {
     }
     start = i >= 0 ? 20000 + i - 200 : 20000;
   }
-
-  const endPats = [
-    /toc=\\"Raid Drops\\"/i,
-    /toc="Raid Drops"/i,
-    /Best Gear from Raids/i,
-    /Best Raid Items/i,
-    /Best Gear to Catalyze/i,
-    /Crafted Gear/i,
-    /Trinket Tier List/i,
-  ];
-  let end = -1;
-  const rest = html.slice(start + 20);
-  for (const p of endPats) {
-    const i = rest.search(p);
-    if (i >= 0 && (end < 0 || i < end)) end = i;
-  }
-  const hardCap = 50000;
-  if (end < 0 || end > hardCap) end = hardCap;
-  return html.slice(start, start + 20 + end);
+  return sliceUntilEnd(html, start, endPats, 50000);
 }
 
 function cleanDrop(raw) {
@@ -260,62 +322,31 @@ function tierLetterToRank(letter) {
   const t = String(letter || "")
     .trim()
     .toUpperCase();
+  // Only S/A become list ranks. B/C/D are ignored (no Alt/Niche product ranks).
   if (t === "S" || t === "S+" || t === "SS") return "bis";
   if (t === "A" || t === "A+" || t === "A-") return "strong";
-  if (t === "B" || t === "B+" || t === "B-") return "alt";
-  if (t === "C" || t === "C+" || t === "D" || t === "F") return "ok";
   return null;
 }
 
 const MIN_GUIDE_OFFSET = 80000;
 
 function sectionChunk(html, startPats, endPats, hardCap = 35000) {
-  let start = -1;
-  // Prefer first matching pattern in priority order, but only in guide body (skip TOC/nav).
-  for (const p of startPats) {
-    const slice = html.slice(MIN_GUIDE_OFFSET);
-    const i = slice.search(p);
-    if (i >= 0) {
-      start = MIN_GUIDE_OFFSET + i;
-      break;
-    }
-  }
-  if (start < 0) {
-    // Fallback: last occurrence (TOC often appears before the real heading).
-    for (const p of startPats) {
-      let last = -1;
-      let from = 0;
-      while (from < html.length) {
-        const slice = html.slice(from);
-        const i = slice.search(p);
-        if (i < 0) break;
-        last = from + i;
-        from = last + 1;
-      }
-      if (last >= MIN_GUIDE_OFFSET / 2) {
-        start = last;
-        break;
-      }
-    }
-  }
+  // Prefer the start whose bounded chunk actually contains item refs.
+  const start = pickStartWithItems(html, startPats, endPats, {
+    minOffset: Math.floor(MIN_GUIDE_OFFSET / 2),
+    hardCap,
+  });
   if (start < 0) return "";
-
-  const rest = html.slice(start + 20);
-  let end = -1;
-  for (const p of endPats) {
-    const i = rest.search(p);
-    if (i >= 0 && (end < 0 || i < end)) end = i;
-  }
-  if (end < 0 || end > hardCap) end = hardCap;
-  return html.slice(start, start + 20 + end);
+  return sliceUntilEnd(html, start, endPats, hardCap);
 }
 
 /** Pull Slot | Item | Source rows from BBCode + HTML tables. */
 function extractGearRows(html) {
   const rows = [];
 
-  for (const tr of html.matchAll(/\[tr\]([\s\S]*?)\[\/tr\]/gi)) {
-    const tds = [...tr[1].matchAll(/\[td\]([\s\S]*?)\[\/td\]/gi)].map((m) => m[1]);
+  // Wowhead often escapes BBCode closers as [\/td] [\/tr] inside JSON/script payloads.
+  for (const tr of html.matchAll(/\[tr\]([\s\S]*?)\[\\?\/tr\]/gi)) {
+    const tds = [...tr[1].matchAll(/\[td\]([\s\S]*?)\[\\?\/td\]/gi)].map((m) => m[1]);
     if (tds.length < 2) continue;
     const slotRaw = stripMarkup(tds[0]);
     if (!SLOT_RE.test(slotRaw)) continue;
@@ -333,36 +364,29 @@ function extractGearRows(html) {
     });
   }
 
-  // HTML table rows — absolute or relative item URLs, name may be in nested span/img
-  const htmlRow =
-    /<(?:td|th)[^>]*>\s*(?:<[^>]+>\s*)*([^<]{2,40}?)\s*(?:<\/[^>]+>\s*)*<\/(?:td|th)>\s*<(?:td|th)[^>]*>[\s\S]{0,1200}?href="(?:https?:\/\/(?:www|de|fr|es|pt|ru|ko|cn)\.wowhead\.com)?\/item=(\d+)\/([^"#?]+)"[\s\S]{0,800}?<\/(?:td|th)>\s*<(?:td|th)[^>]*>([\s\S]*?)<\/(?:td|th)>/gi;
-  for (const m of html.matchAll(htmlRow)) {
-    const slotRaw = stripMarkup(m[1]);
+  // HTML tables — parse per <tr> so empty item cells cannot steal the next row's link.
+  for (const tr of html.matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr>/gi)) {
+    const cells = [...tr[1].matchAll(/<(?:td|th)\b[^>]*>([\s\S]*?)<\/(?:td|th)>/gi)].map(
+      (m) => m[1]
+    );
+    if (cells.length < 2) continue;
+    const slotRaw = stripMarkup(cells[0]);
     if (!SLOT_RE.test(slotRaw)) continue;
-    const cell = m[0];
+    const itemCell = cells[1];
+    const href =
+      itemCell.match(new RegExp(ITEM_HREF_SRC, "i")) ||
+      itemCell.match(/\[item=(\d+)/i);
+    if (!href) continue;
     const name =
-      (cell.match(/tinyicontxt"[^>]*>([^<]+)/i) || [])[1] ||
-      (cell.match(/alt="([^"]+)"/i) || [])[1] ||
-      slugToName(m[3]);
+      (itemCell.match(/tinyicontxt"[^>]*>([^<]+)/i) || [])[1] ||
+      (itemCell.match(/alt="([^"]+)"/i) || [])[1] ||
+      (itemCell.match(/>([^<]{2,80})</) || [])[1] ||
+      (href[2] ? slugToName(href[2]) : null);
     rows.push({
-      id: Number(m[2]),
+      id: Number(href[1]),
       name,
       slot: slotRaw,
-      drop: cleanDrop(m[4]),
-    });
-  }
-
-  // Item | Source only (no slot column)
-  const itemSource =
-    /href="(?:https?:\/\/(?:www|de|fr|es|pt|ru|ko|cn)\.wowhead\.com)?\/item=(\d+)\/([^"#?]+)"[\s\S]{0,400}?<(?:td|th)[^>]*>([\s\S]{2,160}?)<\/(?:td|th)>/gi;
-  for (const m of html.matchAll(itemSource)) {
-    const drop = cleanDrop(m[3]);
-    if (!drop) continue;
-    rows.push({
-      id: Number(m[1]),
-      name: slugToName(m[2]),
-      slot: null,
-      drop,
+      drop: cleanDrop(cells[2] || ""),
     });
   }
 
@@ -387,21 +411,58 @@ function extractItemIds(html) {
   return ids;
 }
 
+/** Icon-grid / badge lists only — skips inline prose mentions (icontiny "like X"). */
+function extractIconGridItemIds(html) {
+  const ids = [];
+  const seen = new Set();
+  const push = (id) => {
+    id = Number(id);
+    if (!id || seen.has(id) || EMBELLISHMENTS.has(id)) return;
+    seen.add(id);
+    ids.push(id);
+  };
+
+  // Wowhead icon-badge widgets used in Raid / M+ "best picks" rows
+  for (const m of html.matchAll(
+    new RegExp(
+      String.raw`icon-badge[\s\S]{0,800}?` + ITEM_HREF_ID_SRC,
+      "gi"
+    )
+  )) {
+    push(m[1]);
+  }
+  for (const m of html.matchAll(
+    new RegExp(
+      ITEM_HREF_ID_SRC + String.raw`[^"]*"[\s\S]{0,400}?icon-badge`,
+      "gi"
+    )
+  )) {
+    push(m[1]);
+  }
+
+  // Compact BBCode item rows (3+ [item=] close together) — not isolated prose mentions.
+  for (const m of html.matchAll(/((?:\[item=\d+[^\]]*\]\s*){3,})/gi)) {
+    for (const idm of m[1].matchAll(/\[item=(\d+)/gi)) {
+      push(idm[1]);
+    }
+  }
+
+  return ids;
+}
+
 /** Trinket tier lists: S/A/B(/C) headings, tables, or Wowhead tier-list widget. */
 function extractTrinketTierRows(html) {
   const chunk = sectionChunk(
     html,
     [
       /Trinket Tier List/i,
-      /Best .* Trinkets in/i,
-      /Best .* Trinkets/i,
+      /Best [\w'+ -]{2,50} Trinkets in\b/i,
+      /<h[1-4]\b[^>]*>[\s\S]{0,120}?Trinkets/i,
       /Trinket Tier/i,
-      /toc=\\"Trinkets\\"/i,
-      /toc="Trinkets"/i,
     ],
     [
       /Embellish/i,
-      /Crafted Gear/i,
+      ...CRAFTED_SECTION_END,
       /Stat Priority/i,
       /Consumable/i,
       /Talent/i,
@@ -476,7 +537,7 @@ function parseGuide(html) {
 
   function upsert(id, name, slot, drop, rank, wowhead, note, { allowNew = true } = {}) {
     id = Number(id);
-    if (!id || EMBELLISHMENTS.has(id)) return;
+    if (!id || EMBELLISHMENTS.has(id) || BLOCKED_ITEMS.has(id)) return;
     let entry = byId.get(id);
     if (!entry) {
       if (!allowNew) return;
@@ -512,15 +573,18 @@ function parseGuide(html) {
     if (note && !entry.note) entry.note = note;
   }
 
-  // 1) Overall BiS chunk — BiS (order matters)
-  for (const row of extractGearRows(chunk)) {
+  // 1) Overall BiS — ONLY Slot|Item|Source table rows (never prose item links).
+  const overallRows = extractGearRows(chunk).filter((r) => r.id && r.slot);
+  for (const row of overallRows) {
     upsert(row.id, row.name, row.slot, row.drop, "bis", "overall");
   }
-  for (const m of chunk.matchAll(/\[item=(\d+)/gi)) {
-    upsert(m[1], null, null, null, "bis", "overall");
-  }
-  for (const m of itemHrefMatches(chunk)) {
-    upsert(m[1], slugToName(m[2]), null, null, "bis", "overall");
+  // BBCode fallback when HTML table cells are empty but [item=] sits in the slot row.
+  if (overallRows.length === 0) {
+    for (const m of chunk.matchAll(
+      /\[td\][^\[]{0,40}?(Weapon|Head|Neck|Shoulders?|Cloak|Back|Chest|Wrist|Gloves|Hands|Belt|Waist|Legs|Boots|Feet|Ring|Finger|Trinket)[^\[]{0,40}?\[\\?\/td\][\s\S]{0,200}?\[item=(\d+)/gi
+    )) {
+      upsert(m[2], null, m[1], null, "bis", "overall");
+    }
   }
 
   // 2) Trinket tier list — Strong/Alt/Ok (and S-tier as BiS if not already)
@@ -537,14 +601,12 @@ function parseGuide(html) {
       start: [
         /Best Gear from Raids/i,
         /Best Raid Items/i,
-        /Raid BiS/i,
-        /Raid Drops/i,
+        /Raid BiS(?:\b| )/i,
       ],
       end: [
         /Best Gear from Mythic/i,
-        /Best .* Trinkets/i,
-        /Trinket Tier List/i,
-        /Crafted Gear/i,
+        ...TRINKET_SECTION_END,
+        ...CRAFTED_SECTION_END,
         /Set Bonuses/i,
       ],
     },
@@ -555,12 +617,10 @@ function parseGuide(html) {
         /Mythic\+ BiS/i,
         /M\+ BiS/i,
         /Mythic Plus BiS/i,
-        /Mythic\+ Drops/i,
       ],
       end: [
-        /Best .* Trinkets/i,
-        /Trinket Tier List/i,
-        /Crafted Gear/i,
+        ...TRINKET_SECTION_END,
+        ...CRAFTED_SECTION_END,
         /Embellish/i,
         /Stat Priority/i,
       ],
@@ -569,12 +629,14 @@ function parseGuide(html) {
   for (const sec of secondarySections) {
     const secHtml = sectionChunk(html, sec.start, sec.end, 30000);
     if (!secHtml) continue;
-    for (const row of extractGearRows(secHtml)) {
+    const secRows = extractGearRows(secHtml).filter((r) => r.id);
+    for (const row of secRows) {
       upsert(row.id, row.name, row.slot, row.drop, "strong", sec.wowhead, null, {
         allowNew: true,
       });
     }
-    for (const id of extractItemIds(secHtml)) {
+    // Icon grids (Raid/M+ highlight widgets). Always merge — tables and grids can coexist.
+    for (const id of extractIconGridItemIds(secHtml)) {
       upsert(id, null, null, null, "strong", sec.wowhead, null, { allowNew: true });
     }
   }
@@ -592,7 +654,7 @@ function parseGuide(html) {
     if (isPlaceholderName(entry.name)) {
       const slugM = html.match(
         new RegExp(
-          String.raw`href="(?:https?:\/\/(?:www|de|fr|es|pt|ru|ko|cn)\.wowhead\.com)?\/item=${entry.id}\/([^"#?]+)"`,
+          String.raw`href="(?:https?:\/\/(?:www|de|fr|es|pt|ru|ko|cn)\.wowhead\.com)?(?:\/(?:ptr|beta))?\/item=${entry.id}\/([^"#?]+)"`,
           "i"
         )
       );
@@ -645,6 +707,20 @@ async function scrapeSpecOnce(page, stem, cls, spec) {
       { timeout: 15000 }
     )
     .catch(() => {});
+  // Raid/M+ icon grids often lazy-render until scrolled into view.
+  await page
+    .evaluate(async () => {
+      for (const h of document.querySelectorAll("h2, h3")) {
+        const t = h.textContent || "";
+        if (/Best Gear from (Raids|Mythic)/i.test(t)) {
+          h.scrollIntoView({ block: "center" });
+          await new Promise((r) => setTimeout(r, 350));
+        }
+      }
+      window.scrollTo(0, 0);
+    })
+    .catch(() => {});
+  await sleep(600);
   let html = await page.content();
   // Prefer live Gatherer names when available in the page context.
   try {
@@ -729,6 +805,24 @@ function loadPreviousOut() {
 }
 
 async function main() {
+  const onlyArg = process.argv.find((a) => a.startsWith("--only="));
+  const only = onlyArg
+    ? new Set(
+        onlyArg
+          .slice("--only=".length)
+          .split(",")
+          .map((s) => s.trim())
+          .filter(Boolean)
+      )
+    : null;
+  const specs = only
+    ? SPECS.filter(([stem]) => only.has(stem))
+    : SPECS;
+  if (only && specs.length === 0) {
+    console.error("No matching --only specs");
+    process.exit(1);
+  }
+
   const browser = await chromium.launch({
     headless: true,
     args: ["--disable-blink-features=AutomationControlled"],
@@ -748,9 +842,10 @@ async function main() {
   await dismissConsent(page);
 
   const previous = loadPreviousOut();
-  const out = {};
+  // Partial --only runs keep prior specs; full runs replace out.
+  const out = only ? { ...previous } : {};
   const errors = {};
-  for (const [stem, cls, spec] of SPECS) {
+  for (const [stem, cls, spec] of specs) {
     process.stdout.write(`${stem} ... `);
     try {
       const pack = await scrapeSpec(page, stem, cls, spec);
@@ -795,9 +890,10 @@ async function main() {
   };
   fs.writeFileSync(OUT, JSON.stringify(payload, null, 2), "utf8");
   console.log(
-    `\nWrote ${OUT} (${ok}/${SPECS.length} specs, fresh=${freshOk}, ph=${totalPh}/${totalItems})`
+    `\nWrote ${OUT} (${ok}/${SPECS.length} specs, fresh=${freshOk}, ph=${totalPh}/${totalItems})` +
+      (only ? ` [only=${[...only].join(",")}]` : "")
   );
-  if (ok < 36) {
+  if (!only && ok < 36) {
     console.error("Too few specs available (fresh+reused) — not safe to regenerate Data/");
     process.exit(1);
   }

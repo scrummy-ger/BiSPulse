@@ -1,28 +1,10 @@
-# Archon.gg refresh (manual)
+# Archon.gg — deprecated for BiSPulse
 
-Archon gear tables are public but behind Cloudflare. Headless Playwright usually fails.
-Use a real Cursor / Chrome tab that already passed the human check.
+BiSPulse is **Wowhead-only** as of 1.5.10.
 
-## Steps
+Archon’s gear tables label BiS from Wowhead and add parse popularity, but Cloudflare
+makes reliable refreshes painful, and the % display is not worth the ops cost.
 
-1. Open any Archon Midnight gear page, e.g.  
-   https://www.archon.gg/wow/builds/arms/warrior/raid/gear-and-tier-set/mythic/all-bosses  
-   and complete the Cloudflare check if shown.
-2. In the agent chat, ask to **re-scrape Archon** (CDP bulk fetch of `/_next/data/...` for all 40 specs).
-3. Confirm `tools/archon_browser_data.json` has `"ok": 40` and a large `totalItems`.
-4. Merge:
-
-```powershell
-cd tools
-python scrape_method_bis.py --wowhead-json wowhead_browser_data.json --archon-json archon_browser_data.json
-python enrich_drops.py
-python check_data_quality.py
-```
-
-5. Commit the updated `archon_browser_data.json` + `Data/*.lua` so weekly CI keeps Archon alternatives.
-
-## Safety
-
-- `scrape_archon.mjs` refuses to overwrite a good JSON with an empty (`ok: 0`) run.
-- `scrape_method_bis.py` skips Archon when `ok: 0`.
-- `update_bis.ps1` keeps the last snapshot if Playwright Archon fails.
+- Do **not** merge `archon_browser_data.json` into `Data/*.lua`.
+- Refresh pipeline: `tools/update_bis.ps1` (Wowhead scrape → generate → drop fixes).
+- Legacy `scrape_archon*.mjs` scripts may remain in `tools/` for experiments; they are unused by CI.

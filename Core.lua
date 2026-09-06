@@ -18,12 +18,13 @@ local defaults = {
   offspecIndex = 0, -- 0 = auto (first other spec of your class)
   checklistView = "main", -- "main" | "off"
   contentMode = "all", -- all | overall | raid | mythic
-  checklistRankFilter = "all", -- all | bis | strong | alt | ok
+  checklistRankFilter = "all", -- all | bis | strong
   checklistSlotFilter = "all",
+  checklistInstanceFilter = "all", -- all | instance name | __unknown__
   checklistSearch = "",
   checklistMissingOnly = false,
   checklistSort = "rank", -- rank | name | slot | missing
-  minRank = "strong", -- bis | strong | alt | ok
+  minRank = "strong", -- bis | strong
   customToast = true,
   raidWarning = false,
   lootBadges = true,
@@ -47,7 +48,18 @@ local function CopyDefaults(src, dst)
 end
 
 function addon:GetDB()
-  return BiSPulseDB
+  local db = BiSPulseDB
+  if type(db) == "table" then
+    local rf = db.checklistRankFilter
+    if rf == "alt" or rf == "ok" then
+      db.checklistRankFilter = "all"
+    end
+    local mr = db.minRank
+    if mr == "alt" or mr == "ok" then
+      db.minRank = "strong"
+    end
+  end
+  return db
 end
 addon.GetDB = addon.GetDB
 
@@ -727,18 +739,6 @@ function addon:PrintGuideLinks(pack)
   local links = {}
   if g.wowhead then
     links[#links + 1] = { label = L["SOURCE_WOWHEAD"] or "Wowhead", url = g.wowhead }
-  end
-  if g.archonRaid then
-    links[#links + 1] = {
-      label = (L["SOURCE_ARCHON"] or "Archon") .. " Raid",
-      url = g.archonRaid,
-    }
-  end
-  if g.archonMythic then
-    links[#links + 1] = {
-      label = (L["SOURCE_ARCHON"] or "Archon") .. " Mythic+",
-      url = g.archonMythic,
-    }
   end
   if #links == 0 then
     addon:Print(L["NO_SPEC_DATA"] or "No guide links for this spec.")

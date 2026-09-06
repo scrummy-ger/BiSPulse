@@ -145,22 +145,6 @@ local function PlayerOwnsItem(itemID)
   return addon:PlayerOwnsItem(itemID)
 end
 
-local function ParsePopularity(info)
-  if not info then
-    return nil
-  end
-  if type(info.popularity) == "number" then
-    return info.popularity
-  end
-  if info.note then
-    local pct = info.note:match("^Archon%s+([%d%.]+)%%")
-    if pct then
-      return tonumber(pct)
-    end
-  end
-  return nil
-end
-
 local function BuildSortedEntries(pack, sortMode)
   local list = {}
   if not pack or not pack.items then
@@ -197,13 +181,23 @@ local function BuildSortedEntries(pack, sortMode)
     if ra ~= rb then
       return ra > rb
     end
-    local pa, pb = ParsePopularity(a.info) or -1, ParsePopularity(b.info) or -1
-    if pa ~= pb then
-      return pa > pb
-    end
     return (a.info.name or "") < (b.info.name or "")
   end)
   return list
+end
+
+local function EntryInstanceKey(info)
+  local drop = (info and info.drop) or ""
+  if drop == "" then
+    return "__unknown__"
+  end
+  if BiSPulse.ExtractDropInstance then
+    local inst = BiSPulse.ExtractDropInstance(drop)
+    if inst and inst ~= "" then
+      return inst
+    end
+  end
+  return drop
 end
 
 local function EntryPassesChecklistFilters(entry, db)
@@ -221,6 +215,12 @@ local function EntryPassesChecklistFilters(entry, db)
       return false
     end
   end
+  local instFilter = (db and db.checklistInstanceFilter) or "all"
+  if instFilter ~= "all" then
+    if EntryInstanceKey(entry.info) ~= instFilter then
+      return false
+    end
+  end
   if db and db.checklistMissingOnly then
     if PlayerOwnsItem(entry.id) then
       return false
@@ -231,7 +231,11 @@ local function EntryPassesChecklistFilters(entry, db)
   if q ~= "" then
     local name = (entry.info.name or ""):lower()
     local drop = (entry.info.drop or ""):lower()
-    if not name:find(q, 1, true) and not drop:find(q, 1, true) then
+    local formatted = ""
+    if BiSPulse.FormatDropSource and entry.info.drop then
+      formatted = (BiSPulse.FormatDropSource(entry.info.drop) or ""):lower()
+    end
+    if not name:find(q, 1, true) and not drop:find(q, 1, true) and not formatted:find(q, 1, true) then
       return false
     end
   end
@@ -260,6 +264,51 @@ local function CollectSlotsFromPack(pack, rankFilter)
   return slots
 end
 
+local function CollectInstancesFromPack(pack, rankFilter)
+  local seen = {}
+  local list = {}
+  local hasUnknown = false
+  if not pack or not pack.items then
+    return list, hasUnknown
+  end
+  rankFilter = rankFilter or "all"
+  for _, info in pairs(pack.items) do
+    if info and addon:MeetsContentFilter(info) then
+      if rankFilter == "all" or info.rank == rankFilter then
+        local key = EntryInstanceKey(info)
+        if key == "__unknown__" then
+          hasUnknown = true
+        elseif key ~= "" and not seen[key] then
+          seen[key] = true
+          list[#list + 1] = key
+        end
+      end
+    end
+  end
+  table.sort(list)
+  return list, hasUnknown
+end
+
+local function CountRankProgress(pack)
+  local totals = { bis = 0, strong = 0 }
+  local owned = { bis = 0, strong = 0 }
+  if not pack or not pack.items then
+    return owned, totals
+  end
+  for id, info in pairs(pack.items) do
+    if info and addon:MeetsContentFilter(info) then
+      local rank = info.rank
+      if totals[rank] ~= nil then
+        totals[rank] = totals[rank] + 1
+        if PlayerOwnsItem(id) then
+          owned[rank] = owned[rank] + 1
+        end
+      end
+    end
+  end
+  return owned, totals
+end
+
 local function ShortRankLabel(rank)
   if rank == "all" then
     return L["CHECKLIST_FILTER_ALL"] or "All"
@@ -267,10 +316,6 @@ local function ShortRankLabel(rank)
     return L["CHECKLIST_RANK_BIS"] or "BiS"
   elseif rank == "strong" then
     return L["CHECKLIST_RANK_STRONG"] or "Strong"
-  elseif rank == "alt" then
-    return L["CHECKLIST_RANK_ALT"] or "Alt"
-  elseif rank == "ok" then
-    return L["CHECKLIST_RANK_OK"] or "Niche"
   end
   return addon:RankLabel(rank)
 end
@@ -535,7 +580,7 @@ local function ShowFlatMenu(anchor, entries)
   end)
 end
 
-local CHECKLIST_LAYOUT_REV = 15
+local CHECKLIST_LAYOUT_REV = 17
 
 local function NextChecklistFrameName()
   addon._checklistFrameSeq = (addon._checklistFrameSeq or 0) + 1
@@ -602,7 +647,7 @@ local function EnsureChecklist()
   local frameName = NextChecklistFrameName()
   local f = CreateFrame("Frame", frameName, UIParent, "BackdropTemplate")
   f.layoutRev = CHECKLIST_LAYOUT_REV
-  f:SetSize(480, 580)
+  f:SetSize(500, 620)
   f:SetPoint("CENTER", UIParent, "CENTER", 180, 0)
   f:SetFrameStrata("FULLSCREEN_DIALOG")
   f:SetFrameLevel(1000)
@@ -688,6 +733,7 @@ local function EnsureChecklist()
   -- Filter row: flat rank / slot / sort drops
   local rankDrop
   local slotDrop
+  local instanceDrop
 
   local function SyncRankDrop()
     if not rankDrop or not rankDrop.SetLabel then
@@ -707,6 +753,21 @@ local function EnsureChecklist()
       slotDrop:SetLabel(L["CHECKLIST_FILTER_ALL"] or "All")
     else
       slotDrop:SetLabel(v)
+    end
+  end
+
+  local function SyncInstanceDrop()
+    if not instanceDrop or not instanceDrop.SetLabel then
+      return
+    end
+    local db = addon:GetDB()
+    local v = (db and db.checklistInstanceFilter) or "all"
+    if v == "all" then
+      instanceDrop:SetLabel(L["CHECKLIST_FILTER_ALL"] or "All")
+    elseif v == "__unknown__" then
+      instanceDrop:SetLabel(L["CHECKLIST_FILTER_UNKNOWN"] or "No source")
+    else
+      instanceDrop:SetLabel(v)
     end
   end
 
@@ -737,12 +798,17 @@ local function EnsureChecklist()
       return
     end
     local current = (addon:GetDB() and addon:GetDB().checklistRankFilter) or "all"
+    if current == "alt" or current == "ok" then
+      current = "all"
+      local db = addon:GetDB()
+      if db then
+        db.checklistRankFilter = "all"
+      end
+    end
     local order = {
       { value = "all", text = L["CHECKLIST_FILTER_ALL"] or "All" },
       { value = "bis", text = ShortRankLabel("bis") },
       { value = "strong", text = ShortRankLabel("strong") },
-      { value = "alt", text = ShortRankLabel("alt") },
-      { value = "ok", text = ShortRankLabel("ok") },
     }
     local entries = {}
     for _, row in ipairs(order) do
@@ -756,8 +822,10 @@ local function EnsureChecklist()
           end
           db.checklistRankFilter = row.value
           db.checklistSlotFilter = "all"
+          db.checklistInstanceFilter = "all"
           SyncRankDrop()
           SyncSlotDrop()
+          SyncInstanceDrop()
           addon:RefreshChecklist()
         end,
       }
@@ -814,7 +882,7 @@ local function EnsureChecklist()
   f.SyncSlotBtn = SyncSlotDrop
   SyncSlotDrop()
 
-  local sortDrop = CreateFlatDrop(f, 120, 28, SortLabel("rank"))
+  local sortDrop = CreateFlatDrop(f, 130, 28, SortLabel("rank"))
   sortDrop:SetPoint("LEFT", slotDrop, "RIGHT", 8, 0)
   sortDrop:SetScript("OnClick", function(self)
     if flatMenu and flatMenu:IsShown() and flatMenu.anchor == self then
@@ -849,11 +917,71 @@ local function EnsureChecklist()
   f.SyncSortDrop = SyncSortDrop
   SyncSortDrop()
 
-  -- Full-width search row (fixes overflow against the right edge)
+  instanceDrop = CreateFlatDrop(f, 220, 28, L["CHECKLIST_FILTER_ALL"] or "All")
+  instanceDrop:SetPoint("TOPLEFT", rankDrop, "BOTTOMLEFT", 0, -8)
+  instanceDrop:SetScript("OnClick", function(self)
+    if flatMenu and flatMenu:IsShown() and flatMenu.anchor == self then
+      HideFlatMenu()
+      return
+    end
+    local db = addon:GetDB()
+    local pack = addon:GetChecklistPack()
+    local instances, hasUnknown = CollectInstancesFromPack(pack, (db and db.checklistRankFilter) or "all")
+    local current = (db and db.checklistInstanceFilter) or "all"
+    local entries = {
+      {
+        text = L["CHECKLIST_FILTER_ALL"] or "All",
+        checked = current == "all",
+        func = function()
+          local d = addon:GetDB()
+          if d then
+            d.checklistInstanceFilter = "all"
+          end
+          SyncInstanceDrop()
+          addon:RefreshChecklist()
+        end,
+      },
+    }
+    if hasUnknown then
+      entries[#entries + 1] = {
+        text = L["CHECKLIST_FILTER_UNKNOWN"] or "No source",
+        checked = current == "__unknown__",
+        func = function()
+          local d = addon:GetDB()
+          if d then
+            d.checklistInstanceFilter = "__unknown__"
+          end
+          SyncInstanceDrop()
+          addon:RefreshChecklist()
+        end,
+      }
+    end
+    for _, inst in ipairs(instances) do
+      local instValue = inst
+      entries[#entries + 1] = {
+        text = instValue,
+        checked = current == instValue,
+        func = function()
+          local d = addon:GetDB()
+          if d then
+            d.checklistInstanceFilter = instValue
+          end
+          SyncInstanceDrop()
+          addon:RefreshChecklist()
+        end,
+      }
+    end
+    ShowFlatMenu(self, entries)
+  end)
+  f.instanceFilterDrop = instanceDrop
+  f.SyncInstanceBtn = SyncInstanceDrop
+  SyncInstanceDrop()
+
+  -- Full-width search row
   local search = CreateFrame("EditBox", nil, f, "BackdropTemplate")
   search:SetHeight(28)
-  search:SetPoint("TOPLEFT", 16, -118)
-  search:SetPoint("TOPRIGHT", -16, -118)
+  search:SetPoint("TOPLEFT", instanceDrop, "BOTTOMLEFT", 0, -8)
+  search:SetPoint("RIGHT", f, "RIGHT", -16, 0)
   search:SetAutoFocus(false)
   search:SetMaxLetters(40)
   search:SetFontObject(GameFontHighlight)
@@ -923,7 +1051,7 @@ local function EnsureChecklist()
   f.missingOnlyLabel = missingLabel
 
   local empty = f:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
-  empty:SetPoint("TOP", f, "TOP", 0, -250)
+  empty:SetPoint("TOP", f, "TOP", 0, -280)
   empty:SetWidth(400)
   empty:SetJustifyH("CENTER")
   empty:SetTextColor(SKIN.muted[1], SKIN.muted[2], SKIN.muted[3], 1)
@@ -931,12 +1059,12 @@ local function EnsureChecklist()
   f.emptyLabel = empty
 
   local scroll = CreateFrame("ScrollFrame", nil, f, "UIPanelScrollFrameTemplate")
-  scroll:SetPoint("TOPLEFT", 14, -178)
+  scroll:SetPoint("TOPLEFT", missingCb, "BOTTOMLEFT", 4, -8)
   scroll:SetPoint("BOTTOMRIGHT", -34, 52)
   f.scroll = scroll
 
   local content = CreateFrame("Frame", nil, scroll)
-  content:SetSize(420, 1)
+  content:SetSize(440, 1)
   content.rows = {}
   scroll:SetScrollChild(content)
   f.content = content
@@ -976,7 +1104,7 @@ local function GetOrCreateRow(parent, index)
   end
 
   row = CreateFrame("Button", nil, parent, "BackdropTemplate")
-  row:SetSize(420, 42)
+  row:SetSize(440, 42)
   SkinBackdrop(row, { 0.07, 0.07, 0.08, 0.0 }, { 0.07, 0.07, 0.08, 0.0 }, 1)
   row:SetHighlightTexture("Interface\\Buttons\\WHITE8X8")
   local ht = row:GetHighlightTexture()
@@ -984,6 +1112,7 @@ local function GetOrCreateRow(parent, index)
     ht:SetVertexColor(0.15, 0.85, 0.35)
     ht:SetAlpha(0.12)
   end
+  row:RegisterForClicks("LeftButtonUp", "RightButtonUp")
 
   local check = row:CreateTexture(nil, "ARTWORK")
   check:SetSize(16, 16)
@@ -1025,9 +1154,15 @@ local function GetOrCreateRow(parent, index)
       GameTooltip:AddLine(" ")
       GameTooltip:AddLine((L["CHECKLIST_DROP"] or "Drops from") .. ": " .. self.dropText, 0.7, 0.85, 1)
     end
+    GameTooltip:AddLine(L["CHECKLIST_ROW_GUIDE_HINT"] or "Right-click: guide links", 0.55, 0.58, 0.62)
     GameTooltip:Show()
   end)
   row:SetScript("OnLeave", GameTooltip_Hide)
+  row:SetScript("OnClick", function(_, button)
+    if button == "RightButton" and addon.PrintGuideLinks then
+      addon:PrintGuideLinks()
+    end
+  end)
 
   parent.rows[index] = row
   return row
@@ -1063,12 +1198,13 @@ function addon:RefreshChecklist()
   end
 
   local viewTag = isOff and (L["OFFSPEC"] or "Offspec") or (L["MAINSPEC"] or "Main")
-  f.subtitle:SetText(("%s %s [%s] - %s - Wowhead %s"):format(
+  local dataFmt = L["CHECKLIST_DATA_LINE"] or "Data: %s"
+  f.subtitle:SetText(("%s %s [%s] · %s · %s"):format(
     pack.specName or "?",
     pack.className or "?",
     viewTag,
     pack.season or pack.patch or "?",
-    pack.updated or "?"
+    dataFmt:format(pack.updated or "?")
   ))
 
   local db = self:GetDB()
@@ -1085,7 +1221,7 @@ function addon:RefreshChecklist()
   end
 
   local entries = BuildSortedEntries(pack, (db and db.checklistSort) or "rank")
-  -- Drop slot filter if it has no matches for the current rank (avoids "empty" screens).
+  -- Drop slot/instance filters if they have no matches for the current rank.
   if db and db.checklistSlotFilter and db.checklistSlotFilter ~= "all" then
     local slots = CollectSlotsFromPack(pack, db.checklistRankFilter or "all")
     local okSlot = false
@@ -1097,6 +1233,23 @@ function addon:RefreshChecklist()
     end
     if not okSlot then
       db.checklistSlotFilter = "all"
+    end
+  end
+  if db and db.checklistInstanceFilter and db.checklistInstanceFilter ~= "all" then
+    local instances, hasUnknown = CollectInstancesFromPack(pack, db.checklistRankFilter or "all")
+    local okInst = false
+    if db.checklistInstanceFilter == "__unknown__" then
+      okInst = hasUnknown
+    else
+      for _, inst in ipairs(instances) do
+        if inst == db.checklistInstanceFilter then
+          okInst = true
+          break
+        end
+      end
+    end
+    if not okInst then
+      db.checklistInstanceFilter = "all"
     end
   end
 
@@ -1119,6 +1272,9 @@ function addon:RefreshChecklist()
   end
   if f.SyncSlotBtn then
     f.SyncSlotBtn()
+  end
+  if f.SyncInstanceBtn then
+    f.SyncInstanceBtn()
   end
   if f.searchBox and db then
     local want = db.checklistSearch or ""
@@ -1182,10 +1338,6 @@ function addon:RefreshChecklist()
       dropSrc = (BiSPulse.FormatDropSource and BiSPulse.FormatDropSource(dropSrc)) or dropSrc
       dropParts[#dropParts + 1] = dropSrc
     end
-    local pop = ParsePopularity(entry.info)
-    if pop then
-      dropParts[#dropParts + 1] = string.format("%.0f%%", pop)
-    end
     if owned and where == "equipped" then
       dropParts[#dropParts + 1] = (L["CHECKLIST_EQUIPPED"] or "equipped")
     elseif owned and where == "bags" then
@@ -1205,8 +1357,13 @@ function addon:RefreshChecklist()
   end
 
   f.content:SetHeight(math.max(1, y))
-  local progressFmt = L["CHECKLIST_PROGRESS"] or "Owned: %d / %d"
-  f.progress:SetText(progressFmt:format(ownedCount, #entries))
+  local ownedRanks, totalRanks = CountRankProgress(pack)
+  local ranksFmt = L["CHECKLIST_PROGRESS_RANKS"] or "BiS %d/%d · Strong %d/%d"
+  local shownFmt = L["CHECKLIST_PROGRESS"] or "Shown: %d · %d owned"
+  f.progress:SetText(ranksFmt:format(
+    ownedRanks.bis, totalRanks.bis,
+    ownedRanks.strong, totalRanks.strong
+  ) .. "  ·  " .. shownFmt:format(#entries, ownedCount))
 end
 
 function addon:ToggleChecklist()

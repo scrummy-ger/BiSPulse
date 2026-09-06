@@ -403,4 +403,13 @@ if (isDirect) {
   });
 }
 
-export { extractGearFromNextData, normalizeSlot, SPECS };
+export {
+  extractGearFromNextData,
+  normalizeSlot,
+  SPECS,
+  gearUrl,
+  dismissHumanCheck,
+  waitForGuide,
+  sleep,
+  scrapePack,
+};

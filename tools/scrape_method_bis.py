@@ -314,8 +314,10 @@ def parse_wowhead_bis(html: str) -> dict[int, dict]:
         r"Overall BiS",
         [
             r'h2 toc=\\?"Raid Drops\\?"',
-            r"Crafted Gear",
-            r"Best .* Trinkets",
+            r"Best Crafted Gear",
+            r"<h[1-4]\b[^>]*>[\s\S]{0,120}?Crafted Gear",
+            r"Best [\w' +\-]{2,50} Trinkets in\b",
+            r"<h[1-4]\b[^>]*>[\s\S]{0,120}?Trinkets",
             r"Trinket Tier List",
             r"Raid BiS",
             r"Mythic\+ BiS",
@@ -343,9 +345,11 @@ def parse_wowhead_bis(html: str) -> dict[int, dict]:
         [r"Best Gear from Raids", r"Best Raid Items", r"Raid BiS", r"Raid Drops"],
         [
             r"Best Gear from Mythic",
-            r"Best .* Trinkets",
+            r"Best [\w' +\-]{2,50} Trinkets in\b",
+            r"<h[1-4]\b[^>]*>[\s\S]{0,120}?Trinkets",
             r"Trinket Tier List",
-            r"Crafted Gear",
+            r"Best Crafted Gear",
+            r"<h[1-4]\b[^>]*>[\s\S]{0,120}?Crafted Gear",
             r"Set Bonuses",
         ],
     ):
@@ -362,9 +366,11 @@ def parse_wowhead_bis(html: str) -> dict[int, dict]:
             r"Mythic\+ Drops",
         ],
         [
-            r"Best .* Trinkets",
+            r"Best [\w' +\-]{2,50} Trinkets in\b",
+            r"<h[1-4]\b[^>]*>[\s\S]{0,120}?Trinkets",
             r"Trinket Tier List",
-            r"Crafted Gear",
+            r"Best Crafted Gear",
+            r"<h[1-4]\b[^>]*>[\s\S]{0,120}?Crafted Gear",
             r"Embellish",
         ],
     ):
@@ -378,7 +384,7 @@ def parse_wowhead_bis(html: str) -> dict[int, dict]:
     if tier_chunk_m:
         chunk = html[MIN_GUIDE_OFFSET + tier_chunk_m.start() : MIN_GUIDE_OFFSET + tier_chunk_m.start() + 45000]
         end = re.search(
-            r"Embellish|Crafted Gear|Stat Priority|Consumable|Talent|Rotation|Set Bonuses",
+            r"Embellish|Best Crafted Gear|Stat Priority|Consumable|Talent|Rotation|Set Bonuses",
             chunk[40:],
             re.I,
         )
@@ -391,9 +397,9 @@ def parse_wowhead_bis(html: str) -> dict[int, dict]:
             if not label_m:
                 continue
             letter = label_m.group(1).upper()
-            rank = {"S": "bis", "A": "strong", "B": "alt", "C": "ok", "D": "ok"}.get(
-                letter, "alt"
-            )
+            rank = {"S": "bis", "A": "strong"}.get(letter)
+            if not rank:
+                continue
             content_m = re.search(r'class="tier-content"[^>]*>([\s\S]*)', block, re.I)
             slice_ = content_m.group(1) if content_m else block
             end_m = re.search(r'<div class="tier-list-tier">|<h[234]\b', slice_, re.I)
@@ -428,9 +434,9 @@ def parse_wowhead_bis(html: str) -> dict[int, dict]:
             re.I,
         ):
             letter = hm.group(1).upper()
-            rank = {"S": "bis", "A": "strong", "B": "alt", "C": "ok", "D": "ok"}.get(
-                letter, "alt"
-            )
+            rank = {"S": "bis", "A": "strong"}.get(letter)
+            if not rank:
+                continue
             # slice until next tier heading
             rest = chunk[hm.end() :]
             nxt = re.search(
@@ -531,28 +537,13 @@ def write_lua(
     items: dict[int, dict],
     wowhead_url: str,
     updated: str | None = None,
-    archon_urls: dict[str, str] | None = None,
 ) -> Path:
     class_file, spec_index, _, _, _, class_name, spec_name = spec_meta
     stem = STEMS[(class_file, spec_index)]
     path = DATA_DIR / f"{stem}.lua"
 
-    sources = sorted(
-        {
-            (info.get("source") or "Wowhead")
-            for info in items.values()
-            if info.get("source")
-        }
-    )
-    if any("Archon" in s for s in sources) and any("Wowhead" in s for s in sources):
-        primary = "Wowhead + Archon"
-        source_line = "  Source: Wowhead BiS + Archon popularity"
-    elif any("Archon" in s for s in sources):
-        primary = "Archon"
-        source_line = "  Source: Archon.gg popularity"
-    else:
-        primary = "Wowhead"
-        source_line = "  Source: Wowhead only"
+    primary = "Wowhead"
+    source_line = "  Source: Wowhead BiS guides"
 
     lines = [
         f"--[[",
@@ -572,7 +563,6 @@ def write_lua(
         "    wowhead = opts.wowhead,",
         "    rank = opts.rank,",
         "    note = opts.note,",
-        "    popularity = opts.popularity,",
         "    priority = opts.priority,",
         "  }",
         "end",
@@ -592,36 +582,31 @@ def write_lua(
         }.get(rank, "RANK.ALT")
         wowhead_lua = "nil" if not wowhead else f'"{wowhead}"'
         priority = "true" if info.get("priority") else "nil"
+        # Drop Archon popularity notes — Wowhead-only product.
         note = info.get("note") or None
+        if isinstance(note, str) and re.match(r"^Archon\s+[\d.]+%", note.strip()):
+            note = None
         note_lua = "nil" if not note else f'"{lua_escape(note)}"'
         drop = info.get("drop") or ""
-        pop = info.get("popularity")
-        if isinstance(pop, (int, float)):
-            pop_lua = f"{float(pop):.1f}"
-        else:
-            pop_lua = "nil"
+        src = info.get("source") or "Wowhead"
+        if "Archon" in src:
+            src = "Wowhead"
         lines.append(f"  [{item_id}] = entry({{")
         lines.append(f'    name = "{lua_escape(info.get("name", "Item"))}",')
         lines.append(f'    slot = "{lua_escape(info.get("slot", ""))}",')
         lines.append(f'    drop = "{lua_escape(drop)}",')
-        lines.append(f'    source = "{lua_escape(info.get("source", "Wowhead"))}",')
+        lines.append(f'    source = "{lua_escape(src)}",')
         lines.append(f"    wowhead = {wowhead_lua},")
         lines.append(f"    rank = {rank_const},")
         lines.append(f"    note = {note_lua},")
-        lines.append(f"    popularity = {pop_lua},")
         lines.append(f"    priority = {priority},")
         lines.append("  }),")
 
     guide_lines = [
         "  guides = {",
         f'    wowhead = "{wowhead_url}",',
+        "  },",
     ]
-    if archon_urls:
-        if archon_urls.get("raid"):
-            guide_lines.append(f'    archonRaid = "{archon_urls["raid"]}",')
-        if archon_urls.get("mythic"):
-            guide_lines.append(f'    archonMythic = "{archon_urls["mythic"]}",')
-    guide_lines.append("  },")
 
     lines.extend(
         [
@@ -660,12 +645,12 @@ Options.lua
 """
     header_end = re.sub(
         r"## Notes: .*",
-        "## Notes: Wowhead + Archon BiS rankings for all Retail specs.",
+        "## Notes: Wowhead BiS rankings for all Retail specs.",
         header_end,
     )
     header_end = re.sub(
         r"## Notes-deDE: .*",
-        "## Notes-deDE: BiS-Rankings von Wowhead + Archon — alle Retail-Specs.",
+        "## Notes-deDE: BiS-Rankings von Wowhead — alle Retail-Specs.",
         header_end,
     )
     toc.write_text(header_end + data_lines + footer, encoding="utf-8")
@@ -682,11 +667,17 @@ def load_wowhead_browser_json(path: Path) -> dict[str, dict[int, dict]]:
             iid = int(row["id"])
             if iid in EMBELLISHMENT_IDS:
                 continue
+            rank = (row.get("rank") or "bis").lower()
+            # Product ranks are BiS + Strong only (drop Alt/Niche leftovers).
+            if rank in {"alt", "ok"}:
+                continue
+            if rank not in {"bis", "strong"}:
+                rank = "bis"
             items[iid] = {
                 "name": row.get("name") or f"Item {iid}",
                 "wowhead": row.get("wowhead") or "overall",
                 "method": None,
-                "rank": row.get("rank") or "bis",
+                "rank": rank,
                 "source": "Wowhead",
                 "note": row.get("note") or None,
                 "slot": row.get("slot") or "",
@@ -775,6 +766,12 @@ def merge_archon_into_wowhead(
 
 def finalize_wowhead_items(wh_items: dict[int, dict]) -> dict[int, dict]:
     """Normalize pack (priority flags). Preserve scrape ranks."""
+    try:
+        from fill_missing_drops import ITEM_CANONICAL, infer_slot_from_name
+    except ImportError:
+        ITEM_CANONICAL = {}
+        infer_slot_from_name = None  # type: ignore
+
     out: dict[int, dict] = {}
     for iid, info in wh_items.items():
         entry = dict(info)
@@ -782,9 +779,20 @@ def finalize_wowhead_items(wh_items: dict[int, dict]) -> dict[int, dict]:
         if not entry.get("source"):
             entry["source"] = "Wowhead"
         rank = (entry.get("rank") or "bis").lower()
-        if rank not in {"bis", "strong", "alt", "ok"}:
+        if rank in {"alt", "ok"}:
+            continue
+        if rank not in {"bis", "strong"}:
             rank = "bis"
         entry["rank"] = rank
+        canon = ITEM_CANONICAL.get(iid)
+        if canon:
+            for key in ("name", "slot", "drop"):
+                if canon.get(key):
+                    entry[key] = canon[key]
+        elif infer_slot_from_name:
+            inferred = infer_slot_from_name(entry.get("name") or "", entry.get("slot") or "")
+            if inferred:
+                entry["slot"] = inferred
         if rank == "bis" and entry.get("slot") != "Embellishment":
             entry["priority"] = True
         else:
@@ -797,7 +805,7 @@ def main() -> None:
     import argparse
 
     parser = argparse.ArgumentParser(
-        description="Generate BiSPulse Data/*.lua from Wowhead (+ optional Archon)"
+        description="Generate BiSPulse Data/*.lua from Wowhead BiS guides (Wowhead-only)"
     )
     parser.add_argument(
         "--wowhead-json",
@@ -808,8 +816,8 @@ def main() -> None:
     parser.add_argument(
         "--archon-json",
         type=Path,
-        default=ROOT / "tools" / "archon_browser_data.json",
-        help="Pre-scraped Archon popularity JSON (optional).",
+        default=None,
+        help="Deprecated / ignored. Archon merge is disabled.",
     )
     args = parser.parse_args()
 
@@ -825,11 +833,8 @@ def main() -> None:
     else:
         print("No Wowhead JSON — will attempt live Wowhead fetch (may 403).")
 
-    archon_by_stem = load_archon_browser_json(args.archon_json)
-    if archon_by_stem:
-        print(f"Loaded Archon JSON: {args.archon_json} ({len(archon_by_stem)} specs)")
-    else:
-        print("No Archon JSON — Wowhead-only lists.")
+    if args.archon_json:
+        print("Note: --archon-json is ignored (Wowhead-only mode).")
 
     drop_map = build_global_drop_map(wh_by_stem)
     print(f"Global drop map: {len(drop_map)} item ids")
@@ -854,37 +859,25 @@ def main() -> None:
                 print(f"  Wowhead FAIL: {e}")
 
         stems_order.append(stem)
-        if not wh_items and stem not in archon_by_stem:
+        if not wh_items:
             print("  KEEP existing (empty scrape)")
             continue
 
-        items = finalize_wowhead_items(wh_items) if wh_items else {}
-        archon_urls = None
-        if stem in archon_by_stem:
-            apack = archon_by_stem[stem]
-            before = len(items)
-            items = merge_archon_into_wowhead(items, apack["items"])
-            items = finalize_wowhead_items(items)
-            archon_urls = apack.get("urls")
-            print(
-                f"  Archon merge: +{len(items) - before} new "
-                f"(now {len(items)} total)"
-            )
-
+        items = finalize_wowhead_items(wh_items)
         items = merge_preserve_quality(items, stem)
         apply_drop_map(items, drop_map)
-        path = write_lua(spec, items, wowhead_url, archon_urls=archon_urls)
+        path = write_lua(spec, items, wowhead_url)
         scraped[stem] = {
             "count": len(items),
             "wowhead_overall": sum(
                 1 for v in items.values() if v.get("wowhead") == "overall"
             ),
-            "archon": sum(1 for v in items.values() if "Archon" in (v.get("source") or "")),
             "sources": sorted(
                 {(v.get("source") or "Wowhead") for v in items.values()}
             ),
             "file": path.name,
         }
+        print(f"  Wrote {path.name} ({len(items)} items)")
 
     update_toc(stems_order)
     OUT_JSON.write_text(json.dumps(scraped, indent=2), encoding="utf-8")
