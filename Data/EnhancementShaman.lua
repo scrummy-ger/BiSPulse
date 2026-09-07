@@ -193,7 +193,7 @@ local items = {
   [273792] = entry({
     name = "Band of the Amani Warlord",
     slot = "",
-    drop = "The Coiled Altar\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\r\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\n",
+    drop = "The Coiled Altar\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\r\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\n",
     source = "Wowhead",
     wowhead = "raid",
     rank = RANK.STRONG,
@@ -217,7 +217,7 @@ BiSPulseData:Register("SHAMAN", 2, {
   specName = "Enhancement",
   patch = "12.1",
   season = "Midnight Season 2",
-  updated = "2026-09-06",
+  updated = "2026-09-07",
   primarySource = "Wowhead",
   guides = {
     wowhead = "https://www.wowhead.com/guide/classes/shaman/enhancement/bis-gear",

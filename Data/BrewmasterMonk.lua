@@ -207,7 +207,7 @@ BiSPulseData:Register("MONK", 1, {
   specName = "Brewmaster",
   patch = "12.1",
   season = "Midnight Season 2",
-  updated = "2026-09-06",
+  updated = "2026-09-07",
   primarySource = "Wowhead",
   guides = {
     wowhead = "https://www.wowhead.com/guide/classes/monk/brewmaster/bis-gear",

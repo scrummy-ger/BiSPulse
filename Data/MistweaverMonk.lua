@@ -93,7 +93,7 @@ local items = {
   [252258] = entry({
     name = "Sickening Signet of Atroxus",
     slot = "Ring",
-    drop = "Voidscar Arena",
+    drop = "Atroxus",
     source = "Wowhead",
     wowhead = "raid",
     rank = RANK.STRONG,
@@ -237,7 +237,7 @@ BiSPulseData:Register("MONK", 2, {
   specName = "Mistweaver",
   patch = "12.1",
   season = "Midnight Season 2",
-  updated = "2026-09-06",
+  updated = "2026-09-07",
   primarySource = "Wowhead",
   guides = {
     wowhead = "https://www.wowhead.com/guide/classes/monk/mistweaver/bis-gear",

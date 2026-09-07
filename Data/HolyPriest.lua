@@ -63,7 +63,7 @@ local items = {
   [251132] = entry({
     name = "Speakeasy Shroud",
     slot = "Cloak",
-    drop = "Murder Row",
+    drop = "Zaen Bladesorrow",
     source = "Wowhead",
     wowhead = "overall",
     rank = RANK.BIS,
@@ -207,7 +207,7 @@ BiSPulseData:Register("PRIEST", 2, {
   specName = "Holy",
   patch = "12.1",
   season = "Midnight Season 2",
-  updated = "2026-09-06",
+  updated = "2026-09-07",
   primarySource = "Wowhead",
   guides = {
     wowhead = "https://www.wowhead.com/guide/classes/priest/holy/bis-gear",
