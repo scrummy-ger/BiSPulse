@@ -207,7 +207,7 @@ BiSPulseData:Register("ROGUE", 2, {
   specName = "Outlaw",
   patch = "12.1",
   season = "Midnight Season 2",
-  updated = "2026-09-06",
+  updated = "2026-09-07",
   primarySource = "Wowhead",
   guides = {
     wowhead = "https://www.wowhead.com/guide/classes/rogue/outlaw/bis-gear",

@@ -40,16 +40,6 @@ local items = {
     note = nil,
     priority = nil,
   }),
-  [159644] = entry({
-    name = "Geti'ikku, Cut of Death",
-    slot = "",
-    drop = "King Dazar",
-    source = "Wowhead",
-    wowhead = "mythic",
-    rank = RANK.STRONG,
-    note = nil,
-    priority = nil,
-  }),
   [162544] = entry({
     name = "Jade Ophidian Band",
     slot = "",
@@ -227,7 +217,7 @@ BiSPulseData:Register("DEATHKNIGHT", 1, {
   specName = "Blood",
   patch = "12.1",
   season = "Midnight Season 2",
-  updated = "2026-09-06",
+  updated = "2026-09-07",
   primarySource = "Wowhead",
   guides = {
     wowhead = "https://www.wowhead.com/guide/classes/death-knight/blood/bis-gear",

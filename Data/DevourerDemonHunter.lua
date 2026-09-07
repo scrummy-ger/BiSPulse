@@ -53,7 +53,7 @@ local items = {
   [250215] = entry({
     name = "Freightrunner's Flask",
     slot = "Trinket",
-    drop = "Murder Row",
+    drop = "Zaen Bladesorrow",
     source = "Wowhead",
     wowhead = "overall",
     rank = RANK.BIS,
@@ -227,7 +227,7 @@ BiSPulseData:Register("DEMONHUNTER", 3, {
   specName = "Devourer",
   patch = "12.1",
   season = "Midnight Season 2",
-  updated = "2026-09-06",
+  updated = "2026-09-07",
   primarySource = "Wowhead",
   guides = {
     wowhead = "https://www.wowhead.com/guide/classes/demon-hunter/devourer/bis-gear",

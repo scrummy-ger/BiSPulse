@@ -203,7 +203,7 @@ local items = {
   [273796] = entry({
     name = "Vile Vial of Volatile Venom",
     slot = "Trinket",
-    drop = "Altar of Fangs",
+    drop = "Rav'i",
     source = "Wowhead",
     wowhead = "overall",
     rank = RANK.BIS,
@@ -217,7 +217,7 @@ BiSPulseData:Register("DRUID", 1, {
   specName = "Balance",
   patch = "12.1",
   season = "Midnight Season 2",
-  updated = "2026-09-06",
+  updated = "2026-09-07",
   primarySource = "Wowhead",
   guides = {
     wowhead = "https://www.wowhead.com/guide/classes/druid/balance/bis-gear",

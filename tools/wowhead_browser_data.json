@@ -1,18 +1,18 @@
 {
-  "scrapedAt": "2026-09-06",
+  "scrapedAt": "2026-09-07",
   "ok": 40,
   "freshOk": 40,
-  "totalItems": 755,
+  "totalItems": 754,
   "placeholders": 0,
   "errors": {},
   "out": {
     "BloodDeathKnight": {
-      "count": 20,
+      "count": 19,
       "withDrop": 16,
       "placeholders": 0,
       "byRank": {
         "bis": 15,
-        "strong": 5,
+        "strong": 4,
         "alt": 0,
         "ok": 0
       },
@@ -161,12 +161,6 @@
         {
           "id": 251230,
           "name": "Charonic Crescent",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 159644,
-          "name": "Geti'ikku, Cut of Death",
           "wowhead": "mythic",
           "rank": "strong"
         }

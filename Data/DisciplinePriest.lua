@@ -63,7 +63,7 @@ local items = {
   [252258] = entry({
     name = "Sickening Signet of Atroxus",
     slot = "Ring",
-    drop = "Voidscar Arena",
+    drop = "Atroxus",
     source = "Wowhead",
     wowhead = "overall",
     rank = RANK.BIS,
@@ -207,7 +207,7 @@ BiSPulseData:Register("PRIEST", 1, {
   specName = "Discipline",
   patch = "12.1",
   season = "Midnight Season 2",
-  updated = "2026-09-06",
+  updated = "2026-09-07",
   primarySource = "Wowhead",
   guides = {
     wowhead = "https://www.wowhead.com/guide/classes/priest/discipline/bis-gear",
