@@ -1,18 +1,18 @@
 {
-  "scrapedAt": "2026-09-06",
+  "scrapedAt": "2026-09-14",
   "ok": 40,
   "freshOk": 40,
-  "totalItems": 755,
+  "totalItems": 753,
   "placeholders": 0,
   "errors": {},
   "out": {
     "BloodDeathKnight": {
-      "count": 20,
+      "count": 19,
       "withDrop": 16,
       "placeholders": 0,
       "byRank": {
         "bis": 15,
-        "strong": 5,
+        "strong": 4,
         "alt": 0,
         "ok": 0
       },
@@ -161,12 +161,6 @@
         {
           "id": 251230,
           "name": "Charonic Crescent",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 159644,
-          "name": "Geti'ikku, Cut of Death",
           "wowhead": "mythic",
           "rank": "strong"
         }
@@ -1482,12 +1476,12 @@
           "drop": "The Twin Fangs"
         },
         {
-          "id": 268251,
-          "name": "Amulet of the Twin Fangs",
+          "id": 268265,
+          "name": "Aqirbane Reliquary",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Neck",
-          "drop": "The Twin Fangs (Raid)"
+          "drop": "Ula'tek"
         },
         {
           "id": 244572,
@@ -2254,12 +2248,12 @@
       "url": "https://www.wowhead.com/guide/classes/hunter/beast-mastery/bis-gear"
     },
     "MarksmanshipHunter": {
-      "count": 20,
+      "count": 19,
       "withDrop": 15,
       "placeholders": 0,
       "byRank": {
         "bis": 15,
-        "strong": 5,
+        "strong": 4,
         "alt": 0,
         "ok": 0
       },
@@ -2345,12 +2339,12 @@
           "drop": "Sszorak"
         },
         {
-          "id": 268233,
-          "name": "Ferocious Scaleboots",
+          "id": 268258,
+          "name": "Boots of the Reckless Wayfarer",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Boots",
-          "drop": "Sszorak"
+          "drop": "The Lost Explorers"
         },
         {
           "id": 251136,
@@ -2361,12 +2355,12 @@
           "drop": "Murder Row"
         },
         {
-          "id": 268249,
-          "name": "Vile Alchemist's Band",
+          "id": 158366,
+          "name": "Charged Sandstone Band",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Ring",
-          "drop": "Vashnik the Malignant"
+          "drop": "Temple of Sethraliss"
         },
         {
           "id": 270175,
@@ -2405,12 +2399,6 @@
         {
           "id": 251234,
           "name": "Graft of the Domanaar",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 158366,
-          "name": "Charged Sandstone Band",
           "wowhead": "mythic",
           "rank": "strong"
         }
