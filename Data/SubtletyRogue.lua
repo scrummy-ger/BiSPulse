@@ -80,16 +80,6 @@ local items = {
     note = nil,
     priority = nil,
   }),
-  [251194] = entry({
-    name = "Lightwarden's Bind",
-    slot = "Ring",
-    drop = "Blinding Vale",
-    source = "Wowhead",
-    wowhead = "overall",
-    rank = RANK.BIS,
-    note = nil,
-    priority = true,
-  }),
   [268253] = entry({
     name = "Silken Voodoo Drape",
     slot = "Cloak",
@@ -230,6 +220,26 @@ local items = {
     note = nil,
     priority = nil,
   }),
+  [281029] = entry({
+    name = "Band of the Swarmcaller",
+    slot = "Ring",
+    drop = "Kith'ix",
+    source = "Wowhead",
+    wowhead = "overall",
+    rank = RANK.BIS,
+    note = nil,
+    priority = true,
+  }),
+  [281236] = entry({
+    name = "Chestwrap of Palpable Terror",
+    slot = "",
+    drop = "Kith'ix",
+    source = "Wowhead",
+    wowhead = "raid",
+    rank = RANK.STRONG,
+    note = nil,
+    priority = nil,
+  }),
 }
 
 BiSPulseData:Register("ROGUE", 3, {
@@ -237,7 +247,7 @@ BiSPulseData:Register("ROGUE", 3, {
   specName = "Subtlety",
   patch = "12.1",
   season = "Midnight Season 2",
-  updated = "2026-09-06",
+  updated = "2026-10-19",
   primarySource = "Wowhead",
   guides = {
     wowhead = "https://www.wowhead.com/guide/classes/rogue/subtlety/bis-gear",

@@ -20,26 +20,6 @@ local function entry(opts)
 end
 
 local items = {
-  [159304] = entry({
-    name = "Goldfeather Boots",
-    slot = "Boots",
-    drop = "Kings' Rest",
-    source = "Wowhead",
-    wowhead = "overall",
-    rank = RANK.BIS,
-    note = nil,
-    priority = true,
-  }),
-  [159617] = entry({
-    name = "Lustrous Golden Plumage",
-    slot = "Trinket",
-    drop = "Kings' Rest",
-    source = "Wowhead",
-    wowhead = "mythic",
-    rank = RANK.STRONG,
-    note = nil,
-    priority = nil,
-  }),
   [244576] = entry({
     name = "Silvermoon Agent's Deflectors",
     slot = "Wrist",
@@ -60,26 +40,6 @@ local items = {
     note = nil,
     priority = true,
   }),
-  [251192] = entry({
-    name = "Branch of Pride",
-    slot = "",
-    drop = "Lightwarden Ruia",
-    source = "Wowhead",
-    wowhead = "mythic",
-    rank = RANK.STRONG,
-    note = nil,
-    priority = nil,
-  }),
-  [251226] = entry({
-    name = "Hide of Pestilence",
-    slot = "Chest",
-    drop = "Atroxus",
-    source = "Wowhead",
-    wowhead = "mythic",
-    rank = RANK.STRONG,
-    note = nil,
-    priority = nil,
-  }),
   [251513] = entry({
     name = "Loa Worshiper's Band",
     slot = "Ring",
@@ -89,16 +49,6 @@ local items = {
     rank = RANK.BIS,
     note = nil,
     priority = true,
-  }),
-  [268215] = entry({
-    name = "Abyssal Broodfiend's Bardiche",
-    slot = "",
-    drop = "Ula'tek",
-    source = "Wowhead",
-    wowhead = "raid",
-    rank = RANK.STRONG,
-    note = nil,
-    priority = nil,
   }),
   [268253] = entry({
     name = "Silken Voodoo Drape",
@@ -129,26 +79,6 @@ local items = {
     rank = RANK.BIS,
     note = nil,
     priority = true,
-  }),
-  [270173] = entry({
-    name = "Zul'jin's Guillotine Technique",
-    slot = "",
-    drop = "The Coiled Altar",
-    source = "Wowhead",
-    wowhead = "raid",
-    rank = RANK.STRONG,
-    note = nil,
-    priority = nil,
-  }),
-  [270175] = entry({
-    name = "Voracious Heart of Ula'tek",
-    slot = "",
-    drop = "Ula'tek",
-    source = "Wowhead",
-    wowhead = "raid",
-    rank = RANK.STRONG,
-    note = nil,
-    priority = nil,
   }),
   [271517] = entry({
     name = "Tassels of the Monkey King",
@@ -200,6 +130,16 @@ local items = {
     note = nil,
     priority = true,
   }),
+  [272240] = entry({
+    name = "Miststalker's Striders",
+    slot = "Boots",
+    drop = "Mythical Soul Fragment ( Labyrinth of Kindo'jan )",
+    source = "Wowhead",
+    wowhead = "overall",
+    rank = RANK.BIS,
+    note = nil,
+    priority = true,
+  }),
 }
 
 BiSPulseData:Register("MONK", 1, {
@@ -207,7 +147,7 @@ BiSPulseData:Register("MONK", 1, {
   specName = "Brewmaster",
   patch = "12.1",
   season = "Midnight Season 2",
-  updated = "2026-09-06",
+  updated = "2026-10-19",
   primarySource = "Wowhead",
   guides = {
     wowhead = "https://www.wowhead.com/guide/classes/monk/brewmaster/bis-gear",
