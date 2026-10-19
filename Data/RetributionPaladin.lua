@@ -80,16 +80,6 @@ local items = {
     note = nil,
     priority = true,
   }),
-  [268249] = entry({
-    name = "Vile Alchemist's Band",
-    slot = "Ring",
-    drop = "Vashnik the Malignant",
-    source = "Wowhead",
-    wowhead = "overall",
-    rank = RANK.BIS,
-    note = nil,
-    priority = true,
-  }),
   [268253] = entry({
     name = "Silken Voodoo Drape",
     slot = "Cloak",
@@ -210,6 +200,16 @@ local items = {
     note = nil,
     priority = nil,
   }),
+  [281029] = entry({
+    name = "Band of the Swarmcaller",
+    slot = "Ring",
+    drop = "The Unbinding of Kith'ix",
+    source = "Wowhead",
+    wowhead = "overall",
+    rank = RANK.BIS,
+    note = nil,
+    priority = true,
+  }),
 }
 
 BiSPulseData:Register("PALADIN", 3, {
@@ -217,7 +217,7 @@ BiSPulseData:Register("PALADIN", 3, {
   specName = "Retribution",
   patch = "12.1",
   season = "Midnight Season 2",
-  updated = "2026-09-06",
+  updated = "2026-10-19",
   primarySource = "Wowhead",
   guides = {
     wowhead = "https://www.wowhead.com/guide/classes/paladin/retribution/bis-gear",

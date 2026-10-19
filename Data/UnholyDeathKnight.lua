@@ -70,30 +70,10 @@ local items = {
     note = nil,
     priority = nil,
   }),
-  [252258] = entry({
-    name = "Sickening Signet of Atroxus",
-    slot = "Ring",
-    drop = "Voidscar Arena",
-    source = "Wowhead",
-    wowhead = "overall",
-    rank = RANK.BIS,
-    note = nil,
-    priority = true,
-  }),
   [268213] = entry({
     name = "Maze-roa, Warlord's Fury",
     slot = "Weapon",
     drop = "The Coiled Altar",
-    source = "Wowhead",
-    wowhead = "overall",
-    rank = RANK.BIS,
-    note = nil,
-    priority = true,
-  }),
-  [268249] = entry({
-    name = "Vile Alchemist's Band",
-    slot = "Ring",
-    drop = "Vashnik",
     source = "Wowhead",
     wowhead = "overall",
     rank = RANK.BIS,
@@ -210,6 +190,16 @@ local items = {
     note = nil,
     priority = true,
   }),
+  [273792] = entry({
+    name = "Band of the Amani Warlord",
+    slot = "Ring",
+    drop = "Altar of Fangs",
+    source = "Wowhead",
+    wowhead = "overall",
+    rank = RANK.BIS,
+    note = nil,
+    priority = true,
+  }),
   [273797] = entry({
     name = "Tattered Amani War Banner",
     slot = "",
@@ -220,6 +210,16 @@ local items = {
     note = nil,
     priority = nil,
   }),
+  [281029] = entry({
+    name = "Band of the Swarmcaller",
+    slot = "Ring",
+    drop = "Kyth'ix",
+    source = "Wowhead",
+    wowhead = "overall",
+    rank = RANK.BIS,
+    note = nil,
+    priority = true,
+  }),
 }
 
 BiSPulseData:Register("DEATHKNIGHT", 3, {
@@ -227,7 +227,7 @@ BiSPulseData:Register("DEATHKNIGHT", 3, {
   specName = "Unholy",
   patch = "12.1",
   season = "Midnight Season 2",
-  updated = "2026-09-06",
+  updated = "2026-10-19",
   primarySource = "Wowhead",
   guides = {
     wowhead = "https://www.wowhead.com/guide/classes/death-knight/unholy/bis-gear",

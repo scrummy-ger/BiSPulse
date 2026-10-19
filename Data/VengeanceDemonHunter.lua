@@ -140,16 +140,6 @@ local items = {
     note = nil,
     priority = true,
   }),
-  [270164] = entry({
-    name = "Gebbo's Bottomless Bag",
-    slot = "Trinket",
-    drop = "The Lost Explorers",
-    source = "Wowhead",
-    wowhead = "overall",
-    rank = RANK.BIS,
-    note = nil,
-    priority = true,
-  }),
   [270175] = entry({
     name = "Voracious Heart of Ula'tek",
     slot = "Trinket",
@@ -220,6 +210,16 @@ local items = {
     note = nil,
     priority = nil,
   }),
+  [281215] = entry({
+    name = "Twisted Horror's Tendril",
+    slot = "Trinket",
+    drop = "The Unbinding of Kith'ix",
+    source = "Wowhead",
+    wowhead = "overall",
+    rank = RANK.BIS,
+    note = nil,
+    priority = true,
+  }),
 }
 
 BiSPulseData:Register("DEMONHUNTER", 2, {
@@ -227,7 +227,7 @@ BiSPulseData:Register("DEMONHUNTER", 2, {
   specName = "Vengeance",
   patch = "12.1",
   season = "Midnight Season 2",
-  updated = "2026-09-06",
+  updated = "2026-10-19",
   primarySource = "Wowhead",
   guides = {
     wowhead = "https://www.wowhead.com/guide/classes/demon-hunter/vengeance/bis-gear",

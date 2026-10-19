@@ -150,16 +150,6 @@ local items = {
     note = nil,
     priority = true,
   }),
-  [271465] = entry({
-    name = "Warhelm of the Consecrated Flame",
-    slot = "Head",
-    drop = "The Twin Fangs",
-    source = "Wowhead",
-    wowhead = "overall",
-    rank = RANK.BIS,
-    note = nil,
-    priority = true,
-  }),
   [271466] = entry({
     name = "Gauntlets of the Consecrated Flame",
     slot = "Gloves",
@@ -200,6 +190,16 @@ local items = {
     note = nil,
     priority = nil,
   }),
+  [281239] = entry({
+    name = "Corroded Hulk's Skullcap",
+    slot = "Head",
+    drop = "Kith'ix",
+    source = "Wowhead",
+    wowhead = "overall",
+    rank = RANK.BIS,
+    note = nil,
+    priority = true,
+  }),
 }
 
 BiSPulseData:Register("PALADIN", 2, {
@@ -207,7 +207,7 @@ BiSPulseData:Register("PALADIN", 2, {
   specName = "Protection",
   patch = "12.1",
   season = "Midnight Season 2",
-  updated = "2026-09-06",
+  updated = "2026-10-19",
   primarySource = "Wowhead",
   guides = {
     wowhead = "https://www.wowhead.com/guide/classes/paladin/protection/bis-gear",

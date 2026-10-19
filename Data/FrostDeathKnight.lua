@@ -82,7 +82,7 @@ local items = {
   }),
   [268209] = entry({
     name = "Aman'muso, Warlord's Vengeance",
-    slot = "Offhand",
+    slot = "Weapon",
     drop = "The Coiled Altar",
     source = "Wowhead",
     wowhead = "overall",
@@ -90,10 +90,10 @@ local items = {
     note = nil,
     priority = true,
   }),
-  [268249] = entry({
-    name = "Vile Alchemist's Band",
-    slot = "Ring",
-    drop = "Vashnik the Malignant",
+  [268245] = entry({
+    name = "Entombed Cultist's Sabatons",
+    slot = "Boots",
+    drop = "Nek'zali the Soulcoiler",
     source = "Wowhead",
     wowhead = "overall",
     rank = RANK.BIS,
@@ -114,16 +114,6 @@ local items = {
     name = "Girdle of Toxic Regret",
     slot = "Belt",
     drop = "The Coiled Altar",
-    source = "Wowhead",
-    wowhead = "overall",
-    rank = RANK.BIS,
-    note = nil,
-    priority = true,
-  }),
-  [268260] = entry({
-    name = "Scaled Fiend's Warboots",
-    slot = "Boots",
-    drop = "Vashnik the Malignant",
     source = "Wowhead",
     wowhead = "overall",
     rank = RANK.BIS,
@@ -220,6 +210,16 @@ local items = {
     note = nil,
     priority = nil,
   }),
+  [281029] = entry({
+    name = "Band of the Swarmcaller",
+    slot = "Ring",
+    drop = "Kith'ix",
+    source = "Wowhead",
+    wowhead = "overall",
+    rank = RANK.BIS,
+    note = nil,
+    priority = true,
+  }),
 }
 
 BiSPulseData:Register("DEATHKNIGHT", 2, {
@@ -227,7 +227,7 @@ BiSPulseData:Register("DEATHKNIGHT", 2, {
   specName = "Frost",
   patch = "12.1",
   season = "Midnight Season 2",
-  updated = "2026-09-06",
+  updated = "2026-10-19",
   primarySource = "Wowhead",
   guides = {
     wowhead = "https://www.wowhead.com/guide/classes/death-knight/frost/bis-gear",

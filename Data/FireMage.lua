@@ -140,16 +140,6 @@ local items = {
     note = nil,
     priority = true,
   }),
-  [270167] = entry({
-    name = "Wavecaller's Seastone",
-    slot = "",
-    drop = "Nymrissa Wavebinder (Raid)",
-    source = "Wowhead",
-    wowhead = "raid",
-    rank = RANK.STRONG,
-    note = nil,
-    priority = nil,
-  }),
   [271092] = entry({
     name = "Jan'thrazet, the Soul Fang",
     slot = "Weapon",
@@ -233,7 +223,7 @@ local items = {
   [273796] = entry({
     name = "Vile Vial of Volatile Venom",
     slot = "Trinket",
-    drop = "Altar of Fangs",
+    drop = "Rav'i",
     source = "Wowhead",
     wowhead = "overall",
     rank = RANK.BIS,
@@ -247,7 +237,7 @@ BiSPulseData:Register("MAGE", 2, {
   specName = "Fire",
   patch = "12.1",
   season = "Midnight Season 2",
-  updated = "2026-09-06",
+  updated = "2026-10-19",
   primarySource = "Wowhead",
   guides = {
     wowhead = "https://www.wowhead.com/guide/classes/mage/fire/bis-gear",

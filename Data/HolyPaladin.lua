@@ -33,12 +33,12 @@ local items = {
   [252258] = entry({
     name = "Sickening Signet of Atroxus",
     slot = "Ring",
-    drop = "Voidscar Arena",
+    drop = "Atroxus",
     source = "Wowhead",
-    wowhead = "overall",
-    rank = RANK.BIS,
+    wowhead = "mythic",
+    rank = RANK.STRONG,
     note = nil,
-    priority = true,
+    priority = nil,
   }),
   [268211] = entry({
     name = "Baleful Hexblade",
@@ -115,20 +115,10 @@ local items = {
     slot = "Trinket",
     drop = "Nek'zali the Soulcoiler",
     source = "Wowhead",
-    wowhead = "overall",
-    rank = RANK.BIS,
+    wowhead = "raid",
+    rank = RANK.STRONG,
     note = nil,
-    priority = true,
-  }),
-  [270164] = entry({
-    name = "Gebbo's Bottomless Bag",
-    slot = "Trinket",
-    drop = "The Lost Explorers",
-    source = "Wowhead",
-    wowhead = "overall",
-    rank = RANK.BIS,
-    note = nil,
-    priority = true,
+    priority = nil,
   }),
   [271463] = entry({
     name = "Pauldrons of the Consecrated Flame",
@@ -210,6 +200,16 @@ local items = {
     note = nil,
     priority = nil,
   }),
+  [281029] = entry({
+    name = "Band of the Swarmcaller",
+    slot = "Ring",
+    drop = "Kith'ix",
+    source = "Wowhead",
+    wowhead = "overall",
+    rank = RANK.BIS,
+    note = nil,
+    priority = true,
+  }),
 }
 
 BiSPulseData:Register("PALADIN", 1, {
@@ -217,7 +217,7 @@ BiSPulseData:Register("PALADIN", 1, {
   specName = "Holy",
   patch = "12.1",
   season = "Midnight Season 2",
-  updated = "2026-09-06",
+  updated = "2026-10-19",
   primarySource = "Wowhead",
   guides = {
     wowhead = "https://www.wowhead.com/guide/classes/paladin/holy/bis-gear",
