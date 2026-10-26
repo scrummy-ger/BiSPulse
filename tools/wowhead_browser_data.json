@@ -1,8 +1,8 @@
 {
-  "scrapedAt": "2026-09-06",
+  "scrapedAt": "2026-10-26",
   "ok": 40,
   "freshOk": 40,
-  "totalItems": 755,
+  "totalItems": 770,
   "placeholders": 0,
   "errors": {},
   "out": {
@@ -11,8 +11,8 @@
       "withDrop": 16,
       "placeholders": 0,
       "byRank": {
-        "bis": 15,
-        "strong": 5,
+        "bis": 16,
+        "strong": 4,
         "alt": 0,
         "ok": 0
       },
@@ -106,20 +106,28 @@
           "drop": "Altar of Fangs"
         },
         {
-          "id": 268249,
-          "name": "Vile Alchemist's Band",
+          "id": 281029,
+          "name": "Band of the Swarmcaller",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Ring",
-          "drop": "Vashnik the Malignant"
+          "drop": "Kith'ix"
         },
         {
-          "id": 251194,
-          "name": "Lightwarden's Bind",
+          "id": 159459,
+          "name": "Ritual Binder's Ring",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Ring",
-          "drop": "Blinding Vale"
+          "drop": "King's Rest"
+        },
+        {
+          "id": 252258,
+          "name": "Sickening Signet of Atroxus",
+          "wowhead": "overall",
+          "rank": "bis",
+          "slot": "Ring",
+          "drop": "Voidscar Arena"
         },
         {
           "id": 270175,
@@ -136,14 +144,6 @@
           "rank": "bis",
           "slot": "Trinket",
           "drop": "The Coiled Altar"
-        },
-        {
-          "id": 159459,
-          "name": "Ritual Binder's Ring",
-          "wowhead": "mythic",
-          "rank": "strong",
-          "slot": "Ring",
-          "drop": "King's Rest"
         },
         {
           "id": 159418,
@@ -197,7 +197,7 @@
           "name": "Aman'muso, Warlord's Vengeance",
           "wowhead": "overall",
           "rank": "bis",
-          "slot": "Offhand",
+          "slot": "Weapon",
           "drop": "The Coiled Altar"
         },
         {
@@ -273,20 +273,20 @@
           "drop": "Ula'tek"
         },
         {
-          "id": 268260,
-          "name": "Scaled Fiend's Warboots",
+          "id": 268245,
+          "name": "Entombed Cultist's Sabatons",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Boots",
-          "drop": "Vashnik the Malignant"
+          "drop": "Nek'zali the Soulcoiler"
         },
         {
-          "id": 268249,
-          "name": "Vile Alchemist's Band",
+          "id": 281029,
+          "name": "Band of the Swarmcaller",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Ring",
-          "drop": "Vashnik the Malignant"
+          "drop": "Kith'ix"
         },
         {
           "id": 251513,
@@ -441,20 +441,20 @@
           "drop": "Crafting"
         },
         {
-          "id": 268249,
-          "name": "Vile Alchemist's Band",
+          "id": 281029,
+          "name": "Band of the Swarmcaller",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Ring",
-          "drop": "Vashnik"
+          "drop": "Kyth'ix"
         },
         {
-          "id": 252258,
-          "name": "Sickening Signet of Atroxus",
+          "id": 273792,
+          "name": "Band of the Amani Warlord",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Ring",
-          "drop": "Voidscar Arena"
+          "drop": "Altar of Fangs"
         },
         {
           "id": 270175,
@@ -510,12 +510,12 @@
       "url": "https://www.wowhead.com/guide/classes/death-knight/unholy/bis-gear"
     },
     "HavocDemonHunter": {
-      "count": 16,
+      "count": 17,
       "withDrop": 16,
       "placeholders": 0,
       "byRank": {
         "bis": 16,
-        "strong": 0,
+        "strong": 1,
         "alt": 0,
         "ok": 0
       },
@@ -537,12 +537,12 @@
           "drop": "Crafting/ Misc"
         },
         {
-          "id": 271875,
-          "name": "Gaze of the Coiled Watcher",
+          "id": 271537,
+          "name": "Abyssal Doomhound's Relentless Stare",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Head",
-          "drop": "Ula'tek"
+          "drop": "The Twin Fangs"
         },
         {
           "id": 268265,
@@ -569,12 +569,12 @@
           "drop": "The Coiled Altar"
         },
         {
-          "id": 271540,
-          "name": "Abyssal Doomhound's Coreguard",
+          "id": 281236,
+          "name": "Chestwrap of Palpable Terror",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Chest",
-          "drop": "Vashnik the Malignant"
+          "drop": "Kith'ix"
         },
         {
           "id": 244576,
@@ -641,12 +641,18 @@
           "drop": "The Coiled Altar"
         },
         {
-          "id": 270168,
-          "name": "Font of Venomous Rage",
+          "id": 270175,
+          "name": "Voracious Heart of Ula'tek",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Trinket",
           "drop": "Ula'tek"
+        },
+        {
+          "id": 270168,
+          "name": "Font of Venomous Rage",
+          "wowhead": "raid",
+          "rank": "strong"
         }
       ],
       "url": "https://www.wowhead.com/guide/classes/demon-hunter/havoc/bis-gear"
@@ -775,12 +781,12 @@
           "drop": "King's Rest"
         },
         {
-          "id": 270164,
-          "name": "Gebbo's Bottomless Bag",
+          "id": 281215,
+          "name": "Twisted Horror's Tendril",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Trinket",
-          "drop": "The Lost Explorers"
+          "drop": "The Unbinding of Kith'ix"
         },
         {
           "id": 270175,
@@ -822,11 +828,11 @@
     },
     "DevourerDemonHunter": {
       "count": 20,
-      "withDrop": 15,
+      "withDrop": 16,
       "placeholders": 0,
       "byRank": {
-        "bis": 15,
-        "strong": 5,
+        "bis": 16,
+        "strong": 4,
         "alt": 0,
         "ok": 0
       },
@@ -928,12 +934,12 @@
           "drop": "Crafting/ Misc"
         },
         {
-          "id": 268249,
-          "name": "Vile Alchemist's Band",
+          "id": 281029,
+          "name": "Band of the Swarmcaller",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Ring",
-          "drop": "Vashnik the Malignant"
+          "drop": "General Kith'ix"
         },
         {
           "id": 158366,
@@ -944,23 +950,31 @@
           "drop": "Temple of Sethraliss"
         },
         {
-          "id": 250215,
-          "name": "Freightrunner's Flask",
+          "id": 281215,
+          "name": "Twisted Horror's Tendril",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Trinket",
-          "drop": "Murder Row"
+          "drop": "General Kith'ix"
         },
         {
           "id": 270164,
           "name": "Gebbo's Bottomless Bag",
-          "wowhead": "raid",
-          "rank": "strong"
+          "wowhead": "overall",
+          "rank": "bis",
+          "slot": "Trinket",
+          "drop": "The Lost Explorers"
         },
         {
           "id": 271875,
           "name": "Gaze of the Coiled Watcher",
           "wowhead": "raid",
+          "rank": "strong"
+        },
+        {
+          "id": 250215,
+          "name": "Freightrunner's Flask",
+          "wowhead": "mythic",
           "rank": "strong"
         },
         {
@@ -976,12 +990,6 @@
           "wowhead": "mythic",
           "rank": "strong",
           "slot": "Chest"
-        },
-        {
-          "id": 250224,
-          "name": "Mindpiercer's Sigil",
-          "wowhead": "mythic",
-          "rank": "strong"
         }
       ],
       "url": "https://www.wowhead.com/guide/classes/demon-hunter/devourer/bis-gear"
@@ -1046,12 +1054,12 @@
           "drop": "The Coiled Altar"
         },
         {
-          "id": 251159,
-          "name": "War Trial Vestments",
+          "id": 281236,
+          "name": "Chestwrap of Palpable Terror",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Chest",
-          "drop": "Den of Nalorakk"
+          "drop": "Kith'ix"
         },
         {
           "id": 244576,
@@ -1086,20 +1094,20 @@
           "drop": "The Coiled Altar"
         },
         {
-          "id": 268261,
-          "name": "Bespittled Slitherslippers",
+          "id": 159327,
+          "name": "Sand-Shined Snakeskin Sandals",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Boots",
-          "drop": "The Twin Fangs"
+          "drop": "Temple of Sethraliss"
         },
         {
-          "id": 158366,
-          "name": "Charged Sandstone Band",
+          "id": 281029,
+          "name": "Band of the Swarmcaller",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Ring",
-          "drop": "Temple of Sethraliss"
+          "drop": "Kith'ix"
         },
         {
           "id": 268249,
@@ -1110,12 +1118,12 @@
           "drop": "Vashnik the Malignant"
         },
         {
-          "id": 270167,
-          "name": "Wavecaller's Seastone",
+          "id": 281215,
+          "name": "Twisted Horror's Tendril",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Trinket",
-          "drop": "Nymrissa Wavecaller"
+          "drop": "Kith'ix"
         },
         {
           "id": 273796,
@@ -1126,16 +1134,17 @@
           "drop": "Altar of Fangs"
         },
         {
-          "id": 270164,
-          "name": "Gebbo's Bottomless Bag",
-          "wowhead": "raid",
-          "rank": "strong"
-        },
-        {
           "id": 250215,
           "name": "Freightrunner's Flask",
           "wowhead": "mythic",
           "rank": "strong"
+        },
+        {
+          "id": 251159,
+          "name": "War Trial Vestments",
+          "wowhead": "mythic",
+          "rank": "strong",
+          "slot": "Chest"
         },
         {
           "id": 252258,
@@ -1255,12 +1264,12 @@
           "drop": "Vashnik the Malignant"
         },
         {
-          "id": 252258,
-          "name": "Sickening Signet of Atroxus",
+          "id": 281029,
+          "name": "Band of the Swarmcaller",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Ring",
-          "drop": "Voidscar Arena"
+          "drop": "Kith'ix"
         },
         {
           "id": 270173,
@@ -1363,12 +1372,12 @@
           "drop": "The Coiled Altar"
         },
         {
-          "id": 271531,
-          "name": "Enigmatic Dreamwatcher's Lunar Raiment",
+          "id": 281236,
+          "name": "Chestwrap of Palpable Terror",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Chest",
-          "drop": "Vashnik the Malignant"
+          "drop": "Kith'ix"
         },
         {
           "id": 268240,
@@ -1482,12 +1491,12 @@
           "drop": "The Twin Fangs"
         },
         {
-          "id": 268251,
-          "name": "Amulet of the Twin Fangs",
+          "id": 268265,
+          "name": "Aqirbane Reliquary",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Neck",
-          "drop": "The Twin Fangs (Raid)"
+          "drop": "Ula'tek"
         },
         {
           "id": 244572,
@@ -1538,12 +1547,12 @@
           "drop": "Leatherworking"
         },
         {
-          "id": 268266,
-          "name": "Alluring Bubbleband",
+          "id": 281029,
+          "name": "Band of the Swarmcaller",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Ring",
-          "drop": "Nymrissa Wavebinder (Raid)"
+          "drop": "Kithix (Raid)"
         },
         {
           "id": 252258,
@@ -1755,12 +1764,12 @@
           "drop": "The Lost Explorers"
         },
         {
-          "id": 270167,
-          "name": "Wavecaller's Seastone",
+          "id": 281215,
+          "name": "Twisted Horror's Tendril",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Trinket",
-          "drop": "Nymrissa Wavecaller"
+          "drop": "Kith'ix"
         },
         {
           "id": 271876,
@@ -1939,12 +1948,12 @@
       "url": "https://www.wowhead.com/guide/classes/evoker/preservation/bis-gear"
     },
     "AugmentationEvoker": {
-      "count": 18,
+      "count": 20,
       "withDrop": 16,
       "placeholders": 0,
       "byRank": {
         "bis": 16,
-        "strong": 2,
+        "strong": 4,
         "alt": 0,
         "ok": 0
       },
@@ -1974,12 +1983,12 @@
           "drop": "The Twin Fangs"
         },
         {
-          "id": 268265,
-          "name": "Aqirbane Reliquary",
+          "id": 268251,
+          "name": "Amulet of the Twin Fangs",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Neck",
-          "drop": "Ula'tek"
+          "drop": "Twin Fangs"
         },
         {
           "id": 271499,
@@ -2054,12 +2063,12 @@
           "drop": "Vashnik the Malignant"
         },
         {
-          "id": 158366,
-          "name": "Charged Sandstone Band",
+          "id": 281029,
+          "name": "Band of the Swarmcaller",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Ring",
-          "drop": "Temple of Sethraliss"
+          "drop": "Kith'ix"
         },
         {
           "id": 270168,
@@ -2070,12 +2079,12 @@
           "drop": "Ula'tek"
         },
         {
-          "id": 250224,
-          "name": "Mindpiercer's Sigil",
+          "id": 281215,
+          "name": "Twisted Horror's Tendril",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Trinket",
-          "drop": "Voidscar Arena"
+          "drop": "Kith'ix"
         },
         {
           "id": 271876,
@@ -2090,17 +2099,29 @@
           "wowhead": "mythic",
           "rank": "strong",
           "slot": "Head"
+        },
+        {
+          "id": 158366,
+          "name": "Charged Sandstone Band",
+          "wowhead": "mythic",
+          "rank": "strong"
+        },
+        {
+          "id": 250224,
+          "name": "Mindpiercer's Sigil",
+          "wowhead": "mythic",
+          "rank": "strong"
         }
       ],
       "url": "https://www.wowhead.com/guide/classes/evoker/augmentation/bis-gear"
     },
     "BeastMasteryHunter": {
-      "count": 19,
+      "count": 20,
       "withDrop": 15,
       "placeholders": 0,
       "byRank": {
         "bis": 15,
-        "strong": 4,
+        "strong": 5,
         "alt": 0,
         "ok": 0
       },
@@ -2202,20 +2223,20 @@
           "drop": "Vashnik the Malignant"
         },
         {
-          "id": 252258,
-          "name": "Sickening Signet of Atroxus",
+          "id": 281029,
+          "name": "Band of the Swarmcaller",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Ring",
-          "drop": "Voidscar Arena"
+          "drop": "Kith'ix"
         },
         {
-          "id": 270173,
-          "name": "Zul'jin's Guillotine Technique",
+          "id": 281215,
+          "name": "Twisted Horror's Tendril",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Trinket",
-          "drop": "The Coiled Altar"
+          "drop": "Kith'ix"
         },
         {
           "id": 270175,
@@ -2239,6 +2260,13 @@
           "rank": "strong"
         },
         {
+          "id": 252258,
+          "name": "Sickening Signet of Atroxus",
+          "wowhead": "mythic",
+          "rank": "strong",
+          "slot": "Ring"
+        },
+        {
           "id": 158366,
           "name": "Charged Sandstone Band",
           "wowhead": "mythic",
@@ -2254,12 +2282,12 @@
       "url": "https://www.wowhead.com/guide/classes/hunter/beast-mastery/bis-gear"
     },
     "MarksmanshipHunter": {
-      "count": 20,
+      "count": 23,
       "withDrop": 15,
       "placeholders": 0,
       "byRank": {
         "bis": 15,
-        "strong": 5,
+        "strong": 8,
         "alt": 0,
         "ok": 0
       },
@@ -2345,28 +2373,28 @@
           "drop": "Sszorak"
         },
         {
-          "id": 268233,
-          "name": "Ferocious Scaleboots",
+          "id": 268258,
+          "name": "Boots of the Reckless Wayfarer",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Boots",
+          "drop": "The Lost Explorers"
+        },
+        {
+          "id": 268252,
+          "name": "Apex Brute's Claw Ring",
+          "wowhead": "overall",
+          "rank": "bis",
+          "slot": "Ring",
           "drop": "Sszorak"
         },
         {
-          "id": 251136,
-          "name": "Signet of Snarling Servitude",
+          "id": 281029,
+          "name": "Band of the Swarmcaller",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Ring",
-          "drop": "Murder Row"
-        },
-        {
-          "id": 268249,
-          "name": "Vile Alchemist's Band",
-          "wowhead": "overall",
-          "rank": "bis",
-          "slot": "Ring",
-          "drop": "Vashnik the Malignant"
+          "drop": "Kith'ix"
         },
         {
           "id": 270175,
@@ -2385,14 +2413,27 @@
           "drop": "Ula'tek"
         },
         {
+          "id": 281215,
+          "name": "Twisted Horror's Tendril",
+          "wowhead": "raid",
+          "rank": "strong"
+        },
+        {
+          "id": 281238,
+          "name": "Aberrant Commander's Gauntlets",
+          "wowhead": "raid",
+          "rank": "strong",
+          "slot": "Gloves"
+        },
+        {
           "id": 271680,
           "name": "Sinseared Repeater",
           "wowhead": "mythic",
           "rank": "strong"
         },
         {
-          "id": 250214,
-          "name": "Lightspire Core",
+          "id": 250228,
+          "name": "Resonant Bellowstone",
           "wowhead": "mythic",
           "rank": "strong"
         },
@@ -2413,27 +2454,42 @@
           "name": "Charged Sandstone Band",
           "wowhead": "mythic",
           "rank": "strong"
+        },
+        {
+          "id": 251136,
+          "name": "Signet of Snarling Servitude",
+          "wowhead": "mythic",
+          "rank": "strong",
+          "slot": "Ring"
         }
       ],
       "url": "https://www.wowhead.com/guide/classes/hunter/marksmanship/bis-gear"
     },
     "SurvivalHunter": {
-      "count": 18,
+      "count": 21,
       "withDrop": 17,
       "placeholders": 0,
       "byRank": {
-        "bis": 15,
-        "strong": 3,
+        "bis": 16,
+        "strong": 5,
         "alt": 0,
         "ok": 0
       },
       "items": [
         {
-          "id": 268215,
-          "name": "Abyssal Broodfiend's Bardiche",
+          "id": 268209,
+          "name": "Aman'muso, Warlord's Vengeance",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Weapon",
+          "drop": "The Coiled Altar"
+        },
+        {
+          "id": 271093,
+          "name": "Zatha'tek, Breath of Corruption",
+          "wowhead": "overall",
+          "rank": "bis",
+          "slot": "Offhand",
           "drop": "Ula'tek"
         },
         {
@@ -2509,28 +2565,28 @@
           "drop": "Sszorak"
         },
         {
-          "id": 268233,
-          "name": "Ferocious Scaleboots",
+          "id": 268258,
+          "name": "Boots of the Reckless Wayfarer",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Boots",
+          "drop": "The lost Explorers"
+        },
+        {
+          "id": 268252,
+          "name": "Apex Brute's Claw Ring",
+          "wowhead": "overall",
+          "rank": "bis",
+          "slot": "Ring",
           "drop": "Sszorak"
         },
         {
-          "id": 273792,
-          "name": "Band of the Amani Warlord",
+          "id": 281029,
+          "name": "Band of the Swarmcaller",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Ring",
-          "drop": "Altar of Fangs"
-        },
-        {
-          "id": 252258,
-          "name": "Sickening Signet of Atroxus",
-          "wowhead": "overall",
-          "rank": "bis",
-          "slot": "Ring",
-          "drop": "Voidscar Arena"
+          "drop": "Kith'ix"
         },
         {
           "id": 270175,
@@ -2549,20 +2605,32 @@
           "drop": "The Coiled Altar"
         },
         {
+          "id": 268213,
+          "name": "Maze-roa, Warlord's Fury",
+          "wowhead": "raid",
+          "rank": "strong"
+        },
+        {
           "id": 160213,
           "name": "Sepulchral Construct's Gloves",
           "wowhead": "mythic",
           "rank": "strong",
-          "slot": "Gloves",
-          "drop": "Tier Set / King's Rest"
+          "slot": "Gloves"
         },
         {
-          "id": 251220,
+          "id": 239035,
           "name": "Skulking Viper's Weeping Fangs",
           "wowhead": "mythic",
           "rank": "strong",
           "slot": "Head",
           "drop": "The Twin Fangs"
+        },
+        {
+          "id": 252258,
+          "name": "Sickening Signet of Atroxus",
+          "wowhead": "mythic",
+          "rank": "strong",
+          "slot": "Ring"
         },
         {
           "id": 251149,
@@ -2574,12 +2642,12 @@
       "url": "https://www.wowhead.com/guide/classes/hunter/survival/bis-gear"
     },
     "ArcaneMage": {
-      "count": 19,
+      "count": 20,
       "withDrop": 16,
       "placeholders": 0,
       "byRank": {
         "bis": 16,
-        "strong": 3,
+        "strong": 4,
         "alt": 0,
         "ok": 0
       },
@@ -2681,12 +2749,12 @@
           "drop": "The Coiled Altar"
         },
         {
-          "id": 268266,
-          "name": "Alluring Bubbleband",
+          "id": 281029,
+          "name": "Band of the Swarmcaller",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Ring",
-          "drop": "Nymrissa Wavecaller"
+          "drop": "Kith'ix"
         },
         {
           "id": 251148,
@@ -2705,12 +2773,19 @@
           "drop": "Murder Row"
         },
         {
-          "id": 270164,
-          "name": "Gebbo's Bottomless Bag",
+          "id": 281215,
+          "name": "Twisted Horror's Tendril",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Trinket",
-          "drop": "The Lost Explorers"
+          "drop": "Kith'ix"
+        },
+        {
+          "id": 281235,
+          "name": "Voidweaver's Leggings",
+          "wowhead": "raid",
+          "rank": "strong",
+          "slot": "Legs"
         },
         {
           "id": 271874,
@@ -2736,12 +2811,12 @@
       "url": "https://www.wowhead.com/guide/classes/mage/arcane/bis-gear"
     },
     "FireMage": {
-      "count": 22,
+      "count": 21,
       "withDrop": 18,
       "placeholders": 0,
       "byRank": {
         "bis": 18,
-        "strong": 4,
+        "strong": 3,
         "alt": 0,
         "ok": 0
       },
@@ -2898,12 +2973,6 @@
           "slot": "Head"
         },
         {
-          "id": 270167,
-          "name": "Wavecaller's Seastone",
-          "wowhead": "raid",
-          "rank": "strong"
-        },
-        {
           "id": 273778,
           "name": "Polished Lightwood Channeler",
           "wowhead": "mythic",
@@ -2920,12 +2989,12 @@
       "url": "https://www.wowhead.com/guide/classes/mage/fire/bis-gear"
     },
     "FrostMage": {
-      "count": 20,
+      "count": 22,
       "withDrop": 16,
       "placeholders": 0,
       "byRank": {
         "bis": 16,
-        "strong": 4,
+        "strong": 6,
         "alt": 0,
         "ok": 0
       },
@@ -3027,20 +3096,20 @@
           "drop": "The Coiled Altar"
         },
         {
-          "id": 268249,
-          "name": "Vile Alchemist's Band",
+          "id": 281029,
+          "name": "Band of the Swarmcaller",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Ring",
-          "drop": "Vashnik the Malignant"
+          "drop": "Kith'ix"
         },
         {
-          "id": 158366,
-          "name": "Charged Sandstone Band",
+          "id": 268252,
+          "name": "Apex Brute's Claw Ring",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Ring",
-          "drop": "Temple of Sethraliss"
+          "drop": "Sszorak"
         },
         {
           "id": 270164,
@@ -3051,12 +3120,12 @@
           "drop": "The Lost Explorers"
         },
         {
-          "id": 270167,
-          "name": "Wavecaller's Seastone",
+          "id": 281215,
+          "name": "Twisted Horror's Tendril",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Trinket",
-          "drop": "Nymrissa Wavecaller"
+          "drop": "Kith'ix"
         },
         {
           "id": 271874,
@@ -3064,6 +3133,13 @@
           "wowhead": "raid",
           "rank": "strong",
           "slot": "Head"
+        },
+        {
+          "id": 281235,
+          "name": "Voidweaver's Leggings",
+          "wowhead": "raid",
+          "rank": "strong",
+          "slot": "Legs"
         },
         {
           "id": 273796,
@@ -3078,6 +3154,12 @@
           "rank": "strong"
         },
         {
+          "id": 158366,
+          "name": "Charged Sandstone Band",
+          "wowhead": "mythic",
+          "rank": "strong"
+        },
+        {
           "id": 273785,
           "name": "Primordial Robe of Rites",
           "wowhead": "mythic",
@@ -3088,12 +3170,12 @@
       "url": "https://www.wowhead.com/guide/classes/mage/frost/bis-gear"
     },
     "BrewmasterMonk": {
-      "count": 18,
+      "count": 12,
       "withDrop": 12,
       "placeholders": 0,
       "byRank": {
         "bis": 12,
-        "strong": 6,
+        "strong": 0,
         "alt": 0,
         "ok": 0
       },
@@ -3171,12 +3253,12 @@
           "drop": "Sszorak"
         },
         {
-          "id": 159304,
-          "name": "Goldfeather Boots",
+          "id": 272240,
+          "name": "Miststalker's Striders",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Boots",
-          "drop": "Kings' Rest"
+          "drop": "Mythical Soul Fragment ( Labyrinth of Kindo'jan )"
         },
         {
           "id": 251148,
@@ -3193,49 +3275,13 @@
           "rank": "bis",
           "slot": "Ring",
           "drop": "Jewelcrafting"
-        },
-        {
-          "id": 268215,
-          "name": "Abyssal Broodfiend's Bardiche",
-          "wowhead": "raid",
-          "rank": "strong"
-        },
-        {
-          "id": 270175,
-          "name": "Voracious Heart of Ula'tek",
-          "wowhead": "raid",
-          "rank": "strong"
-        },
-        {
-          "id": 270173,
-          "name": "Zul'jin's Guillotine Technique",
-          "wowhead": "raid",
-          "rank": "strong"
-        },
-        {
-          "id": 251192,
-          "name": "Branch of Pride",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 159617,
-          "name": "Lustrous Golden Plumage",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 251226,
-          "name": "Hide of Pestilence",
-          "wowhead": "mythic",
-          "rank": "strong"
         }
       ],
       "url": "https://www.wowhead.com/guide/classes/monk/brewmaster/bis-gear"
     },
     "MistweaverMonk": {
       "count": 21,
-      "withDrop": 18,
+      "withDrop": 19,
       "placeholders": 0,
       "byRank": {
         "bis": 14,
@@ -3285,12 +3331,12 @@
           "drop": "Entombed Sentinels"
         },
         {
-          "id": 251189,
-          "name": "Rootwalker Harness",
+          "id": 268256,
+          "name": "Sash of the Forlorn Vessel",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Belt",
-          "drop": "The Blinding Vale"
+          "drop": "The Coiled Altar"
         },
         {
           "id": 271518,
@@ -3301,12 +3347,12 @@
           "drop": "Sszorak"
         },
         {
-          "id": 268247,
-          "name": "Breakwater Boots",
+          "id": 251153,
+          "name": "Arctic Explorer's Legwraps",
           "wowhead": "overall",
           "rank": "bis",
-          "slot": "Boots",
-          "drop": "Nymrissa Wavebinder"
+          "slot": "Legs",
+          "drop": "Den of Nalorakk"
         },
         {
           "id": 268266,
@@ -3314,23 +3360,23 @@
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Ring",
-          "drop": "Nymrissa Wavebinder"
+          "drop": "Nymrissa Wavecaller"
         },
         {
-          "id": 159459,
-          "name": "Ritual Binder's Ring",
+          "id": 252258,
+          "name": "Sickening Signet of Atroxus",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Ring",
-          "drop": "Kings' Rest"
+          "drop": "Voidscar Arena"
         },
         {
-          "id": 270167,
-          "name": "Wavecaller's Seastone",
+          "id": 281215,
+          "name": "Twisted Horror's Tendril",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Trinket",
-          "drop": "Nymrissa Wavebinder"
+          "drop": "Kith'ix"
         },
         {
           "id": 270162,
@@ -3349,44 +3395,52 @@
           "drop": "The Coiled Altar"
         },
         {
-          "id": 159667,
-          "name": "Vessel of Last Rites",
+          "id": 268197,
+          "name": "Spine of the Hissing Abyss",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Offhand",
-          "drop": "Kings' Rest"
+          "drop": "Entombed Sentinels"
         },
         {
-          "id": 268256,
-          "name": "Sash of the Forlorn Vessel",
+          "id": 251189,
+          "name": "Rootwalker Harness",
           "wowhead": "raid",
           "rank": "strong",
           "slot": "Belt",
-          "drop": "The Coiled Altar"
+          "drop": "The Blinding Vale"
         },
         {
-          "id": 251153,
-          "name": "Arctic Explorer's Legwraps",
+          "id": 268247,
+          "name": "Breakwater Boots",
           "wowhead": "raid",
           "rank": "strong",
-          "slot": "Legs",
-          "drop": "Den of Nalorakk"
+          "slot": "Boots",
+          "drop": "Nymrissa Wavecaller"
         },
         {
-          "id": 252258,
-          "name": "Sickening Signet of Atroxus",
+          "id": 159459,
+          "name": "Ritual Binder's Ring",
           "wowhead": "raid",
           "rank": "strong",
           "slot": "Ring",
-          "drop": "Voidscar Arena"
+          "drop": "Kings' Rest"
         },
         {
-          "id": 268197,
-          "name": "Spine of the Hissing Abyss",
+          "id": 270167,
+          "name": "Wavecaller's Seastone",
           "wowhead": "raid",
           "rank": "strong",
-          "slot": "Offhand",
-          "drop": "Entomed Sentinels"
+          "slot": "Trinket",
+          "drop": "Nymrissa Wavecaller"
+        },
+        {
+          "id": 251123,
+          "name": "Nibbles' Training Rod",
+          "wowhead": "raid",
+          "rank": "strong",
+          "slot": "Weapon",
+          "drop": "Murder Row"
         },
         {
           "id": 251124,
@@ -3400,23 +3454,17 @@
           "name": "Fury-fletched Armlets",
           "wowhead": "mythic",
           "rank": "strong"
-        },
-        {
-          "id": 158369,
-          "name": "Galvanized Stormcrusher",
-          "wowhead": "mythic",
-          "rank": "strong"
         }
       ],
       "url": "https://www.wowhead.com/guide/classes/monk/mistweaver/bis-gear"
     },
     "WindwalkerMonk": {
-      "count": 15,
+      "count": 16,
       "withDrop": 13,
       "placeholders": 0,
       "byRank": {
         "bis": 13,
-        "strong": 2,
+        "strong": 3,
         "alt": 0,
         "ok": 0
       },
@@ -3462,12 +3510,12 @@
           "drop": "The Coiled Altar"
         },
         {
-          "id": 268235,
-          "name": "Vestment of the Awakening",
+          "id": 281236,
+          "name": "Chestwrap of Palpable Terror",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Chest",
-          "drop": "Nek'zali the Soulcoiler"
+          "drop": "Kith'ix"
         },
         {
           "id": 244576,
@@ -3518,12 +3566,12 @@
           "drop": "Temple of Sethraliss"
         },
         {
-          "id": 252258,
-          "name": "Sickening Signet of Atroxus",
+          "id": 281029,
+          "name": "Band of the Swarmcaller",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Ring",
-          "drop": "Voidscar Arena"
+          "drop": "Kith'ix"
         },
         {
           "id": 270175,
@@ -3536,17 +3584,24 @@
           "name": "Zul'jin's Guillotine Technique",
           "wowhead": "raid",
           "rank": "strong"
+        },
+        {
+          "id": 252258,
+          "name": "Sickening Signet of Atroxus",
+          "wowhead": "mythic",
+          "rank": "strong",
+          "slot": "Ring"
         }
       ],
       "url": "https://www.wowhead.com/guide/classes/monk/windwalker/bis-gear"
     },
     "HolyPaladin": {
       "count": 19,
-      "withDrop": 15,
+      "withDrop": 13,
       "placeholders": 0,
       "byRank": {
-        "bis": 15,
-        "strong": 4,
+        "bis": 13,
+        "strong": 6,
         "alt": 0,
         "ok": 0
       },
@@ -3648,28 +3703,12 @@
           "drop": "Vashnik the Malignant"
         },
         {
-          "id": 252258,
-          "name": "Sickening Signet of Atroxus",
+          "id": 281029,
+          "name": "Band of the Swarmcaller",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Ring",
-          "drop": "Voidscar Arena"
-        },
-        {
-          "id": 270162,
-          "name": "Soulcoiler Ritual Vessel",
-          "wowhead": "overall",
-          "rank": "bis",
-          "slot": "Trinket",
-          "drop": "Nek'zali the Soulcoiler"
-        },
-        {
-          "id": 270164,
-          "name": "Gebbo's Bottomless Bag",
-          "wowhead": "overall",
-          "rank": "bis",
-          "slot": "Trinket",
-          "drop": "The Lost Explorers"
+          "drop": "Kith'ix"
         },
         {
           "id": 271878,
@@ -3677,6 +3716,19 @@
           "wowhead": "raid",
           "rank": "strong",
           "slot": "Legs"
+        },
+        {
+          "id": 270162,
+          "name": "Soulcoiler Ritual Vessel",
+          "wowhead": "raid",
+          "rank": "strong"
+        },
+        {
+          "id": 252258,
+          "name": "Sickening Signet of Atroxus",
+          "wowhead": "mythic",
+          "rank": "strong",
+          "slot": "Ring"
         },
         {
           "id": 273780,
@@ -3719,12 +3771,12 @@
           "drop": "The Coiled Altar"
         },
         {
-          "id": 271465,
-          "name": "Warhelm of the Consecrated Flame",
+          "id": 281239,
+          "name": "Corroded Hulk's Skullcap",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Head",
-          "drop": "The Twin Fangs"
+          "drop": "Kith'ix"
         },
         {
           "id": 268265,
@@ -3947,12 +3999,12 @@
           "drop": "Vashnik the Malignant"
         },
         {
-          "id": 268249,
-          "name": "Vile Alchemist's Band",
+          "id": 281029,
+          "name": "Band of the Swarmcaller",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Ring",
-          "drop": "Vashnik the Malignant"
+          "drop": "The Unbinding of Kith'ix"
         },
         {
           "id": 251513,
@@ -4316,12 +4368,12 @@
       "url": "https://www.wowhead.com/guide/classes/priest/holy/bis-gear"
     },
     "ShadowPriest": {
-      "count": 19,
+      "count": 20,
       "withDrop": 16,
       "placeholders": 0,
       "byRank": {
         "bis": 16,
-        "strong": 3,
+        "strong": 4,
         "alt": 0,
         "ok": 0
       },
@@ -4407,12 +4459,12 @@
           "drop": "Crafting\\/Misc"
         },
         {
-          "id": 271554,
-          "name": "Enveloping Legwraps of the Cosmic Penitent",
+          "id": 281235,
+          "name": "Voidweaver's Leggings",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Legs",
-          "drop": "Sszorak"
+          "drop": "Unbinding of Kith'Ix"
         },
         {
           "id": 268255,
@@ -4423,12 +4475,12 @@
           "drop": "The Coiled Altar"
         },
         {
-          "id": 252258,
-          "name": "Sickening Signet of Atroxus",
+          "id": 281029,
+          "name": "Band of the Swarmcaller",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Ring",
-          "drop": "Voidscar Arena"
+          "drop": "Unbinding of Kith'Ix"
         },
         {
           "id": 268249,
@@ -4439,12 +4491,12 @@
           "drop": "Vashnik the Malignant"
         },
         {
-          "id": 270167,
-          "name": "Wavecaller's Seastone",
+          "id": 281215,
+          "name": "Twisted Horror's Tendril",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Trinket",
-          "drop": "Nymrissa Wavecaller"
+          "drop": "Unbinding of Kith'Ix"
         },
         {
           "id": 250215,
@@ -4460,6 +4512,13 @@
           "wowhead": "raid",
           "rank": "strong",
           "slot": "Head"
+        },
+        {
+          "id": 252258,
+          "name": "Sickening Signet of Atroxus",
+          "wowhead": "mythic",
+          "rank": "strong",
+          "slot": "Ring"
         },
         {
           "id": 273796,
@@ -4536,12 +4595,12 @@
           "drop": "The Coiled Altar"
         },
         {
-          "id": 271513,
-          "name": "Chosen Bloodslayer's Banded Poncho",
+          "id": 281236,
+          "name": "Chestwrap of Palpable Terror",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Chest",
-          "drop": "Vashnik the Malignant"
+          "drop": "Kith'ix"
         },
         {
           "id": 244576,
@@ -4584,20 +4643,20 @@
           "drop": "Crafting"
         },
         {
-          "id": 273792,
-          "name": "Band of the Amani Warlord",
+          "id": 281029,
+          "name": "Band of the Swarmcaller",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Ring",
-          "drop": "Altar of Fangs"
+          "drop": "Kith'ix"
         },
         {
-          "id": 268249,
-          "name": "Vile Alchemist's Band",
+          "id": 268252,
+          "name": "Apex Brute's Claw Ring",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Ring",
-          "drop": "Vashnik the Malignant"
+          "drop": "Sszorak"
         },
         {
           "id": 270175,
@@ -4608,12 +4667,12 @@
           "drop": "Ula'tek"
         },
         {
-          "id": 270168,
-          "name": "Font of Venomous Rage",
+          "id": 281215,
+          "name": "Twisted Horror's Tendril",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Trinket",
-          "drop": "Ula'tek"
+          "drop": "Kith'ix"
         },
         {
           "id": 271875,
@@ -4805,12 +4864,12 @@
       "url": "https://www.wowhead.com/guide/classes/rogue/outlaw/bis-gear"
     },
     "SubtletyRogue": {
-      "count": 21,
+      "count": 22,
       "withDrop": 16,
       "placeholders": 0,
       "byRank": {
         "bis": 16,
-        "strong": 5,
+        "strong": 6,
         "alt": 0,
         "ok": 0
       },
@@ -4912,12 +4971,12 @@
           "drop": "King's Rest"
         },
         {
-          "id": 251194,
-          "name": "Lightwarden's Bind",
+          "id": 281029,
+          "name": "Band of the Swarmcaller",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Ring",
-          "drop": "Blinding Vale"
+          "drop": "Kith'ix"
         },
         {
           "id": 162544,
@@ -4950,6 +5009,12 @@
           "rank": "strong"
         },
         {
+          "id": 281236,
+          "name": "Chestwrap of Palpable Terror",
+          "wowhead": "raid",
+          "rank": "strong"
+        },
+        {
           "id": 251190,
           "name": "Bloodthorn Burnous",
           "wowhead": "mythic",
@@ -4978,12 +5043,12 @@
       "url": "https://www.wowhead.com/guide/classes/rogue/subtlety/bis-gear"
     },
     "ElementalShaman": {
-      "count": 18,
+      "count": 19,
       "withDrop": 16,
       "placeholders": 0,
       "byRank": {
         "bis": 16,
-        "strong": 2,
+        "strong": 3,
         "alt": 0,
         "ok": 0
       },
@@ -5101,12 +5166,12 @@
           "drop": "Voidscar Arena"
         },
         {
-          "id": 270164,
-          "name": "Gebbo's Bottomless Bag",
+          "id": 281215,
+          "name": "Twisted Horror's Tendril",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Trinket",
-          "drop": "The Lost Explorers"
+          "drop": "The Unbinding of Kith'ix"
         },
         {
           "id": 273796,
@@ -5115,6 +5180,13 @@
           "rank": "bis",
           "slot": "Trinket",
           "drop": "Altar of Fangs"
+        },
+        {
+          "id": 281238,
+          "name": "Aberrant Commander's Gauntlets",
+          "wowhead": "raid",
+          "rank": "strong",
+          "slot": "Gloves"
         },
         {
           "id": 250215,
@@ -5134,7 +5206,7 @@
     },
     "EnhancementShaman": {
       "count": 19,
-      "withDrop": 7,
+      "withDrop": 6,
       "placeholders": 0,
       "byRank": {
         "bis": 12,
@@ -5283,12 +5355,12 @@
       "url": "https://www.wowhead.com/guide/classes/shaman/enhancement/bis-gear"
     },
     "RestorationShaman": {
-      "count": 21,
+      "count": 22,
       "withDrop": 13,
       "placeholders": 0,
       "byRank": {
         "bis": 15,
-        "strong": 6,
+        "strong": 7,
         "alt": 0,
         "ok": 0
       },
@@ -5383,12 +5455,12 @@
           "note": "S Tier"
         },
         {
-          "id": 270167,
-          "name": "Wavecaller's Seastone",
+          "id": 281215,
+          "name": "Twisted Horror's Tendril",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Trinket",
-          "drop": "Nymrissa Wavebinder (Raid)",
+          "drop": "Kith'ix (Raid)",
           "note": "S Tier"
         },
         {
@@ -5408,12 +5480,20 @@
           "note": "S Tier"
         },
         {
-          "id": 270169,
-          "name": "Hex Lord's Dooming Idol",
+          "id": 270167,
+          "name": "Wavecaller's Seastone",
           "wowhead": "trinket",
           "rank": "bis",
           "slot": "Trinket",
           "note": "S Tier"
+        },
+        {
+          "id": 270169,
+          "name": "Hex Lord's Dooming Idol",
+          "wowhead": "trinket",
+          "rank": "strong",
+          "slot": "Trinket",
+          "note": "A Tier"
         },
         {
           "id": 193757,
@@ -5465,12 +5545,12 @@
       "url": "https://www.wowhead.com/guide/classes/shaman/restoration/bis-gear"
     },
     "AfflictionWarlock": {
-      "count": 18,
+      "count": 20,
       "withDrop": 16,
       "placeholders": 0,
       "byRank": {
         "bis": 16,
-        "strong": 2,
+        "strong": 4,
         "alt": 0,
         "ok": 0
       },
@@ -5484,12 +5564,12 @@
           "drop": "Ula'tek\\r\\n"
         },
         {
-          "id": 273779,
-          "name": "Nocuous Focal Fang",
+          "id": 245769,
+          "name": "Aln'hara Lantern",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Offhand",
-          "drop": "The Writhing Coil"
+          "drop": "Crafting"
         },
         {
           "id": 271874,
@@ -5548,12 +5628,12 @@
           "drop": "Entombed Sentinels"
         },
         {
-          "id": 239649,
-          "name": "Martyr's Waistwrap",
+          "id": 251222,
+          "name": "Ethereal Netherwrap",
           "wowhead": "overall",
           "rank": "bis",
-          "slot": "Belt",
-          "drop": "Crafting"
+          "slot": "Cloak",
+          "drop": "Voidscar Arena"
         },
         {
           "id": 271545,
@@ -5580,20 +5660,20 @@
           "drop": "Sszorak\\r\\n"
         },
         {
-          "id": 273792,
-          "name": "Band of the Amani Warlord",
+          "id": 281029,
+          "name": "Band of the Swarmcaller",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Ring",
-          "drop": "The Coiled Altar\\r\\n"
+          "drop": "Kith'ix\\r\\n"
         },
         {
-          "id": 270164,
-          "name": "Gebbo's Bottomless Bag",
+          "id": 281215,
+          "name": "Twisted Horror's Tendril",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Trinket",
-          "drop": "The Lost Explorers\\r\\n"
+          "drop": "Kith'ix\\r\\n"
         },
         {
           "id": 273649,
@@ -5602,6 +5682,12 @@
           "rank": "bis",
           "slot": "Trinket",
           "drop": "King Dazar"
+        },
+        {
+          "id": 270164,
+          "name": "Gebbo's Bottomless Bag",
+          "wowhead": "raid",
+          "rank": "strong"
         },
         {
           "id": 270167,
@@ -5614,17 +5700,23 @@
           "name": "Vile Vial of Volatile Venom",
           "wowhead": "mythic",
           "rank": "strong"
+        },
+        {
+          "id": 273779,
+          "name": "Nocuous Focal Fang",
+          "wowhead": "mythic",
+          "rank": "strong"
         }
       ],
       "url": "https://www.wowhead.com/guide/classes/warlock/affliction/bis-gear"
     },
     "DemonologyWarlock": {
-      "count": 18,
+      "count": 22,
       "withDrop": 16,
       "placeholders": 0,
       "byRank": {
         "bis": 16,
-        "strong": 2,
+        "strong": 6,
         "alt": 0,
         "ok": 0
       },
@@ -5638,12 +5730,12 @@
           "drop": "Ula'tek"
         },
         {
-          "id": 268197,
-          "name": "Spine of the Hissing Abyss",
+          "id": 245769,
+          "name": "Aln'hara Lantern",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Offhand",
-          "drop": "Entombed Sentinels"
+          "drop": "Crafting"
         },
         {
           "id": 271874,
@@ -5686,12 +5778,12 @@
           "drop": "Vashnik the Malignant"
         },
         {
-          "id": 239648,
-          "name": "Martyr's Bindings",
+          "id": 271542,
+          "name": "Damned Necrolyte's Shackles",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Wrist",
-          "drop": "Crafting"
+          "drop": "Entombed Sentinels"
         },
         {
           "id": 271547,
@@ -5734,32 +5826,56 @@
           "drop": "Sszorak"
         },
         {
-          "id": 158366,
-          "name": "Charged Sandstone Band",
+          "id": 281029,
+          "name": "Band of the Swarmcaller",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Ring",
-          "drop": "Galvazzt"
+          "drop": "Kith'ix"
+        },
+        {
+          "id": 281215,
+          "name": "Twisted Horror's Tendril",
+          "wowhead": "overall",
+          "rank": "bis",
+          "slot": "Trinket",
+          "drop": "Kith'ix"
+        },
+        {
+          "id": 273649,
+          "name": "Stormbound Emblem of Dazar",
+          "wowhead": "overall",
+          "rank": "bis",
+          "slot": "Trinket",
+          "drop": "King Dazar"
         },
         {
           "id": 270164,
           "name": "Gebbo's Bottomless Bag",
-          "wowhead": "overall",
-          "rank": "bis",
-          "slot": "Trinket",
-          "drop": "The Lost Explorers"
+          "wowhead": "raid",
+          "rank": "strong"
+        },
+        {
+          "id": 268197,
+          "name": "Spine of the Hissing Abyss",
+          "wowhead": "raid",
+          "rank": "strong"
         },
         {
           "id": 273796,
           "name": "Vile Vial of Volatile Venom",
-          "wowhead": "overall",
-          "rank": "bis",
-          "slot": "Trinket",
-          "drop": "Rav'i"
+          "wowhead": "mythic",
+          "rank": "strong"
         },
         {
           "id": 250215,
           "name": "Freightrunner's Flask",
+          "wowhead": "mythic",
+          "rank": "strong"
+        },
+        {
+          "id": 158366,
+          "name": "Charged Sandstone Band",
           "wowhead": "mythic",
           "rank": "strong"
         },
@@ -5845,7 +5961,7 @@
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Wrist",
-          "drop": "Crafting"
+          "drop": "Crafting\\r\\n"
         },
         {
           "id": 271547,
@@ -5861,15 +5977,15 @@
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Belt",
-          "drop": "Crafting"
+          "drop": "Crafting\\r\\n"
         },
         {
-          "id": 271545,
-          "name": "Damned Necrolyte's Leg Bindings",
+          "id": 281235,
+          "name": "Voidweaver's Leggings",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Legs",
-          "drop": "Sszorak"
+          "drop": "Kith'Ix\\r\\n"
         },
         {
           "id": 268255,
@@ -5888,12 +6004,12 @@
           "drop": "Sszorak\\r\\n"
         },
         {
-          "id": 273792,
-          "name": "Band of the Amani Warlord",
+          "id": 281029,
+          "name": "Band of the Swarmcaller",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Ring",
-          "drop": "The Coiled Altar\\r\\n"
+          "drop": "Kith'Ix\\r\\n"
         },
         {
           "id": 270164,
@@ -5904,12 +6020,12 @@
           "drop": "The Lost Explorers\\r\\n"
         },
         {
-          "id": 270167,
-          "name": "Wavecaller's Seastone",
+          "id": 281215,
+          "name": "Twisted Horror's Tendril",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Trinket",
-          "drop": "Nymrissa Wavecaller\\r\\n"
+          "drop": "Kith'Ix\\r\\n"
         },
         {
           "id": 250215,
@@ -5921,163 +6037,11 @@
       "url": "https://www.wowhead.com/guide/classes/warlock/destruction/bis-gear"
     },
     "ArmsWarrior": {
-      "count": 18,
+      "count": 17,
       "withDrop": 14,
       "placeholders": 0,
       "byRank": {
         "bis": 14,
-        "strong": 4,
-        "alt": 0,
-        "ok": 0
-      },
-      "items": [
-        {
-          "id": 271456,
-          "name": "Tempered Horns of the Jade Warlord",
-          "wowhead": "overall",
-          "rank": "bis",
-          "slot": "Head",
-          "drop": "The Twin Fangs"
-        },
-        {
-          "id": 268265,
-          "name": "Aqirbane Reliquary",
-          "wowhead": "overall",
-          "rank": "bis",
-          "slot": "Neck",
-          "drop": "Ula'tek"
-        },
-        {
-          "id": 271454,
-          "name": "Raging Pauldrons of the Jade Warlord",
-          "wowhead": "overall",
-          "rank": "bis",
-          "slot": "Shoulders",
-          "drop": "The Lost Explorers"
-        },
-        {
-          "id": 268253,
-          "name": "Silken Voodoo Drape",
-          "wowhead": "overall",
-          "rank": "bis",
-          "slot": "Cloak",
-          "drop": "The Coiled Altar"
-        },
-        {
-          "id": 271459,
-          "name": "Cuirass of the Jade Warlord",
-          "wowhead": "overall",
-          "rank": "bis",
-          "slot": "Chest",
-          "drop": "Vashnik the Malignant"
-        },
-        {
-          "id": 271457,
-          "name": "Jeweled Gauntlets of the Jade Warlord",
-          "wowhead": "overall",
-          "rank": "bis",
-          "slot": "Gloves",
-          "drop": "Entombed Sentinels"
-        },
-        {
-          "id": 268259,
-          "name": "Girdle of Toxic Regret",
-          "wowhead": "overall",
-          "rank": "bis",
-          "slot": "Belt",
-          "drop": "The Coiled Altar"
-        },
-        {
-          "id": 271455,
-          "name": "Greaves of the Jade Warlord",
-          "wowhead": "overall",
-          "rank": "bis",
-          "slot": "Legs",
-          "drop": "Sszorak"
-        },
-        {
-          "id": 237828,
-          "name": "Spellbreaker's March",
-          "wowhead": "overall",
-          "rank": "bis",
-          "slot": "Boots",
-          "drop": "Crafting"
-        },
-        {
-          "id": 252258,
-          "name": "Sickening Signet of Atroxus",
-          "wowhead": "overall",
-          "rank": "bis",
-          "slot": "Ring",
-          "drop": "Voidscar Arena"
-        },
-        {
-          "id": 273792,
-          "name": "Band of the Amani Warlord",
-          "wowhead": "overall",
-          "rank": "bis",
-          "slot": "Ring",
-          "drop": "Altar of Fangs"
-        },
-        {
-          "id": 270173,
-          "name": "Zul'jin's Guillotine Technique",
-          "wowhead": "overall",
-          "rank": "bis",
-          "slot": "Trinket",
-          "drop": "The Coiled Altar"
-        },
-        {
-          "id": 270175,
-          "name": "Voracious Heart of Ula'tek",
-          "wowhead": "overall",
-          "rank": "bis",
-          "slot": "Trinket",
-          "drop": "Ula'tek"
-        },
-        {
-          "id": 268213,
-          "name": "Maze-roa, Warlord's Fury",
-          "wowhead": "overall",
-          "rank": "bis",
-          "slot": "Weapon",
-          "drop": "The Coiled Altar"
-        },
-        {
-          "id": 271878,
-          "name": "Chausses of Unbound Rancor",
-          "wowhead": "raid",
-          "rank": "strong",
-          "slot": "Legs"
-        },
-        {
-          "id": 251136,
-          "name": "Signet of Snarling Servitude",
-          "wowhead": "mythic",
-          "rank": "strong",
-          "slot": "Ring"
-        },
-        {
-          "id": 273782,
-          "name": "Vile Writhefang Glaive",
-          "wowhead": "mythic",
-          "rank": "strong"
-        },
-        {
-          "id": 273796,
-          "name": "Vile Vial of Volatile Venom",
-          "wowhead": "mythic",
-          "rank": "strong"
-        }
-      ],
-      "url": "https://www.wowhead.com/guide/classes/warrior/arms/bis-gear"
-    },
-    "FuryWarrior": {
-      "count": 18,
-      "withDrop": 15,
-      "placeholders": 0,
-      "byRank": {
-        "bis": 15,
         "strong": 3,
         "alt": 0,
         "ok": 0
@@ -6140,36 +6104,36 @@
           "drop": "The Coiled Altar"
         },
         {
-          "id": 271455,
-          "name": "Greaves of the Jade Warlord",
+          "id": 271878,
+          "name": "Chausses of Unbound Rancor",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Legs",
-          "drop": "Sszorak"
+          "drop": "Ula'tek"
         },
         {
-          "id": 268260,
-          "name": "Scaled Fiend's Warboots",
+          "id": 237828,
+          "name": "Spellbreaker's March",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Boots",
-          "drop": "Vashnik the Malignant"
+          "drop": "Crafting"
         },
         {
-          "id": 252258,
-          "name": "Sickening Signet of Atroxus",
+          "id": 281029,
+          "name": "Band of the Swarmcaller",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Ring",
-          "drop": "Voidscar Arena"
+          "drop": "Kithix"
         },
         {
-          "id": 268249,
-          "name": "Vile Alchemist's Band",
+          "id": 273792,
+          "name": "Band of the Amani Warlord",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Ring",
-          "drop": "Vashnik the Malignant"
+          "drop": "Altar of Fangs"
         },
         {
           "id": 270173,
@@ -6196,19 +6160,157 @@
           "drop": "The Coiled Altar"
         },
         {
-          "id": 237846,
-          "name": "Blood Knight's Warblade",
+          "id": 251136,
+          "name": "Signet of Snarling Servitude",
+          "wowhead": "mythic",
+          "rank": "strong",
+          "slot": "Ring"
+        },
+        {
+          "id": 273782,
+          "name": "Vile Writhefang Glaive",
+          "wowhead": "mythic",
+          "rank": "strong"
+        },
+        {
+          "id": 273796,
+          "name": "Vile Vial of Volatile Venom",
+          "wowhead": "mythic",
+          "rank": "strong"
+        }
+      ],
+      "url": "https://www.wowhead.com/guide/classes/warrior/arms/bis-gear"
+    },
+    "FuryWarrior": {
+      "count": 17,
+      "withDrop": 15,
+      "placeholders": 0,
+      "byRank": {
+        "bis": 15,
+        "strong": 2,
+        "alt": 0,
+        "ok": 0
+      },
+      "items": [
+        {
+          "id": 271456,
+          "name": "Tempered Horns of the Jade Warlord",
           "wowhead": "overall",
           "rank": "bis",
-          "slot": "Offhand",
-          "drop": "Crafting"
+          "slot": "Head",
+          "drop": "The Twin Fangs"
+        },
+        {
+          "id": 268265,
+          "name": "Aqirbane Reliquary",
+          "wowhead": "overall",
+          "rank": "bis",
+          "slot": "Neck",
+          "drop": "Ula'tek"
+        },
+        {
+          "id": 271454,
+          "name": "Raging Pauldrons of the Jade Warlord",
+          "wowhead": "overall",
+          "rank": "bis",
+          "slot": "Shoulders",
+          "drop": "The Lost Explorers"
+        },
+        {
+          "id": 268253,
+          "name": "Silken Voodoo Drape",
+          "wowhead": "overall",
+          "rank": "bis",
+          "slot": "Cloak",
+          "drop": "The Coiled Altar"
+        },
+        {
+          "id": 271459,
+          "name": "Cuirass of the Jade Warlord",
+          "wowhead": "overall",
+          "rank": "bis",
+          "slot": "Chest",
+          "drop": "Vashnik the Malignant"
+        },
+        {
+          "id": 271457,
+          "name": "Jeweled Gauntlets of the Jade Warlord",
+          "wowhead": "overall",
+          "rank": "bis",
+          "slot": "Gloves",
+          "drop": "Entombed Sentinels"
+        },
+        {
+          "id": 268259,
+          "name": "Girdle of Toxic Regret",
+          "wowhead": "overall",
+          "rank": "bis",
+          "slot": "Belt",
+          "drop": "The Coiled Altar"
         },
         {
           "id": 271878,
           "name": "Chausses of Unbound Rancor",
-          "wowhead": "raid",
-          "rank": "strong",
-          "slot": "Legs"
+          "wowhead": "overall",
+          "rank": "bis",
+          "slot": "Legs",
+          "drop": "Ula'tek"
+        },
+        {
+          "id": 237828,
+          "name": "Spellbreaker's March",
+          "wowhead": "overall",
+          "rank": "bis",
+          "slot": "Boots",
+          "drop": "Crafting"
+        },
+        {
+          "id": 252258,
+          "name": "Sickening Signet of Atroxus",
+          "wowhead": "overall",
+          "rank": "bis",
+          "slot": "Ring",
+          "drop": "Voidscar Arena"
+        },
+        {
+          "id": 281029,
+          "name": "Band of the Swarmcaller",
+          "wowhead": "overall",
+          "rank": "bis",
+          "slot": "Ring",
+          "drop": "Kithix"
+        },
+        {
+          "id": 270173,
+          "name": "Zul'jin's Guillotine Technique",
+          "wowhead": "overall",
+          "rank": "bis",
+          "slot": "Trinket",
+          "drop": "The Coiled Altar"
+        },
+        {
+          "id": 270175,
+          "name": "Voracious Heart of Ula'tek",
+          "wowhead": "overall",
+          "rank": "bis",
+          "slot": "Trinket",
+          "drop": "Ula'tek"
+        },
+        {
+          "id": 268213,
+          "name": "Maze-roa, Warlord's Fury",
+          "wowhead": "overall",
+          "rank": "bis",
+          "slot": "Weapon",
+          "drop": "The Coiled Altar"
+        },
+        {
+          "id": 280799,
+          "name": "Lu'selama, Light's Justice",
+          "wowhead": "overall",
+          "rank": "bis",
+          "slot": "Offhand",
+          "drop": "Kithix"
         },
         {
           "id": 251126,
@@ -6247,12 +6349,12 @@
           "drop": "The Coiled Altar"
         },
         {
-          "id": 271456,
-          "name": "Tempered Horns of the Jade Warlord",
+          "id": 281239,
+          "name": "Corroded Hulk's Skullcap",
           "wowhead": "overall",
           "rank": "bis",
           "slot": "Head",
-          "drop": "The Twin Fangs"
+          "drop": "Kith'ix"
         },
         {
           "id": 268265,

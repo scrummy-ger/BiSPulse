@@ -130,16 +130,6 @@ local items = {
     note = nil,
     priority = true,
   }),
-  [270167] = entry({
-    name = "Wavecaller's Seastone",
-    slot = "Trinket",
-    drop = "Nymrissa Wavecaller",
-    source = "Wowhead",
-    wowhead = "overall",
-    rank = RANK.BIS,
-    note = nil,
-    priority = true,
-  }),
   [271092] = entry({
     name = "Jan'thrazet, the Soul Fang",
     slot = "Weapon",
@@ -220,6 +210,16 @@ local items = {
     note = nil,
     priority = nil,
   }),
+  [281215] = entry({
+    name = "Twisted Horror's Tendril",
+    slot = "Trinket",
+    drop = "Kith'ix",
+    source = "Wowhead",
+    wowhead = "overall",
+    rank = RANK.BIS,
+    note = nil,
+    priority = true,
+  }),
 }
 
 BiSPulseData:Register("EVOKER", 1, {
@@ -227,7 +227,7 @@ BiSPulseData:Register("EVOKER", 1, {
   specName = "Devastation",
   patch = "12.1",
   season = "Midnight Season 2",
-  updated = "2026-09-06",
+  updated = "2026-10-26",
   primarySource = "Wowhead",
   guides = {
     wowhead = "https://www.wowhead.com/guide/classes/evoker/devastation/bis-gear",

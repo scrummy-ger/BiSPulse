@@ -73,7 +73,7 @@ local items = {
   [252258] = entry({
     name = "Sickening Signet of Atroxus",
     slot = "Ring",
-    drop = "Voidscar Arena",
+    drop = "Atroxus",
     source = "Wowhead",
     wowhead = "overall",
     rank = RANK.BIS,
@@ -100,16 +100,6 @@ local items = {
     note = nil,
     priority = nil,
   }),
-  [268251] = entry({
-    name = "Amulet of the Twin Fangs",
-    slot = "Neck",
-    drop = "The Twin Fangs (Raid)",
-    source = "Wowhead",
-    wowhead = "overall",
-    rank = RANK.BIS,
-    note = nil,
-    priority = true,
-  }),
   [268256] = entry({
     name = "Sash of the Forlorn Vessel",
     slot = "Belt",
@@ -120,10 +110,10 @@ local items = {
     note = nil,
     priority = true,
   }),
-  [268266] = entry({
-    name = "Alluring Bubbleband",
-    slot = "Ring",
-    drop = "Nymrissa Wavebinder (Raid)",
+  [268265] = entry({
+    name = "Aqirbane Reliquary",
+    slot = "Neck",
+    drop = "Ula'tek",
     source = "Wowhead",
     wowhead = "overall",
     rank = RANK.BIS,
@@ -210,6 +200,16 @@ local items = {
     note = nil,
     priority = nil,
   }),
+  [281029] = entry({
+    name = "Band of the Swarmcaller",
+    slot = "Ring",
+    drop = "Kithix (Raid)",
+    source = "Wowhead",
+    wowhead = "overall",
+    rank = RANK.BIS,
+    note = nil,
+    priority = true,
+  }),
 }
 
 BiSPulseData:Register("DRUID", 4, {
@@ -217,7 +217,7 @@ BiSPulseData:Register("DRUID", 4, {
   specName = "Restoration",
   patch = "12.1",
   season = "Midnight Season 2",
-  updated = "2026-09-06",
+  updated = "2026-10-26",
   primarySource = "Wowhead",
   guides = {
     wowhead = "https://www.wowhead.com/guide/classes/druid/restoration/bis-gear",

@@ -180,20 +180,20 @@ local items = {
     note = nil,
     priority = true,
   }),
-  [271531] = entry({
-    name = "Enigmatic Dreamwatcher's Lunar Raiment",
-    slot = "Chest",
-    drop = "Vashnik the Malignant",
+  [271875] = entry({
+    name = "Gaze of the Coiled Watcher",
+    slot = "Head",
+    drop = "Ula'tek",
     source = "Wowhead",
     wowhead = "overall",
     rank = RANK.BIS,
     note = nil,
     priority = true,
   }),
-  [271875] = entry({
-    name = "Gaze of the Coiled Watcher",
-    slot = "Head",
-    drop = "Ula'tek",
+  [281236] = entry({
+    name = "Chestwrap of Palpable Terror",
+    slot = "Chest",
+    drop = "Kith'ix",
     source = "Wowhead",
     wowhead = "overall",
     rank = RANK.BIS,
@@ -207,7 +207,7 @@ BiSPulseData:Register("DRUID", 3, {
   specName = "Guardian",
   patch = "12.1",
   season = "Midnight Season 2",
-  updated = "2026-09-06",
+  updated = "2026-10-26",
   primarySource = "Wowhead",
   guides = {
     wowhead = "https://www.wowhead.com/guide/classes/druid/guardian/bis-gear",
