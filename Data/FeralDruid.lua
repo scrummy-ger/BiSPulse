@@ -60,16 +60,6 @@ local items = {
     note = nil,
     priority = true,
   }),
-  [252258] = entry({
-    name = "Sickening Signet of Atroxus",
-    slot = "Ring",
-    drop = "Voidscar Arena",
-    source = "Wowhead",
-    wowhead = "overall",
-    rank = RANK.BIS,
-    note = nil,
-    priority = true,
-  }),
   [268215] = entry({
     name = "Abyssal Broodfiend's Bardiche",
     slot = "Weapon",
@@ -220,6 +210,16 @@ local items = {
     note = nil,
     priority = nil,
   }),
+  [281029] = entry({
+    name = "Band of the Swarmcaller",
+    slot = "Ring",
+    drop = "Kith'ix",
+    source = "Wowhead",
+    wowhead = "overall",
+    rank = RANK.BIS,
+    note = nil,
+    priority = true,
+  }),
 }
 
 BiSPulseData:Register("DRUID", 2, {
@@ -227,7 +227,7 @@ BiSPulseData:Register("DRUID", 2, {
   specName = "Feral",
   patch = "12.1",
   season = "Midnight Season 2",
-  updated = "2026-09-06",
+  updated = "2026-10-26",
   primarySource = "Wowhead",
   guides = {
     wowhead = "https://www.wowhead.com/guide/classes/druid/feral/bis-gear",

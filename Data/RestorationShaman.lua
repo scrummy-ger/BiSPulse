@@ -145,7 +145,7 @@ local items = {
     slot = "Trinket",
     drop = "Nymrissa Wavebinder (Raid)",
     source = "Wowhead",
-    wowhead = "overall",
+    wowhead = "trinket",
     rank = RANK.BIS,
     note = "S Tier",
     priority = true,
@@ -156,9 +156,9 @@ local items = {
     drop = "Hex Lord Malacrass",
     source = "Wowhead",
     wowhead = "trinket",
-    rank = RANK.BIS,
-    note = "S Tier",
-    priority = true,
+    rank = RANK.STRONG,
+    note = "A Tier",
+    priority = nil,
   }),
   [271092] = entry({
     name = "Jan'thrazet, the Soul Fang",
@@ -230,6 +230,16 @@ local items = {
     note = nil,
     priority = nil,
   }),
+  [281215] = entry({
+    name = "Twisted Horror's Tendril",
+    slot = "Trinket",
+    drop = "Kith'ix (Raid)",
+    source = "Wowhead",
+    wowhead = "overall",
+    rank = RANK.BIS,
+    note = "S Tier",
+    priority = true,
+  }),
 }
 
 BiSPulseData:Register("SHAMAN", 3, {
@@ -237,7 +247,7 @@ BiSPulseData:Register("SHAMAN", 3, {
   specName = "Restoration",
   patch = "12.1",
   season = "Midnight Season 2",
-  updated = "2026-09-06",
+  updated = "2026-10-26",
   primarySource = "Wowhead",
   guides = {
     wowhead = "https://www.wowhead.com/guide/classes/shaman/restoration/bis-gear",

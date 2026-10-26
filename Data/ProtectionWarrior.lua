@@ -150,16 +150,6 @@ local items = {
     note = nil,
     priority = true,
   }),
-  [271456] = entry({
-    name = "Tempered Horns of the Jade Warlord",
-    slot = "Head",
-    drop = "The Twin Fangs",
-    source = "Wowhead",
-    wowhead = "overall",
-    rank = RANK.BIS,
-    note = nil,
-    priority = true,
-  }),
   [271457] = entry({
     name = "Jeweled Gauntlets of the Jade Warlord",
     slot = "Gloves",
@@ -200,6 +190,16 @@ local items = {
     note = nil,
     priority = nil,
   }),
+  [281239] = entry({
+    name = "Corroded Hulk's Skullcap",
+    slot = "Head",
+    drop = "Kith'ix",
+    source = "Wowhead",
+    wowhead = "overall",
+    rank = RANK.BIS,
+    note = nil,
+    priority = true,
+  }),
 }
 
 BiSPulseData:Register("WARRIOR", 3, {
@@ -207,7 +207,7 @@ BiSPulseData:Register("WARRIOR", 3, {
   specName = "Protection",
   patch = "12.1",
   season = "Midnight Season 2",
-  updated = "2026-09-06",
+  updated = "2026-10-26",
   primarySource = "Wowhead",
   guides = {
     wowhead = "https://www.wowhead.com/guide/classes/warrior/protection/bis-gear",

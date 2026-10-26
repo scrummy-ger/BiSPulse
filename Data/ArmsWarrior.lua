@@ -40,16 +40,6 @@ local items = {
     note = nil,
     priority = nil,
   }),
-  [252258] = entry({
-    name = "Sickening Signet of Atroxus",
-    slot = "Ring",
-    drop = "Voidscar Arena",
-    source = "Wowhead",
-    wowhead = "overall",
-    rank = RANK.BIS,
-    note = nil,
-    priority = true,
-  }),
   [268213] = entry({
     name = "Maze-roa, Warlord's Fury",
     slot = "Weapon",
@@ -120,16 +110,6 @@ local items = {
     note = nil,
     priority = true,
   }),
-  [271455] = entry({
-    name = "Greaves of the Jade Warlord",
-    slot = "Legs",
-    drop = "Sszorak",
-    source = "Wowhead",
-    wowhead = "overall",
-    rank = RANK.BIS,
-    note = nil,
-    priority = true,
-  }),
   [271456] = entry({
     name = "Tempered Horns of the Jade Warlord",
     slot = "Head",
@@ -165,10 +145,10 @@ local items = {
     slot = "Legs",
     drop = "Ula'tek",
     source = "Wowhead",
-    wowhead = "raid",
-    rank = RANK.STRONG,
+    wowhead = "overall",
+    rank = RANK.BIS,
     note = nil,
-    priority = nil,
+    priority = true,
   }),
   [273782] = entry({
     name = "Vile Writhefang Glaive",
@@ -200,6 +180,16 @@ local items = {
     note = nil,
     priority = nil,
   }),
+  [281029] = entry({
+    name = "Band of the Swarmcaller",
+    slot = "Ring",
+    drop = "Kithix",
+    source = "Wowhead",
+    wowhead = "overall",
+    rank = RANK.BIS,
+    note = nil,
+    priority = true,
+  }),
 }
 
 BiSPulseData:Register("WARRIOR", 1, {
@@ -207,7 +197,7 @@ BiSPulseData:Register("WARRIOR", 1, {
   specName = "Arms",
   patch = "12.1",
   season = "Midnight Season 2",
-  updated = "2026-09-06",
+  updated = "2026-10-26",
   primarySource = "Wowhead",
   guides = {
     wowhead = "https://www.wowhead.com/guide/classes/warrior/arms/bis-gear",
