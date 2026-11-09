@@ -1,8 +1,8 @@
 ## Interface: 120100
 ## Title: BiSPulse
 ## Title-deDE: BiSPulse
-## Notes: Wowhead BiS/Strong loot alerts — tooltip, toast, badges, checklist (all Retail specs).
-## Notes-deDE: Wowhead BiS/Strong Loot-Alerts — Tooltip, Toast, Badges, Checkliste (alle Retail-Specs).
+## Notes: Wowhead BiS rankings for all Retail specs.
+## Notes-deDE: BiS-Rankings von Wowhead — alle Retail-Specs.
 ## Author: D
 ## Version: 1.5.10
 ## SavedVariables: BiSPulseDB
