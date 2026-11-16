@@ -1,7 +1,7 @@
 {
   "BloodDeathKnight": {
-    "count": 20,
-    "wowhead_overall": 15,
+    "count": 19,
+    "wowhead_overall": 16,
     "sources": [
       "Wowhead"
     ],
@@ -24,7 +24,7 @@
     "file": "UnholyDeathKnight.lua"
   },
   "HavocDemonHunter": {
-    "count": 16,
+    "count": 17,
     "wowhead_overall": 16,
     "sources": [
       "Wowhead"
@@ -41,7 +41,7 @@
   },
   "DevourerDemonHunter": {
     "count": 20,
-    "wowhead_overall": 15,
+    "wowhead_overall": 16,
     "sources": [
       "Wowhead"
     ],
@@ -96,7 +96,7 @@
     "file": "PreservationEvoker.lua"
   },
   "AugmentationEvoker": {
-    "count": 18,
+    "count": 20,
     "wowhead_overall": 16,
     "sources": [
       "Wowhead"
@@ -104,7 +104,7 @@
     "file": "AugmentationEvoker.lua"
   },
   "BeastMasteryHunter": {
-    "count": 19,
+    "count": 20,
     "wowhead_overall": 15,
     "sources": [
       "Wowhead"
@@ -112,7 +112,7 @@
     "file": "BeastMasteryHunter.lua"
   },
   "MarksmanshipHunter": {
-    "count": 20,
+    "count": 23,
     "wowhead_overall": 15,
     "sources": [
       "Wowhead"
@@ -120,15 +120,15 @@
     "file": "MarksmanshipHunter.lua"
   },
   "SurvivalHunter": {
-    "count": 18,
-    "wowhead_overall": 15,
+    "count": 21,
+    "wowhead_overall": 16,
     "sources": [
       "Wowhead"
     ],
     "file": "SurvivalHunter.lua"
   },
   "ArcaneMage": {
-    "count": 19,
+    "count": 20,
     "wowhead_overall": 16,
     "sources": [
       "Wowhead"
@@ -136,7 +136,7 @@
     "file": "ArcaneMage.lua"
   },
   "FireMage": {
-    "count": 22,
+    "count": 21,
     "wowhead_overall": 18,
     "sources": [
       "Wowhead"
@@ -144,7 +144,7 @@
     "file": "FireMage.lua"
   },
   "FrostMage": {
-    "count": 20,
+    "count": 22,
     "wowhead_overall": 16,
     "sources": [
       "Wowhead"
@@ -152,7 +152,7 @@
     "file": "FrostMage.lua"
   },
   "BrewmasterMonk": {
-    "count": 18,
+    "count": 12,
     "wowhead_overall": 12,
     "sources": [
       "Wowhead"
@@ -168,7 +168,7 @@
     "file": "MistweaverMonk.lua"
   },
   "WindwalkerMonk": {
-    "count": 15,
+    "count": 16,
     "wowhead_overall": 13,
     "sources": [
       "Wowhead"
@@ -177,7 +177,7 @@
   },
   "HolyPaladin": {
     "count": 19,
-    "wowhead_overall": 15,
+    "wowhead_overall": 13,
     "sources": [
       "Wowhead"
     ],
@@ -216,7 +216,7 @@
     "file": "HolyPriest.lua"
   },
   "ShadowPriest": {
-    "count": 19,
+    "count": 20,
     "wowhead_overall": 16,
     "sources": [
       "Wowhead"
@@ -240,7 +240,7 @@
     "file": "OutlawRogue.lua"
   },
   "SubtletyRogue": {
-    "count": 21,
+    "count": 22,
     "wowhead_overall": 16,
     "sources": [
       "Wowhead"
@@ -248,7 +248,7 @@
     "file": "SubtletyRogue.lua"
   },
   "ElementalShaman": {
-    "count": 18,
+    "count": 19,
     "wowhead_overall": 16,
     "sources": [
       "Wowhead"
@@ -264,7 +264,7 @@
     "file": "EnhancementShaman.lua"
   },
   "RestorationShaman": {
-    "count": 21,
+    "count": 22,
     "wowhead_overall": 13,
     "sources": [
       "Wowhead"
@@ -272,7 +272,7 @@
     "file": "RestorationShaman.lua"
   },
   "AfflictionWarlock": {
-    "count": 18,
+    "count": 20,
     "wowhead_overall": 16,
     "sources": [
       "Wowhead"
@@ -280,7 +280,7 @@
     "file": "AfflictionWarlock.lua"
   },
   "DemonologyWarlock": {
-    "count": 18,
+    "count": 22,
     "wowhead_overall": 16,
     "sources": [
       "Wowhead"
@@ -296,7 +296,7 @@
     "file": "DestructionWarlock.lua"
   },
   "ArmsWarrior": {
-    "count": 18,
+    "count": 17,
     "wowhead_overall": 14,
     "sources": [
       "Wowhead"
@@ -304,7 +304,7 @@
     "file": "ArmsWarrior.lua"
   },
   "FuryWarrior": {
-    "count": 18,
+    "count": 17,
     "wowhead_overall": 15,
     "sources": [
       "Wowhead"
